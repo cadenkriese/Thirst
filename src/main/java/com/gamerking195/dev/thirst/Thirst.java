@@ -15,13 +15,10 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginDescriptionFile;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
-
-import com.connorlinfoot.actionbarapi.ActionBarAPI;
 
 public class Thirst
 {		
@@ -60,10 +57,6 @@ public class Thirst
 		{
 			playerJoin(p);
 		}
-
-		ThirstEffectsHandler.getThirstEffects().startEffects();
-
-		thirstRemover();
 	}
 
 	public String getThirstString(OfflinePlayer p)
@@ -85,7 +78,7 @@ public class Thirst
 
 		String emphasis = "";
 
-		if (percent <= 5) emphasis = "&4!&c!&4!";
+		if (percent <= 5 && !Main.getInstance().getYAMLConfig().DisplayType.equalsIgnoreCase("SCOREBOARD")) emphasis = " &4!&c!&4! ";
 
 		String configMessage = Main.getInstance().getYAMLConfig().ThirstMessage.replace("%player%", p.getName()).replace("%percent%", getThirstPercent(p, true)).replace("%thirstbar%", "&1"+getThirstBar(p));
 
@@ -196,10 +189,20 @@ public class Thirst
 
 	public void playerLeave(Player p)
 	{
+		if (p.isDead()) thirstCache.put(p, 100);
+		
 		p.setScoreboard(manager.getNewScoreboard());
 		
 		thirstConfig.set(p.getUniqueId().toString(), thirstCache.get(p));
 
+		saveThirstFile();
+
+		ThirstEffectsHandler.getThirstEffects().removePlayer(p);
+		thirstCache.remove(p);
+	}
+	
+	public void saveThirstFile()
+	{
 		try 
 		{
 			thirstConfig.save(thirstFile);
@@ -226,15 +229,13 @@ public class Thirst
 			log.log(Level.SEVERE, "");
 			log.log(Level.SEVERE, "END OF ERROR");
 			log.log(Level.SEVERE, "=============================");
-			return;
 		}
-
-		ThirstEffectsHandler.getThirstEffects().removePlayer(p);
-		thirstCache.remove(p);
 	}
 
 	public void setThirst(Player p, int thirst)
 	{
+		if (p.isDead()) thirst = 100;
+		
 		if (thirst < 0) thirst = 0;
 		if (thirst > 100) thirst = 100;
 
@@ -269,24 +270,6 @@ public class Thirst
 		return thirstCache.get(p);
 	}
 
-	public void thirstRemover()
-	{
-		new BukkitRunnable()
-		{
-			public void run()
-			{
-				for (Player p : Bukkit.getOnlinePlayers())
-				{
-					if (p.getGameMode() == GameMode.CREATIVE && Main.getInstance().getYAMLConfig().IgnoreCreative) continue;
-					if (p.isOp() && Main.getInstance().getYAMLConfig().IgnoreOP) continue;
-					if (p.hasPermission("thirst.ignore") || p.hasPermission("thirst.*")) continue;
-
-					setThirst(p, getPlayerThirst(p)-Main.getInstance().getYAMLConfig().RemoveThirst);
-				}
-			}
-		}.runTaskTimer(Main.getInstance(), Main.getInstance().getYAMLConfig().ThirstDelay*20, Main.getInstance().getYAMLConfig().ThirstDelay*20);
-	}
-
 	public void displayThirst(Player p)
 	{
 		if (p.getGameMode() == GameMode.CREATIVE && Main.getInstance().getYAMLConfig().IgnoreCreative) return;
@@ -296,10 +279,6 @@ public class Thirst
 		if (Main.getInstance().getYAMLConfig().DisplayType.equalsIgnoreCase("scoreboard"))
 		{
 			refreshScoreboard(p);
-		}
-		else if (Main.getInstance().getYAMLConfig().DisplayType.equalsIgnoreCase("action"))
-		{
-			ActionBarAPI.sendActionBar(p, getThirstString(p), Main.getInstance().getYAMLConfig().ThirstDelay*20+20);
 		}
 		else
 		{

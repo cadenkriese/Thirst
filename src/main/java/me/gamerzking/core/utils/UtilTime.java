@@ -25,8 +25,9 @@ public class UtilTime {
 		return dateFormat.format(calendar.getTime());
 	}
 
-	public static boolean elapsed(long from, long to) {
-		return System.currentTimeMillis() - from > to;
+	public static boolean elapsed(long from, long to)
+	{
+		return System.currentTimeMillis() - from >= to;
 	}
 
 	public Calendar getCalendar() {

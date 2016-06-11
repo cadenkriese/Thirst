@@ -22,6 +22,7 @@ implements Listener
 			if (Thirst.getThirst().getPlayerThirst(p) <= 0)
 			{
 				event.setDeathMessage(ChatColor.translateAlternateColorCodes('&', Main.getInstance().getYAMLConfig().ThirstDeathMessage.replace("%player%", p.getName())));
+				
 				Thirst.getThirst().setThirst(p, 100);
 			}
 		}

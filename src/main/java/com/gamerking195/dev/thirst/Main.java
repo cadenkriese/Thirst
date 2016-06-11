@@ -19,6 +19,8 @@ import com.gamerking195.dev.thirst.listeners.PlayerDeathListener;
 import com.gamerking195.dev.thirst.listeners.PlayerGamemodeChangeListener;
 import com.gamerking195.dev.thirst.listeners.PlayerItemConsumeListener;
 import com.gamerking195.dev.thirst.listeners.PlayerJoinLeaveListener;
+import com.gamerking195.dev.thirst.listeners.PlayerRespawnListener;
+import com.gamerking195.dev.thirst.listeners.UpdateListener;
 import com.gamerking195.dev.thirst.placeholderapi.Placeholders;
 
 public class Main 
@@ -53,7 +55,8 @@ extends JavaPlugin
 
 	@Override
 	public void onDisable()
-	{	
+	{
+		
 		try 
 		{
 			config.reload();
@@ -131,8 +134,7 @@ extends JavaPlugin
 		
 		//CLASSES
 
-		Thirst.getThirst().init();
-		ThirstEffectsHandler.getThirstEffects().startEffects();
+		Thirst.getThirst().init(); 
 
 		//COMMANDS
 		this.getCommand("thirst").setExecutor(new ThirstCommand());
@@ -145,6 +147,8 @@ extends JavaPlugin
 		pm.registerEvents(new PlayerDeathListener(), this);
 		pm.registerEvents(new PlayerGamemodeChangeListener(), this);
 		pm.registerEvents(new PlayerCommandPreProcessListener(), this);
+		pm.registerEvents(new UpdateListener(), this);
+		pm.registerEvents(new PlayerRespawnListener(), this);
 		
 		//PLACEHOLDERS
 	}

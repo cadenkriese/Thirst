@@ -34,10 +34,10 @@ extends YamlConfig
 		"Desc: Changes the way players see their thirst.",
 		"Type: Enum",
 		"Possible types: SCOREBOARD, ACTION, COMMAND", 
-		"Default: SCOREBOARD",
+		"Default: ACTION",
 		"Note: The command /thirst view, and /thirst view %player% will always be enabled, use command to disable scoreboard, and action."
 	})
-	public String DisplayType = "SCOREBOARD";
+	public String DisplayType = "ACTION";
 
 	@Comments
 	({
@@ -68,9 +68,9 @@ extends YamlConfig
 		"Desc: The delay in seconds before thirst is removed from every player.",
 		"Type: int (Time in seconds)",
 		"Default: 36 (will remove 100% over three days, just like in real life!)",
-		"Note: The higher this is set, the better the server will preform."
+		"Note: This does support valused under one second without any changes in lag!"
 	})
-	public int ThirstDelay = 36;
+	public float ThirstDelay = 36;
 	
 	@Comments
 	({

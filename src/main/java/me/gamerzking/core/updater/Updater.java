@@ -1,6 +1,7 @@
 package me.gamerzking.core.updater;
 
 import me.gamerzking.core.updater.event.UpdateEvent;
+
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -8,27 +9,27 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class Updater implements Runnable {
 
-    private JavaPlugin plugin;
+	private JavaPlugin plugin;
 
-    public Updater(JavaPlugin plugin) {
+	public Updater(JavaPlugin plugin) {
 
-        this.plugin = plugin;
-        plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, this, 0L, 1L);
-    }
+		this.plugin = plugin;
+		plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, this, 0L, 1L);
+	}
 
-    @Override
-    public void run() {
+	@Override
+	public void run() {
 
-        for (UpdateType updateType : UpdateType.values()) {
+		for (UpdateType updateType : UpdateType.values()) 
+		{
+			if (updateType.elapsed()) 
+			{
+				plugin.getServer().getPluginManager().callEvent(new UpdateEvent(updateType));
+			}
+		}
+	}
 
-            if (updateType.elapsed()) {
-
-                plugin.getServer().getPluginManager().callEvent(new UpdateEvent(updateType));
-            }
-        }
-    }
-
-    public JavaPlugin getPlugin() {
-        return plugin;
-    }
+	public JavaPlugin getPlugin() {
+		return plugin;
+	}
 }

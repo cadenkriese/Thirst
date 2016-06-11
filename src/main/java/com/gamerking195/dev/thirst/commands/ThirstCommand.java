@@ -16,6 +16,7 @@ import org.bukkit.plugin.PluginDescriptionFile;
 
 import com.gamerking195.dev.thirst.Main;
 import com.gamerking195.dev.thirst.Thirst;
+import com.gamerking195.dev.thirst.ThirstEffectsHandler;
 
 public class ThirstCommand 
 implements CommandExecutor
@@ -40,8 +41,8 @@ implements CommandExecutor
 
 				sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&f&m--------------------"));
 				sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&1&lThirst &fV"+Main.getInstance().getDescription().getVersion()+" &bby &f"+Main.getInstance().getDescription().getAuthors()));
-				sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&bSpigot: &fNot available in this version."));
-				sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&bGithub: &f"));
+				sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&bSpigot: &fhttps://www.spigotmc.org/resources/thirst.24610/"));
+				sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&bGithub: &fhttps://github.com/GamerKing195/Thirst"));
 				sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&bHelp: &f/thirst help"));
 				sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&f&m--------------------"));
 				return true;
@@ -77,7 +78,7 @@ implements CommandExecutor
 									.replace("%percent%", Thirst.getThirst().getThirstPercent(oP, true)
 									.replace("%thirstmessage%", Thirst.getThirst().getThirstString(oP))));
 
-							sender.sendMessage(ChatColor.translateAlternateColorCodes('&', thirstViewPlayerMessage));
+							sender.sendMessage(ChatColor.translateAlternateColorCodes('&', thirstViewPlayerMessage.replace("%thirstmessage%", Thirst.getThirst().getThirstString(oP))));
 							return true;
 						}
 					}
@@ -122,19 +123,28 @@ implements CommandExecutor
 					sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&b/thirst view [PLAYER] | &fDisplays the thirst of the specified player."));
 					sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&f&m--------------------"));
 				}
-				else if (args[0].equalsIgnoreCase("reload"))
+				else if (args[0].equalsIgnoreCase("reload") || args[0].equalsIgnoreCase("rl"))
 				{
 					try 
-					{
+					{	
 						Main.getInstance().getYAMLConfig().reload();
-						sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&8[&1Thirst&8] &bconfig.yml sucsesfully reloaded!"));
+						
+						Main.getInstance().getYAMLConfig().load();
+						
+						Main.getInstance().getYAMLConfig().save();
 
 						for (Player p : Bukkit.getServer().getOnlinePlayers())
 						{
-							Thirst.getThirst().playerLeave(p);
+							p.setScoreboard(Bukkit.getServer().getScoreboardManager().getNewScoreboard());
 							
-							Thirst.getThirst().playerJoin(p);
+							Thirst.getThirst().getThirstConfig().set(p.getUniqueId().toString(), Thirst.getThirst().getPlayerThirst(p));
+
+							ThirstEffectsHandler.getThirstEffects().removePlayer(p);
 						}
+						
+						Thirst.getThirst().saveThirstFile();
+						
+						sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&8[&1Thirst&8] &bconfig.yml & thirst_data.yml sucsesfully reloaded!"));
 					} 
 					catch (InvalidConfigurationException ex)
 					{
@@ -163,7 +173,13 @@ implements CommandExecutor
 						sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&8[&1Thirst&8] &bconfig.yml reloading failed! Check the console for more info."));
 						
 						Main.getInstance().disable();
+						return true;
 					}
+					for (Player p : Bukkit.getServer().getOnlinePlayers())
+					{
+						Thirst.getThirst().displayThirst(p);
+					}
+					
 					return true;
 				}
 				else
