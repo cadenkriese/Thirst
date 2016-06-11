@@ -21,6 +21,7 @@ public class ActionBarAPI implements Listener {
 	private String pluginMessage = null;
 	private String updateMessage = null;
 	private boolean updateAvailable = false;
+	private static boolean useOldMethods = false;
 
 	public static void init() 
 	{
@@ -28,6 +29,11 @@ public class ActionBarAPI implements Listener {
 		
 		nmsver = Bukkit.getServer().getClass().getPackage().getName();
 		nmsver = nmsver.substring(nmsver.lastIndexOf(".") + 1);
+
+		if (nmsver.equalsIgnoreCase("v1_8_R1") || nmsver.equalsIgnoreCase("v1_7_")) { // Not sure if 1_7 works for the protocol hack?
+			useOldMethods = true;
+		}
+
 	}
 
 	@EventHandler
@@ -53,7 +59,7 @@ public class ActionBarAPI implements Listener {
 			Object ppoc;
 			Class<?> c4 = Class.forName("net.minecraft.server." + nmsver + ".PacketPlayOutChat");
 			Class<?> c5 = Class.forName("net.minecraft.server." + nmsver + ".Packet");
-			if ((nmsver.equalsIgnoreCase("v1_8_R1") || !nmsver.startsWith("v1_8_")) && !nmsver.startsWith("v1_9_")) {
+			if (useOldMethods) {
 				Class<?> c2 = Class.forName("net.minecraft.server." + nmsver + ".ChatSerializer");
 				Class<?> c3 = Class.forName("net.minecraft.server." + nmsver + ".IChatBaseComponent");
 				Method m3 = c2.getDeclaredMethod("a", String.class);
