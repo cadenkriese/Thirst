@@ -6,7 +6,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import com.gamerking195.dev.thirst.Thirst;
-import com.gamerking195.dev.thirst.ThirstEffectsHandler;
 
 public class PlayerCommandPreProcessListener
 implements Listener
@@ -23,8 +22,6 @@ implements Listener
 				Thirst.getThirst().getThirstConfig().set(p.getUniqueId().toString(), Thirst.getThirst().getPlayerThirst(p));
 
 				Thirst.getThirst().saveThirstFile();
-
-				ThirstEffectsHandler.getThirstEffects().removePlayer(p);
 			}
 		}
 	}

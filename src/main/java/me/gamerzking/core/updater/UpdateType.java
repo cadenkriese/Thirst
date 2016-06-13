@@ -20,6 +20,7 @@ public enum UpdateType
 	TIER2(20000),
 	TIER3(30000),
 	CONFIG((long) Main.getInstance().getYAMLConfig().ThirstDelay*1000),
+	DAMAGE((long) Main.getInstance().getYAMLConfig().getDamageInterval()*1000),
 	TICK(50);
 
 	private long milliseconds;

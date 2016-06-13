@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.gamerking195.dev</groupId>
   <artifactId>Thirst</artifactId>
-  <version>1.2.2</version>
+  <version>1.3.1</version>
   <name>Thirst</name>
   <description>Adds a thirst mechanic into vanilla minecraft!</description>
   

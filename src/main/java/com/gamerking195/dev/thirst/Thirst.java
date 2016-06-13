@@ -15,6 +15,8 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginDescriptionFile;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
@@ -197,7 +199,6 @@ public class Thirst
 
 		saveThirstFile();
 
-		ThirstEffectsHandler.getThirstEffects().removePlayer(p);
 		thirstCache.remove(p);
 	}
 	
@@ -241,12 +242,96 @@ public class Thirst
 
 		thirstCache.put(p, thirst);
 
-		if (thirst <= 0) ThirstEffectsHandler.getThirstEffects().setEffect(p, 5);
-		else if (thirst <= 5) ThirstEffectsHandler.getThirstEffects().setEffect(p, 4);
-		else if (thirst <= 10) ThirstEffectsHandler.getThirstEffects().setEffect(p, 3);
-		else if (thirst <= 20) ThirstEffectsHandler.getThirstEffects().setEffect(p, 2);
-		else if (thirst <= 30) ThirstEffectsHandler.getThirstEffects().setEffect(p, 1);
-		else ThirstEffectsHandler.getThirstEffects().setEffect(p, 0);
+		if (Main.getInstance().getYAMLConfig().Enabled)
+		{
+			for (String s : Main.getInstance().getYAMLConfig().Effects)
+			{
+				String[] parts = s.split("\\.");
+				
+				if (parts.length != 2)
+				{
+					Logger log = Main.getInstance().getLogger();
+					PluginDescriptionFile pdf = Main.getInstance().getDescription();
+					
+					log.log(Level.SEVERE, "=============================");
+					log.log(Level.SEVERE, "Error while reading the config for "+pdf.getName()+" V"+pdf.getVersion());
+					log.log(Level.SEVERE, "");
+					log.log(Level.SEVERE, "");
+					log.log(Level.SEVERE, "");
+					log.log(Level.SEVERE, "Printing Error:");
+					log.log(Level.SEVERE, "String '"+s+"' is in an invalid format!");
+					log.log(Level.SEVERE, "");
+					log.log(Level.SEVERE, "");
+					log.log(Level.SEVERE, "");
+					log.log(Level.SEVERE, "END OF ERROR");
+					log.log(Level.SEVERE, "=============================");
+					return;
+				}
+				
+				int percent = Integer.valueOf(parts[0]);
+				
+				String[] potionParts = parts[1].split("_");
+				
+				if (percent >= thirst)
+				{
+					if (potionParts.length != 3)
+					{
+						Logger log = Main.getInstance().getLogger();
+						PluginDescriptionFile pdf = Main.getInstance().getDescription();
+						
+						log.log(Level.SEVERE, "=============================");
+						log.log(Level.SEVERE, "Error while reading the config for "+pdf.getName()+" V"+pdf.getVersion());
+						log.log(Level.SEVERE, "");
+						log.log(Level.SEVERE, "");
+						log.log(Level.SEVERE, "");
+						log.log(Level.SEVERE, "Printing Error:");
+						log.log(Level.SEVERE, "String '"+s+"' is in an invalid format!");
+						log.log(Level.SEVERE, "");
+						log.log(Level.SEVERE, "");
+						log.log(Level.SEVERE, "");
+						log.log(Level.SEVERE, "END OF ERROR");
+						log.log(Level.SEVERE, "=============================");
+						return;
+					}
+					
+					if (potionParts[0].equalsIgnoreCase("DAMAGE"))
+					{
+						return;
+					}
+					
+					PotionEffectType type = PotionEffectType.getByName(potionParts[0].toUpperCase());
+					
+					if (type == null)
+					{
+						Logger log = Main.getInstance().getLogger();
+						PluginDescriptionFile pdf = Main.getInstance().getDescription();
+						
+						log.log(Level.SEVERE, "=============================");
+						log.log(Level.SEVERE, "Error while reading the config for "+pdf.getName()+" V"+pdf.getVersion());
+						log.log(Level.SEVERE, "");
+						log.log(Level.SEVERE, "");
+						log.log(Level.SEVERE, "");
+						log.log(Level.SEVERE, "Printing Error:");
+						log.log(Level.SEVERE, "String '"+s+"' is in an invalid format!");
+						log.log(Level.SEVERE, "");
+						log.log(Level.SEVERE, "");
+						log.log(Level.SEVERE, "");
+						log.log(Level.SEVERE, "END OF ERROR");
+						log.log(Level.SEVERE, "=============================");
+						return;
+					}
+					
+					PotionEffect effect = new PotionEffect(type, Integer.valueOf(potionParts[1])*20, Integer.valueOf(potionParts[2])-1);
+					
+					p.addPotionEffect(effect);
+				}
+				else if (percent > thirst)
+				{
+					PotionEffectType type = PotionEffectType.getByName(potionParts[0].toUpperCase());
+					p.removePotionEffect(type);
+				}
+			}
+		}
 
 		if (thirst <= 35) p.sendMessage(ChatColor.translateAlternateColorCodes('&', Main.getInstance().getYAMLConfig().ThirstLowMessage.replace("%player%", p.getName()).replace("%percent%", getThirstPercent(p, true))));
 		

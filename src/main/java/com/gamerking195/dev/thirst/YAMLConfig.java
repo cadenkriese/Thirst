@@ -5,7 +5,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.bukkit.plugin.PluginDescriptionFile;
-
 import net.cubespace.Yamler.Config.Comment;
 import net.cubespace.Yamler.Config.Comments;
 import net.cubespace.Yamler.Config.YamlConfig;
@@ -15,7 +14,8 @@ extends YamlConfig
 {
 	public YAMLConfig(Main plugin)
 	{
-		CONFIG_HEADER = new String[]{
+		CONFIG_HEADER = new String[]
+		{
 				"#################################",
 				"                                #",
 				"Thirst V"+Main.getInstance().getDescription().getVersion()+", by "+Main.getInstance().getDescription().getAuthors()+"#",
@@ -44,13 +44,14 @@ extends YamlConfig
 		"",
 		"THIRST_QUENCHING_ITEM",
 		"Desc: The item that will quench the thirst of a player.",
-		"Type: Special String",
-		"Default: POTION.20",
-		"Requirements: Should be in format: ITEM.PERCENT",
-		"Note: There will be support for multiple items soon."
+		"Type: Formatted string array",
+		"Default:",
+		"- POTION.20",
+		"- GOLDEN_APPLE.100.1",
+		"Requirements: Should be in format: ITEM.PERCENT.METADATE(metadata optional)"
 	})
-	public String ThirstQuenchingItem = "POTION.20";
-	
+	public String[] ThirstQuenchingItems = {"POTION.20", "GOLDEN_APPLE.100.1"};
+
 	@Comments
 	({
 		"",
@@ -60,7 +61,7 @@ extends YamlConfig
 		"Default: 1"
 	})
 	public int RemoveThirst = 1;
-	
+
 	@Comments
 	({
 		"",
@@ -71,7 +72,7 @@ extends YamlConfig
 		"Note: This does support valused under one second without any changes in lag!"
 	})
 	public float ThirstDelay = 36;
-	
+
 	@Comments
 	({
 		"",
@@ -81,7 +82,7 @@ extends YamlConfig
 		"Default: true"
 	})
 	public boolean IgnoreCreative = true;
-	
+
 	@Comments
 	({
 		"",
@@ -91,8 +92,35 @@ extends YamlConfig
 		"Default: false"
 	})
 	public boolean IgnoreOP = false;
-	
-	@Comment("------------Localization------------")
+
+	@Comment("---------------Effects---------------")
+	@Comments
+	({
+		"",
+		"ENABLED",
+		"Desc: If false, all potion effects will not be given.",
+		"Type: Boolean",
+		"Default: true"
+	})
+	public boolean Enabled = true;
+
+	@Comments
+	({
+		"",
+		"EFFECTS",
+		"Desc: If false, all potion effects will not be given.",
+		"Type: Formatted string array",
+		"Default:",
+		"- 10.CONFUSION_30_1",
+		"- 0.DAMAGE_2_3",
+		"Requirements: Should be in format 'PERCENT.POTIONEFFECT_DURATION-IN-SECONDS_AMPLIFIER'",
+		"Note: To damage a player use the effect damage the duration will be the time between each damage",
+		"and the amplifier is how much damage done (out of 20)."
+	})
+	public String[] Effects = {"10.CONFUSION_30_1", "0.DAMAGE_2_3"};
+
+
+	@Comment("---------------Messages---------------")
 
 	@Comments
 	({
@@ -115,7 +143,7 @@ extends YamlConfig
 		"Default: &8[&bThirst&8] &aWatch out &e%player%, &ayour thirst is at &e%percent%!"
 	})
 	public String ThirstLowMessage = "&8[&1Thirst&8] &bWatch out &f%player%, &byour thirst is at &f%percent%!";
-	
+
 	@Comments
 	({
 		"",
@@ -126,7 +154,7 @@ extends YamlConfig
 		"Default: &f%player% didn't drink his water bottle."
 	})
 	public String ThirstDeathMessage = "&f%player% didn't drink his water bottle.";
-	
+
 	@Comments
 	({
 		"",
@@ -137,7 +165,7 @@ extends YamlConfig
 		"Default: &f%player%'s &bthirst: %thirstmessage%"
 	})
 	public String ThirstViewPlayerMessage = "&8[&1Thirst&8] &f%player%'s &bthirst: %thirstmessage%";
-	
+
 	@Comments
 	({
 		"",
@@ -150,7 +178,7 @@ extends YamlConfig
 		"Note: There will not be a space between messages unless you add one."
 	})
 	public String ThirstViewMessage = "&8[&1Thirst&8] &bYour thirst: ";
-	
+
 	@Comments
 	({
 		"",
@@ -160,7 +188,7 @@ extends YamlConfig
 		"Default: &8[&1Thirst&8] &bInvalid command syntax!"
 	})
 	public String InvalidCommandMessage = "&8[&1Thirst&8] &bInvalid command syntax!";
-	
+
 	@Comments
 	({
 		"",
@@ -170,7 +198,7 @@ extends YamlConfig
 		"Default: &8[&1Thirst&8] &bYou do not have permission to do that!"
 	})
 	public String NoPermissionMesage = "&8[&1Thirst&8] &bYou do not have permission to do that!";
-	
+
 	@Comments
 	({
 		"",
@@ -181,18 +209,22 @@ extends YamlConfig
 		"Default: &f&lTHIRST"
 	})
 	public String ScoreboardName = "&f&lTHIRST";
-	
+
 	//CLASSES
 
 	public class ThirstItem extends YamlConfig
 	{
+		private String item = "POTION";
+		private int quenchPercent = 20;
+		private int metaData = 0;
+
 		public ThirstItem(String s)
 		{
 			if (!s.contains("."))
 			{
 				Logger log = Main.getInstance().getLogger();
 				PluginDescriptionFile pdf = Main.getInstance().getDescription();
-				
+
 				log.log(Level.SEVERE, "=============================");
 				log.log(Level.SEVERE, "Error while reading the config for "+pdf.getName()+" V"+pdf.getVersion());
 				log.log(Level.SEVERE, "");
@@ -202,21 +234,22 @@ extends YamlConfig
 				log.log(Level.SEVERE, "String '"+s+"' is in an invalid format!");
 				log.log(Level.SEVERE, "");
 				log.log(Level.SEVERE, "");
+				log.log(Level.SEVERE, "");
 				log.log(Level.SEVERE, "END OF ERROR");
 				log.log(Level.SEVERE, "=============================");
-				
+
 				item = "NULL";
 				quenchPercent = 0;
 				return;
 			}
-			
+
 			String[] parts = s.split("\\.");
-			
-			if (!isInteger(parts[1]))
+
+			if (!isInteger(parts[1]) || parts.length > 3)
 			{
 				Logger log = Main.getInstance().getLogger();
 				PluginDescriptionFile pdf = Main.getInstance().getDescription();
-				
+
 				log.log(Level.SEVERE, "=============================");
 				log.log(Level.SEVERE, "Error while reading the config for "+pdf.getName()+" V"+pdf.getVersion());
 				log.log(Level.SEVERE, "");
@@ -226,26 +259,29 @@ extends YamlConfig
 				log.log(Level.SEVERE, "String '"+s+"' is in an invalid format!");
 				log.log(Level.SEVERE, "");
 				log.log(Level.SEVERE, "");
+				log.log(Level.SEVERE, "");
 				log.log(Level.SEVERE, "END OF ERROR");
 				log.log(Level.SEVERE, "=============================");
-				
+
 				item = "NULL";
 				quenchPercent = 0;
 				return;
 			}
-			
+
+			if (parts.length == 3)
+			{
+				metaData = Integer.valueOf(parts[2]);
+			}
+
 			item = parts[0];
 			quenchPercent = Integer.valueOf(parts[1]);
 		}
-		
-		private String item = "POTION";
-		private int quenchPercent = 20;
 
 		public String toString()
 		{
 			return ""+item.toUpperCase()+"-"+quenchPercent;
 		}
-		
+
 		public void setItem(String itemString)
 		{
 			item = itemString;
@@ -265,18 +301,177 @@ extends YamlConfig
 		{
 			return quenchPercent;
 		}
-		
-	    public boolean isInteger(String s) 
-	    {
-	        try
-	        {
-	            Integer.parseInt(s);
-	        } 
-	        catch (NumberFormatException e) 
-	        {
-	            return false;
-	        }
-	        return true;
-	    }
+
+		public boolean isInteger(String s) 
+		{
+			try
+			{
+				Integer.parseInt(s);
+			} 
+			catch (NumberFormatException e) 
+			{
+				return false;
+			}
+			return true;
+		}
+
+		public int getMetaData() 
+		{
+			return metaData;
+		}
+
+		public void setMetaData(int metaData) 
+		{
+			this.metaData = metaData;
+		}
+	}
+
+	//METHODS
+
+	public int getDamageInterval()
+	{
+		for (String s : Effects)
+		{
+			String[] parts = s.split("\\.");
+			if (parts.length != 2)
+			{
+				Logger log = Main.getInstance().getLogger();
+				PluginDescriptionFile pdf = Main.getInstance().getDescription();
+
+				log.log(Level.SEVERE, "=============================");
+				log.log(Level.SEVERE, "Error while reading the config for "+pdf.getName()+" V"+pdf.getVersion());
+				log.log(Level.SEVERE, "");
+				log.log(Level.SEVERE, "");
+				log.log(Level.SEVERE, "");
+				log.log(Level.SEVERE, "Printing Error:");
+				log.log(Level.SEVERE, "String '"+s+"' is in an invalid format!");
+				log.log(Level.SEVERE, "");
+				log.log(Level.SEVERE, "");
+				log.log(Level.SEVERE, "");
+				log.log(Level.SEVERE, "END OF ERROR");
+				log.log(Level.SEVERE, "=============================");
+				return -1;
+			}
+
+			Integer.valueOf(parts[0]);
+			String[] potionParts = parts[1].split("_");
+
+			if (potionParts.length != 3)
+			{
+				Logger log = Main.getInstance().getLogger();
+				PluginDescriptionFile pdf = Main.getInstance().getDescription();
+
+				log.log(Level.SEVERE, "=============================");
+				log.log(Level.SEVERE, "Error while reading the config for "+pdf.getName()+" V"+pdf.getVersion());
+				log.log(Level.SEVERE, "");
+				log.log(Level.SEVERE, "");
+				log.log(Level.SEVERE, "");
+				log.log(Level.SEVERE, "Printing Error:");
+				log.log(Level.SEVERE, "String '"+s+"' is in an invalid format!");
+				log.log(Level.SEVERE, "");
+				log.log(Level.SEVERE, "");
+				log.log(Level.SEVERE, "");
+				log.log(Level.SEVERE, "END OF ERROR");
+				log.log(Level.SEVERE, "=============================");
+				return -1;
+			}
+
+			if (potionParts[0].equalsIgnoreCase("DAMAGE"))
+			{	
+				return Integer.valueOf(potionParts[1]);
+			}
+		}
+		return -1;
+	}
+	
+	public int getDamageAmount()
+	{
+		for (String s : Effects)
+		{
+			String[] parts = s.split("\\.");
+			if (parts.length != 2)
+			{
+				Logger log = Main.getInstance().getLogger();
+				PluginDescriptionFile pdf = Main.getInstance().getDescription();
+
+				log.log(Level.SEVERE, "=============================");
+				log.log(Level.SEVERE, "Error while reading the config for "+pdf.getName()+" V"+pdf.getVersion());
+				log.log(Level.SEVERE, "");
+				log.log(Level.SEVERE, "");
+				log.log(Level.SEVERE, "");
+				log.log(Level.SEVERE, "Printing Error:");
+				log.log(Level.SEVERE, "String '"+s+"' is in an invalid format!");
+				log.log(Level.SEVERE, "");
+				log.log(Level.SEVERE, "");
+				log.log(Level.SEVERE, "");
+				log.log(Level.SEVERE, "END OF ERROR");
+				log.log(Level.SEVERE, "=============================");
+				return -1;
+			}
+
+			Integer.valueOf(parts[0]);
+			String[] potionParts = parts[1].split("_");
+
+			if (potionParts.length != 3)
+			{
+				Logger log = Main.getInstance().getLogger();
+				PluginDescriptionFile pdf = Main.getInstance().getDescription();
+
+				log.log(Level.SEVERE, "=============================");
+				log.log(Level.SEVERE, "Error while reading the config for "+pdf.getName()+" V"+pdf.getVersion());
+				log.log(Level.SEVERE, "");
+				log.log(Level.SEVERE, "");
+				log.log(Level.SEVERE, "");
+				log.log(Level.SEVERE, "Printing Error:");
+				log.log(Level.SEVERE, "String '"+s+"' is in an invalid format!");
+				log.log(Level.SEVERE, "");
+				log.log(Level.SEVERE, "");
+				log.log(Level.SEVERE, "");
+				log.log(Level.SEVERE, "END OF ERROR");
+				log.log(Level.SEVERE, "=============================");
+				return -1;
+			}
+
+			if (potionParts[0].equalsIgnoreCase("DAMAGE"))
+			{	
+				return Integer.valueOf(potionParts[2]);
+			}
+		}
+		return -1;
+	}
+	
+	public int getDamagePercent()
+	{
+		for (String s : Effects)
+		{
+			String[] parts = s.split("\\.");
+			if (parts.length != 2)
+			{
+				Logger log = Main.getInstance().getLogger();
+				PluginDescriptionFile pdf = Main.getInstance().getDescription();
+
+				log.log(Level.SEVERE, "=============================");
+				log.log(Level.SEVERE, "Error while reading the config for "+pdf.getName()+" V"+pdf.getVersion());
+				log.log(Level.SEVERE, "");
+				log.log(Level.SEVERE, "");
+				log.log(Level.SEVERE, "");
+				log.log(Level.SEVERE, "Printing Error:");
+				log.log(Level.SEVERE, "String '"+s+"' is in an invalid format!");
+				log.log(Level.SEVERE, "");
+				log.log(Level.SEVERE, "");
+				log.log(Level.SEVERE, "");
+				log.log(Level.SEVERE, "END OF ERROR");
+				log.log(Level.SEVERE, "=============================");
+				return -1;
+			}
+
+			int percent = Integer.valueOf(parts[0]);
+			
+			if (parts[1].startsWith("DAMAGE"))
+			{
+				return percent;
+			}
+		}
+		return -1;
 	}
 }

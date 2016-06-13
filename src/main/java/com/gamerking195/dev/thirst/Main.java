@@ -47,7 +47,7 @@ extends JavaPlugin
 			{
 				loadFiles();
 			}
-		}.runTaskLater(this, 40L);
+		}.runTaskLater(this, 5L);
 
 		log.log(Level.INFO, "V"+pdf.getVersion()+" enabled!");
 		log.log(Level.INFO, pdf.getName()+" developed by "+pdf.getAuthors());
