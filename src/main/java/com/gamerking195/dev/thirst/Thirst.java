@@ -235,6 +235,8 @@ public class Thirst
 
 	public void setThirst(Player p, int thirst)
 	{
+		int oldThirst = getPlayerThirst(p);
+		
 		if (p.isDead()) thirst = 100;
 		
 		if (thirst < 0) thirst = 0;
@@ -333,16 +335,40 @@ public class Thirst
 			}
 		}
 
-		if (thirst <= 35) p.sendMessage(ChatColor.translateAlternateColorCodes('&', Main.getInstance().getYAMLConfig().ThirstLowMessage.replace("%player%", p.getName()).replace("%percent%", getThirstPercent(p, true))));
+		if (thirst <= 35 && oldThirst != 0 & oldThirst != -1) p.sendMessage(ChatColor.translateAlternateColorCodes('&', Main.getInstance().getYAMLConfig().ThirstLowMessage.replace("%player%", p.getName()).replace("%percent%", getThirstPercent(p, true))));
 		
 		displayThirst(p);
 	}
 
 	public void refreshScoreboard (Player p)
 	{
+		if (getThirstString(p).length() > 40)
+		{
+			Logger log = Main.getInstance().getLogger();
+			PluginDescriptionFile pdf = Main.getInstance().getDescription();
+			
+			log.log(Level.SEVERE, "=============================");
+			log.log(Level.SEVERE, "Error while displaying scoreboard for "+p.getName()+" in "+pdf.getName()+" V"+pdf.getVersion());
+			log.log(Level.SEVERE, "");
+			log.log(Level.SEVERE, "");
+			log.log(Level.SEVERE, "");
+			log.log(Level.SEVERE, "Printing Message:");
+			log.log(Level.SEVERE, "The string "+getThirstString(p)+" is longer than 40 characters.");
+			log.log(Level.SEVERE, "You must have a thirst message under 40 characters to use the SCOREBOARD displaytype.");
+			log.log(Level.SEVERE, "");
+			log.log(Level.SEVERE, "NOTE: This message will be displayed every time Thirst trys to update someones thirst (A lot!)");
+			log.log(Level.SEVERE, "");
+			log.log(Level.SEVERE, "");
+			log.log(Level.SEVERE, "");
+			log.log(Level.SEVERE, "END OF ERROR");
+			log.log(Level.SEVERE, "=============================");
+			
+			return;
+		}
+		
 		Scoreboard board = manager.getNewScoreboard();
 		Objective obj = board.registerNewObjective(p.getName().toUpperCase(), "dummy");
-
+		
 		obj.setDisplaySlot(DisplaySlot.SIDEBAR);
 		obj.setDisplayName(ChatColor.translateAlternateColorCodes('&', Main.getInstance().getYAMLConfig().ScoreboardName.replace("%player%", p.getName())));
 		obj.getScore(getThirstString(p)).setScore(-1);
@@ -352,7 +378,18 @@ public class Thirst
 
 	public int getPlayerThirst(Player p)
 	{
-		return thirstCache.get(p);
+		if (!thirstCache.containsKey(p))
+		{
+			if (thirstConfig.contains(p.getUniqueId().toString()))
+			{
+				return thirstConfig.getInt(p.getUniqueId().toString());
+			}
+		}
+		else
+		{
+			return thirstCache.get(p);
+		}
+		return -1;
 	}
 
 	public void displayThirst(Player p)

@@ -12,7 +12,7 @@ extends EZPlaceholderHook
 {
 	public Placeholders(Plugin plugin) 
 	{
-		super(plugin, "thirst");
+		super(plugin, "thrst");
 	}
 
 	@Override

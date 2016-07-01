@@ -69,7 +69,7 @@ extends YamlConfig
 		"Desc: The delay in seconds before thirst is removed from every player.",
 		"Type: float (Time in seconds)",
 		"Default: 36 (will remove 100% over three days, just like in real life!)",
-		"Note: This does support valused under one second without any changes in lag!"
+		"Note: This does support values under one second without any changes in lag!"
 	})
 	public float ThirstDelay = 36;
 

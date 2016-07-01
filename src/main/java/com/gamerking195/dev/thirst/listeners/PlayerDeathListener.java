@@ -17,14 +17,20 @@ implements Listener
 	public void onPlayerDeath(PlayerDeathEvent event)
 	{
 		Player p = event.getEntity();
-		if (event.getDeathMessage().contains("withered away"))
+		boolean damageEffects = false;
+		for (String s : Main.getInstance().getYAMLConfig().Effects)
 		{
-			if (Thirst.getThirst().getPlayerThirst(p) <= 0)
+			if (s.contains("DAMAGE") && event.getDeathMessage().equalsIgnoreCase(p.getName()+" died"))
 			{
-				event.setDeathMessage(ChatColor.translateAlternateColorCodes('&', Main.getInstance().getYAMLConfig().ThirstDeathMessage.replace("%player%", p.getName())));
-				
-				Thirst.getThirst().setThirst(p, 100);
+				damageEffects = true;
 			}
+		}
+		
+		if (Thirst.getThirst().getPlayerThirst(p) <= Main.getInstance().getYAMLConfig().getDamagePercent() && damageEffects)
+		{
+			event.setDeathMessage(ChatColor.translateAlternateColorCodes('&', Main.getInstance().getYAMLConfig().ThirstDeathMessage.replace("%player%", p.getName())));
+
+			Thirst.getThirst().setThirst(p, 100);
 		}
 	}
 }
