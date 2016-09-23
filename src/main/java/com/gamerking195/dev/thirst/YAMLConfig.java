@@ -12,6 +12,20 @@ import net.cubespace.Yamler.Config.YamlConfig;
 public class YAMLConfig
 extends YamlConfig
 {
+	/*
+	 * TODO
+	 * 
+	 * - Add support for biome percent multipliers
+	 * - Add support for day/night multipliers
+	 * - Add support for armor multipliers
+	 * - Add messages for all of the above
+	 * - Fix effects like SLOW_DIGGING (change it all to be split by periods) [DONE]
+	 * - Add sprinting multiplier
+	 * - Something with sleep?
+	 * - Add run sprinting multiplier.
+	 */
+	
+	
 	public YAMLConfig(Main plugin)
 	{
 		CONFIG_HEADER = new String[]
@@ -93,6 +107,57 @@ extends YamlConfig
 	})
 	public boolean IgnoreOP = false;
 
+	@Comment("---------------Multipliers---------------")
+	@Comments
+	({
+		"",		
+		"BIOMES",
+		"Desc: List all biomes you want to modify players thirst percent. Ex: desert.5 will make players thirst go down 5 seconds quicker",
+		"Type: Formatted string array",
+		"Default:",
+		"DESERT.5",
+		"HELL.10"
+	})
+	public String[] Biomes = new String[] {"DESERT.5", "HELL.10"};	
+	@Comments
+	({
+		"",		
+		"ARMOR",
+		"Desc: List all armor types you want to modify players thirst percent. Ex: leather.5 will make players thirst go down 5 seconds quicker in full leather armor",
+		"Type: Formatted string array",
+		"Default:",
+		"LEATHER.5",
+		"IRON_CHESTPLATE.10"
+	})
+	public String[] Armor = new String[] {"LEATHER.5", "IRON_CHESTPLATE.10"};
+	@Comments
+	({
+		"",		
+		"SPRINT",
+		"Desc: How much quicker you want thirst to be removed when sprinting, put -1 to make no thirst removed.",
+		"Type: Integer",
+		"Default: -1"
+	})
+	public int Sprint = -1;
+	@Comments
+	({
+		"",		
+		"DAY_MULTIPLIER",
+		"Desc: How much quicker you want thirst to be removed when it is day, put 0 to make no thirst removed, put negative to make thirst take longer to be removed.",
+		"Type: Integer",
+		"Default: 0"
+	})
+	public int DayMultiplier = 0;
+	@Comments
+	({
+		"",		
+		"NIGHT_MULTIPLIER",
+		"Desc: How much quicker you want thirst to be removed when it is night, put 0 to make no thirst removed, put negative to make thirst take longer to be removed.",
+		"Type: Integer",
+		"Default: 0"
+	})
+	public int NightMultiplier = 0;
+	
 	@Comment("---------------Effects---------------")
 	@Comments
 	({
@@ -111,13 +176,13 @@ extends YamlConfig
 		"Desc: If false, all potion effects will not be given.",
 		"Type: Formatted string array",
 		"Default:",
-		"- 10.CONFUSION_30_1",
-		"- 0.DAMAGE_2_3",
+		"- 10.SLOW_DIGGING.30.1",
+		"- 0.DAMAGE.2.3",
 		"Requirements: Should be in format 'PERCENT.POTIONEFFECT_DURATION-IN-SECONDS_AMPLIFIER'",
 		"Note: To damage a player use the effect damage the duration will be the time between each damage",
 		"and the amplifier is how much damage done (out of 20)."
 	})
-	public String[] Effects = {"10.CONFUSION_30_1", "0.DAMAGE_2_3"};
+	public String[] Effects = {"10.CONFUSION.30.1", "0.DAMAGE.2.3"};
 
 
 	@Comment("---------------Messages---------------")
@@ -128,7 +193,7 @@ extends YamlConfig
 		"THIRST_MESSAGE",
 		"Desc: Changes the message displayed in the display_type.",
 		"Type: String",
-		"Variables: %thirstbar%, %percent%, %player%",
+		"Variables: %thirstbar%, %percent%, %player%, %removespeed%",
 		"Default: &bTHIRST &f- &8[%thirstbar%&8] %percent%"
 	})
 	public String ThirstMessage = "&b&lTHIRST &f- &8[%thirstbar%&8] %percent%";
@@ -161,7 +226,7 @@ extends YamlConfig
 		"THIRST_VIEW_PLAYER_MESSAGE",
 		"Desc: The message that will be sent when someone does /thirst view %player%",
 		"Type: String",
-		"Variables: %player%, %thirstbar%, %percent%, %thirstmessage%",
+		"Variables: %player%, %thirstbar%, %percent%, %thirstmessage%, %removespeed%",
 		"Default: &f%player%'s &bthirst: %thirstmessage%"
 	})
 	public String ThirstViewPlayerMessage = "&8[&1Thirst&8] &f%player%'s &bthirst: %thirstmessage%";
@@ -333,7 +398,7 @@ extends YamlConfig
 		for (String s : Effects)
 		{
 			String[] parts = s.split("\\.");
-			if (parts.length != 2)
+			if (parts.length != 4)
 			{
 				Logger log = Main.getInstance().getLogger();
 				PluginDescriptionFile pdf = Main.getInstance().getDescription();
@@ -353,32 +418,9 @@ extends YamlConfig
 				return -1;
 			}
 
-			Integer.valueOf(parts[0]);
-			String[] potionParts = parts[1].split("_");
-
-			if (potionParts.length != 3)
-			{
-				Logger log = Main.getInstance().getLogger();
-				PluginDescriptionFile pdf = Main.getInstance().getDescription();
-
-				log.log(Level.SEVERE, "=============================");
-				log.log(Level.SEVERE, "Error while reading the config for "+pdf.getName()+" V"+pdf.getVersion());
-				log.log(Level.SEVERE, "");
-				log.log(Level.SEVERE, "");
-				log.log(Level.SEVERE, "");
-				log.log(Level.SEVERE, "Printing Error:");
-				log.log(Level.SEVERE, "String '"+s+"' is in an invalid format!");
-				log.log(Level.SEVERE, "");
-				log.log(Level.SEVERE, "");
-				log.log(Level.SEVERE, "");
-				log.log(Level.SEVERE, "END OF ERROR");
-				log.log(Level.SEVERE, "=============================");
-				return -1;
-			}
-
-			if (potionParts[0].equalsIgnoreCase("DAMAGE"))
+			if (parts[1].equalsIgnoreCase("DAMAGE"))
 			{	
-				return Integer.valueOf(potionParts[1]);
+				return Integer.valueOf(parts[2]);
 			}
 		}
 		return -1;
@@ -389,7 +431,7 @@ extends YamlConfig
 		for (String s : Effects)
 		{
 			String[] parts = s.split("\\.");
-			if (parts.length != 2)
+			if (parts.length != 4)
 			{
 				Logger log = Main.getInstance().getLogger();
 				PluginDescriptionFile pdf = Main.getInstance().getDescription();
@@ -409,32 +451,9 @@ extends YamlConfig
 				return -1;
 			}
 
-			Integer.valueOf(parts[0]);
-			String[] potionParts = parts[1].split("_");
-
-			if (potionParts.length != 3)
-			{
-				Logger log = Main.getInstance().getLogger();
-				PluginDescriptionFile pdf = Main.getInstance().getDescription();
-
-				log.log(Level.SEVERE, "=============================");
-				log.log(Level.SEVERE, "Error while reading the config for "+pdf.getName()+" V"+pdf.getVersion());
-				log.log(Level.SEVERE, "");
-				log.log(Level.SEVERE, "");
-				log.log(Level.SEVERE, "");
-				log.log(Level.SEVERE, "Printing Error:");
-				log.log(Level.SEVERE, "String '"+s+"' is in an invalid format!");
-				log.log(Level.SEVERE, "");
-				log.log(Level.SEVERE, "");
-				log.log(Level.SEVERE, "");
-				log.log(Level.SEVERE, "END OF ERROR");
-				log.log(Level.SEVERE, "=============================");
-				return -1;
-			}
-
-			if (potionParts[0].equalsIgnoreCase("DAMAGE"))
+			if (parts[1].equalsIgnoreCase("DAMAGE"))
 			{	
-				return Integer.valueOf(potionParts[2]);
+				return Integer.valueOf(parts[3]);
 			}
 		}
 		return -1;
@@ -445,7 +464,7 @@ extends YamlConfig
 		for (String s : Effects)
 		{
 			String[] parts = s.split("\\.");
-			if (parts.length != 2)
+			if (parts.length != 4)
 			{
 				Logger log = Main.getInstance().getLogger();
 				PluginDescriptionFile pdf = Main.getInstance().getDescription();

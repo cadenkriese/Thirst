@@ -12,7 +12,7 @@ extends EZPlaceholderHook
 {
 	public Placeholders(Plugin plugin) 
 	{
-		super(plugin, "thrst");
+		super(plugin, "gkthirst");
 	}
 
 	@Override
@@ -31,6 +31,11 @@ extends EZPlaceholderHook
 		if (identifier.equals("thirstpercent"))
 		{
 			return Thirst.getThirst().getThirstPercent(p, true);
+		}
+		
+		if (identifier.equals("thirstremoval"))
+		{
+			return String.format(String.valueOf(Thirst.getThirst().getThirstData(p).getSpeed()/1000), "%.2f");
 		}
 		
 		return null;

@@ -9,6 +9,7 @@ import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.block.Biome;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -77,7 +78,8 @@ implements CommandExecutor
 									.replace("%player%", oP.getName())
 									.replace("%bar%", Thirst.getThirst().getThirstBar(oP)
 											.replace("%percent%", Thirst.getThirst().getThirstPercent(oP, true)
-													.replace("%thirstmessage%", Thirst.getThirst().getThirstString(oP))));
+													.replace("%thirstmessage%", Thirst.getThirst().getThirstString(oP)
+															.replace("%removespeed%", String.valueOf(Thirst.getThirst().getThirstData(oP).getSpeed()/1000)))));
 
 							sender.sendMessage(ChatColor.translateAlternateColorCodes('&', thirstViewPlayerMessage.replace("%thirstmessage%", Thirst.getThirst().getThirstString(oP))));
 							return true;
@@ -122,6 +124,8 @@ implements CommandExecutor
 					sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&b/thirst help | &fDisplays this help message."));
 					sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&b/thirst view | &fDisplays your thirst."));
 					sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&b/thirst view [PLAYER] | &fDisplays the thirst of the specified player."));
+					sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&b/thirst list [BIOMES:FOOD:EFFECTS] | &fLists all possible config nodes for the specified category."));
+					sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&b/thirst reload | &fReloads the configuration and data files."));
 					sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&f&m-----------------------"));
 				}
 				else if (args[0].equalsIgnoreCase("reload") || args[0].equalsIgnoreCase("rl"))
@@ -193,6 +197,11 @@ implements CommandExecutor
 						}
 					}
 					
+					if (args.length < 2)
+					{
+						sender.sendMessage(ChatColor.translateAlternateColorCodes('&', Main.getInstance().getYAMLConfig().InvalidCommandMessage));
+						return true;
+					}
 					
 					if (args[1].equalsIgnoreCase("effects"))
 					{
@@ -214,6 +223,33 @@ implements CommandExecutor
 							if (mat != null && mat.isEdible())
 							{
 								sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&b"+mat.toString()));
+							}
+						}
+						sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&f&m-----------------------"));
+					}
+					else if (args[1].equalsIgnoreCase("biomes"))
+					{						
+						sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&f&m-----------------------"));
+						for (Biome biome : Biome.values())
+						{
+							if (biome != null)
+							{
+								sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&b"+biome.toString()));
+							}
+						}
+						sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&f&m-----------------------"));
+					}
+					else if (args[1].equalsIgnoreCase("armor"))
+					{
+						sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&f&m-----------------------"));
+						for(Material mat : Material.values())
+						{
+							if (mat != null)
+							{
+								if(mat.toString().contains("LEATHER") || mat.toString().contains("GOLD") || mat.toString().contains("CHAINMAIL") || mat.toString().contains("IRON") || mat.toString().contains("GOLD"))
+								{
+									sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&b"+mat.toString()));
+								}
 							}
 						}
 						sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&f&m-----------------------"));

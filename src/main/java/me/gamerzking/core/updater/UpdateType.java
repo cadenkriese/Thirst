@@ -16,10 +16,7 @@ public enum UpdateType
 	SECOND(1000),
 	HALF_SECOND(500),
 	QUARTER_SECOND(250),
-	TIER1(15000),
-	TIER2(20000),
-	TIER3(30000),
-	CONFIG((long) Main.getInstance().getYAMLConfig().ThirstDelay*1000),
+	CENTI_SECOND(100),
 	DAMAGE((long) Main.getInstance().getYAMLConfig().getDamageInterval()*1000),
 	TICK(50);
 

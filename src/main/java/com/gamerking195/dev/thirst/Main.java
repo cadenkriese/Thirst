@@ -56,7 +56,7 @@ extends JavaPlugin
 	@Override
 	public void onDisable()
 	{
-		
+
 		try 
 		{
 			config.reload();
@@ -115,7 +115,7 @@ extends JavaPlugin
 			this.setEnabled(false);
 			return;
 		}
-		
+
 		if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI"))
 		{
 			if (new Placeholders(this).hook())
@@ -127,37 +127,47 @@ extends JavaPlugin
 				log.log(Level.WARNING, "Found PlaceholderAPI, but the placeholders did not hook!");
 			}
 		}
-		
-		ActionBarAPI.init();
-		
-		new Updater(this);
-		
-		//CLASSES
 
+		ActionBarAPI.init();
+
+		new Updater(this);
+
+		//CLASSES
 		Thirst.getThirst().init(); 
 
 		//COMMANDS
 		this.getCommand("thirst").setExecutor(new ThirstCommand());
-		
+
 		//EVENTS
 		PluginManager pm = getServer().getPluginManager();
 
-		pm.registerEvents(new PlayerJoinLeaveListener(), this);
-		pm.registerEvents(new PlayerItemConsumeListener(), this);
-		pm.registerEvents(new PlayerDeathListener(), this);
-		pm.registerEvents(new PlayerGamemodeChangeListener(), this);
-		pm.registerEvents(new PlayerCommandPreProcessListener(), this);
-		pm.registerEvents(new UpdateListener(), this);
-		pm.registerEvents(new PlayerRespawnListener(), this);
-		
-		//PLACEHOLDERS
+		pm.registerEvents(new PlayerJoinLeaveListener(), instance);
+		pm.registerEvents(new PlayerItemConsumeListener(), instance);
+		pm.registerEvents(new PlayerDeathListener(), instance);
+		pm.registerEvents(new PlayerGamemodeChangeListener(), instance);
+		pm.registerEvents(new PlayerCommandPreProcessListener(), instance);
+		pm.registerEvents(new UpdateListener(), instance);
+		pm.registerEvents(new PlayerRespawnListener(), instance);
 	}
 
 	public YAMLConfig getYAMLConfig() 
 	{
 		return config;
 	}
-	
+
+	public boolean isInt(String s)
+	{
+		try 
+		{
+			Integer.parseInt(s);
+		} 
+		catch (NumberFormatException e)
+		{
+			return false;
+		}
+		return true;
+	}
+
 	public void disable()
 	{
 		this.setEnabled(false);
