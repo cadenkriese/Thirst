@@ -24,6 +24,7 @@ implements Listener
 		{
 			for (Player p : Bukkit.getOnlinePlayers())
 			{
+			        if (!p.isOnline()) continue;
 				if (p.getGameMode() == GameMode.CREATIVE && Main.getInstance().getYAMLConfig().IgnoreCreative) continue;
 				if (p.isOp() && Main.getInstance().getYAMLConfig().IgnoreOP) continue;
 				if (p.hasPermission("thirst.ignore") || p.hasPermission("thirst.*")) continue;
@@ -38,6 +39,7 @@ implements Listener
 			{
 				Player p = Bukkit.getServer().getPlayer(UUID.fromString(s));
 				
+				if (!p.isOnline()) continue;
 				if (p.getGameMode() == GameMode.CREATIVE && Main.getInstance().getYAMLConfig().IgnoreCreative) continue;
 				if (p.isOp() && Main.getInstance().getYAMLConfig().IgnoreOP) continue;
 				if (p.hasPermission("thirst.ignore") || p.hasPermission("thirst.*")) continue;
@@ -53,6 +55,7 @@ implements Listener
 		{
 			for (Player p : Bukkit.getOnlinePlayers())
 			{
+			        if (!p.isOnline()) continue;
 				if (p.getGameMode() == GameMode.CREATIVE && Main.getInstance().getYAMLConfig().IgnoreCreative) continue;
 				if (p.isOp() && Main.getInstance().getYAMLConfig().IgnoreOP) continue;
 				if (p.hasPermission("thirst.ignore") || p.hasPermission("thirst.*")) continue;
