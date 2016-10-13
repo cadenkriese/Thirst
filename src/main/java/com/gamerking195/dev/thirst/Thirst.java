@@ -437,6 +437,8 @@ public class Thirst
 		thirstConfig.set(p.getUniqueId().toString(), thirstCache.get(p));
 
 		saveThirstFile();
+		
+		thirstRemovalSpeed.remove(p.getName());
 
 		thirstCache.remove(p);
 	}
