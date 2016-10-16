@@ -19,6 +19,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import com.gamerking195.dev.thirst.Main;
 import com.gamerking195.dev.thirst.Thirst;
+import com.gamerking195.dev.thirst.configs.DataConfig;
 
 public class ThirstCommand 
 implements CommandExecutor
@@ -66,12 +67,12 @@ implements CommandExecutor
 						}
 
 						OfflinePlayer oP = Bukkit.getOfflinePlayer(args[1]);
-						if (oP == null || !oP.hasPlayedBefore() || !Thirst.getThirst().getThirstConfig().contains(oP.getUniqueId().toString()))
+						if (oP == null || !oP.hasPlayedBefore() || !DataConfig.getConfig().fileContains(oP.getUniqueId()))
 						{
 							sender.sendMessage(ChatColor.translateAlternateColorCodes('&', Main.getInstance().getYAMLConfig().InvalidCommandMessage));
 							return true;
 						}
-						else if (oP != null && oP.hasPlayedBefore() && Thirst.getThirst().getThirstConfig().contains(oP.getUniqueId().toString()))
+						else if (oP != null && oP.hasPlayedBefore() && DataConfig.getConfig().fileContains(oP.getUniqueId()))
 						{
 							//if they run /thirst view %player%
 							String thirstViewPlayerMessage = Main.getInstance().getYAMLConfig().ThirstViewPlayerMessage
@@ -142,10 +143,10 @@ implements CommandExecutor
 						{
 							p.setScoreboard(Bukkit.getServer().getScoreboardManager().getNewScoreboard());
 
-							Thirst.getThirst().getThirstConfig().set(p.getUniqueId().toString(), Thirst.getThirst().getPlayerThirst(p));
+							DataConfig.getConfig().writeThirstToFile(p.getUniqueId(), Thirst.getThirst().getPlayerThirst(p));
 						}
 
-						Thirst.getThirst().saveThirstFile();
+						DataConfig.getConfig().saveFile();
 
 						sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&8[&1Thirst&8] &bconfig.yml & thirst_data.yml sucsesfully reloaded!"));
 					} 

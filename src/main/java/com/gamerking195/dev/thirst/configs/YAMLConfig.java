@@ -1,10 +1,13 @@
-package com.gamerking195.dev.thirst;
+package com.gamerking195.dev.thirst.configs;
 
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.bukkit.plugin.PluginDescriptionFile;
+
+import com.gamerking195.dev.thirst.Main;
+
 import net.cubespace.Yamler.Config.Comment;
 import net.cubespace.Yamler.Config.Comments;
 import net.cubespace.Yamler.Config.YamlConfig;

@@ -14,6 +14,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import com.connorlinfoot.actionbarapi.ActionBarAPI;
 import com.gamerking195.dev.thirst.commands.ThirstCommand;
+import com.gamerking195.dev.thirst.configs.DataConfig;
+import com.gamerking195.dev.thirst.configs.YAMLConfig;
 import com.gamerking195.dev.thirst.listeners.PlayerCommandPreProcessListener;
 import com.gamerking195.dev.thirst.listeners.PlayerDeathListener;
 import com.gamerking195.dev.thirst.listeners.PlayerGamemodeChangeListener;
@@ -32,8 +34,8 @@ extends JavaPlugin
 
 	private Logger log;
 	private PluginDescriptionFile pdf;
-	private YAMLConfig config;
-
+	private YAMLConfig yamlConf;
+	
 	@Override
 	public void onEnable()
 	{
@@ -59,8 +61,8 @@ extends JavaPlugin
 
 		try 
 		{
-			config.reload();
-			config.save();
+			yamlConf.reload();
+			yamlConf.save();
 		} 
 		catch(InvalidConfigurationException ex) 
 		{
@@ -89,8 +91,8 @@ extends JavaPlugin
 		//API
 		try
 		{
-			config = new YAMLConfig(this);
-			config.init();
+			yamlConf = new YAMLConfig(this);
+			yamlConf.init();
 		}
 		catch(InvalidConfigurationException ex)
 		{
@@ -134,6 +136,7 @@ extends JavaPlugin
 
 		//CLASSES
 		Thirst.getThirst().init(); 
+		DataConfig.getConfig().init();
 
 		//COMMANDS
 		this.getCommand("thirst").setExecutor(new ThirstCommand());
@@ -152,7 +155,7 @@ extends JavaPlugin
 
 	public YAMLConfig getYAMLConfig() 
 	{
-		return config;
+		return yamlConf;
 	}
 
 	public boolean isInt(String s)

@@ -9,7 +9,7 @@ import org.bukkit.material.MaterialData;
 
 import com.gamerking195.dev.thirst.Main;
 import com.gamerking195.dev.thirst.Thirst;
-import com.gamerking195.dev.thirst.YAMLConfig.ThirstItem;
+import com.gamerking195.dev.thirst.configs.YAMLConfig.ThirstItem;
 
 public class PlayerItemConsumeListener 
 implements Listener

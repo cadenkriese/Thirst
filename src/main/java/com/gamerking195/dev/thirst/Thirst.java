@@ -1,7 +1,5 @@
 package com.gamerking195.dev.thirst;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.UUID;
 import java.util.logging.Level;
@@ -13,8 +11,6 @@ import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Biome;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.potion.PotionEffect;
@@ -25,42 +21,22 @@ import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
 
 import com.connorlinfoot.actionbarapi.ActionBarAPI;
+import com.gamerking195.dev.thirst.configs.DataConfig;
 
 public class Thirst
 {		
-	HashMap<Player, Integer> thirstCache = new HashMap<Player, Integer>();
-
-	//How fast players thirst gets removed in Milliseconds.
-	public HashMap<String, ThirstData> thirstRemovalSpeed = new HashMap<String, ThirstData>();
-
 	private Thirst() {}
 	private static Thirst instance = new Thirst();
-	public static Thirst getThirst() {	return instance;	}
+	public static Thirst getThirst() {	return instance;	 }
 
-	private File thirstFile = new File(Main.getInstance().getDataFolder(), "thirst_data.yml");
-	private FileConfiguration thirstConfig = YamlConfiguration.loadConfiguration(thirstFile); 
+	//All data for players thirst String = Player UUID.
+	private HashMap<String, ThirstData> playerThirstData = new HashMap<String, ThirstData>();
 
 	private ScoreboardManager manager;
-
 
 	public void init()
 	{
 		manager = Bukkit.getScoreboardManager();
-
-		thirstConfig.options().copyDefaults(true);
-
-		if(!thirstFile.exists())
-		{
-			try
-			{
-				thirstFile.createNewFile();
-				thirstConfig.save(thirstFile);
-			}
-			catch (IOException e)
-			{ 
-				e.printStackTrace();
-			}
-		}
 
 		for (Player p : Bukkit.getServer().getOnlinePlayers())
 		{
@@ -172,7 +148,7 @@ public class Thirst
 					log.log(Level.SEVERE, "END OF ERROR");
 					log.log(Level.SEVERE, "=============================");
 				}
-				
+
 				String armorType = split[0];
 				int timeRemoved = Integer.valueOf(split[1])*1000;
 
@@ -213,7 +189,7 @@ public class Thirst
 							speed -= timeRemoved;
 						}
 					}
-			}
+				}
 				Material mat = Material.valueOf(armorType);
 				if (mat != null)
 				{
@@ -285,7 +261,7 @@ public class Thirst
 				speed += Main.getInstance().getYAMLConfig().NightMultiplier*1000;
 			}
 		}
-		
+
 		if (speed < 100)
 		{
 			speed = 100;
@@ -298,13 +274,14 @@ public class Thirst
 	{		
 		int percent = -1;
 
-		if (thirstCache.containsKey(p))
+		if (playerThirstData.containsKey(p))
 		{
-			percent = thirstCache.get(p);
+			//getting thirst without using getPlayerThirst method due to having an offline player.
+			percent = playerThirstData.get(p.getUniqueId().toString()).getThirstAmount();
 		}
-		else if (thirstConfig.contains(p.getUniqueId().toString()))
+		else if (DataConfig.getConfig().fileContains(p.getUniqueId()))
 		{
-			percent = thirstConfig.getInt(p.getUniqueId().toString());
+			percent = DataConfig.getConfig().getThirstFromFIle(p.getUniqueId());
 		}
 		else
 		{
@@ -324,13 +301,14 @@ public class Thirst
 	{
 		int percent = -1;
 
-		if (thirstCache.containsKey(p))
+		if (playerThirstData.containsKey(p.getUniqueId().toString()))
 		{
-			percent = thirstCache.get(p);
+			//getting thirst without using getPlayerThirst method due to having an offline player.
+			percent = playerThirstData.get(p.getUniqueId().toString()).getThirstAmount();
 		}
-		else if (thirstConfig.contains(p.getUniqueId().toString()))
+		else if (DataConfig.getConfig().fileContains(p.getUniqueId()))
 		{
-			percent = thirstConfig.getInt(p.getUniqueId().toString());
+			percent = DataConfig.getConfig().getThirstFromFIle(p.getUniqueId());
 		}
 		else
 		{
@@ -348,13 +326,13 @@ public class Thirst
 	{
 		int percent = -1;
 
-		if (thirstCache.containsKey(p))
+		if (playerThirstData.containsKey(p.getUniqueId().toString()))
 		{
-			percent = thirstCache.get(p);
+			percent = playerThirstData.get(p.getUniqueId().toString()).getThirstAmount();
 		}
-		else if (thirstConfig.contains(p.getUniqueId().toString()))
+		else if (DataConfig.getConfig().fileContains(p.getUniqueId()))
 		{
-			percent = thirstConfig.getInt(p.getUniqueId().toString());
+			percent = DataConfig.getConfig().getThirstFromFIle(p.getUniqueId());
 		}
 		else
 		{
@@ -384,94 +362,36 @@ public class Thirst
 
 		long removalSpeed = calculateSpeed(p);
 		long removeTime = (long) (System.currentTimeMillis()+removalSpeed);
-		ThirstData playerData = new ThirstData(p, removeTime, removalSpeed);
-		setThirstData(p, playerData);
-
-		if (!p.hasPlayedBefore() || !thirstConfig.getKeys(false).contains(pid.toString()))
+		int startingThirst = 100;
+		
+		if (!p.hasPlayedBefore() || !DataConfig.getConfig().fileContains(pid))
 		{
-			thirstConfig.set(pid.toString(), 100);
-			try 
-			{
-				thirstConfig.save(thirstFile);
-			} 
-			catch (IOException ex) 
-			{	
-				Logger log = Main.getInstance().getLogger();
-				PluginDescriptionFile pdf = Main.getInstance().getDescription();
-
-				log.log(Level.SEVERE, "=============================");
-				log.log(Level.SEVERE, "Error while saving Thirst.yml for "+pdf.getName()+" V"+pdf.getVersion());
-				log.log(Level.SEVERE, "");
-				log.log(Level.SEVERE, "");
-				log.log(Level.SEVERE, "");
-				log.log(Level.SEVERE, "Printing StackTrace:");
-				ex.printStackTrace();
-				log.log(Level.SEVERE, "");
-				log.log(Level.SEVERE, "");
-				log.log(Level.SEVERE, "");
-				log.log(Level.SEVERE, "Printing Message:");
-				log.log(Level.SEVERE, ex.getMessage());
-				log.log(Level.SEVERE, "");
-				log.log(Level.SEVERE, "");
-				log.log(Level.SEVERE, "");
-				log.log(Level.SEVERE, "END OF ERROR");
-				log.log(Level.SEVERE, "=============================");
-				return;
-			}
-			thirstCache.put(p, 100);
+			DataConfig.getConfig().writeThirstToFile(pid, 100);
+			DataConfig.getConfig().saveFile();
 		}
 		else
 		{
-			setThirst(p, thirstConfig.getInt(p.getUniqueId().toString()));
+			startingThirst = DataConfig.getConfig().getThirstFromFIle(p.getUniqueId());
 		}
+
+		ThirstData playerData = new ThirstData(p, removeTime, removalSpeed, startingThirst);
+		setThirstData(p, playerData);
 
 		displayThirst(p);
 	}
 
 	public void playerLeave(Player p)
 	{
-		if (p.isDead()) thirstCache.put(p, 100);
+		if (p.isDead()) setThirst(p, 100);
 
 		p.setScoreboard(manager.getNewScoreboard());
 
-		thirstConfig.set(p.getUniqueId().toString(), thirstCache.get(p));
+		DataConfig.getConfig().writeThirstToFile(p.getUniqueId(), getPlayerThirst(p));
+		DataConfig.getConfig().saveFile();
 
-		saveThirstFile();
-		
-		thirstRemovalSpeed.remove(p.getName());
+		playerThirstData.remove(p.getName());
 
-		thirstCache.remove(p);
-	}
-
-	public void saveThirstFile()
-	{
-		try 
-		{
-			thirstConfig.save(thirstFile);
-		} 
-		catch (IOException ex) 
-		{	
-			Logger log = Main.getInstance().getLogger();
-			PluginDescriptionFile pdf = Main.getInstance().getDescription();
-
-			log.log(Level.SEVERE, "=============================");
-			log.log(Level.SEVERE, "Error while saving Thirst.yml for "+pdf.getName()+" V"+pdf.getVersion());
-			log.log(Level.SEVERE, "");
-			log.log(Level.SEVERE, "");
-			log.log(Level.SEVERE, "");
-			log.log(Level.SEVERE, "Printing StackTrace:");
-			ex.printStackTrace();
-			log.log(Level.SEVERE, "");
-			log.log(Level.SEVERE, "");
-			log.log(Level.SEVERE, "");
-			log.log(Level.SEVERE, "Printing Message:");
-			log.log(Level.SEVERE, ex.getMessage());
-			log.log(Level.SEVERE, "");
-			log.log(Level.SEVERE, "");
-			log.log(Level.SEVERE, "");
-			log.log(Level.SEVERE, "END OF ERROR");
-			log.log(Level.SEVERE, "=============================");
-		}
+		playerThirstData.remove(p);
 	}
 
 	public void setThirst(Player p, int thirst)
@@ -483,7 +403,7 @@ public class Thirst
 		if (thirst < 0) thirst = 0;
 		if (thirst > 100) thirst = 100;
 
-		thirstCache.put(p, thirst);
+		playerThirstData.get(p.getUniqueId().toString()).setThirstAmount(thirst);
 
 		if (Main.getInstance().getYAMLConfig().Enabled)
 		{
@@ -597,28 +517,36 @@ public class Thirst
 
 	public int getPlayerThirst(Player p)
 	{
-		if (!thirstCache.containsKey(p))
+		if (p != null)
 		{
-			if (thirstConfig.contains(p.getUniqueId().toString()))
+			if (!playerThirstData.containsKey(p.getUniqueId().toString()))
 			{
-				return thirstConfig.getInt(p.getUniqueId().toString());
+				if (DataConfig.getConfig().fileContains(p.getUniqueId()))
+				{
+					long removalSpeed = calculateSpeed(p);
+					long removeTime = (long) (System.currentTimeMillis()+removalSpeed);
+					ThirstData playerData = new ThirstData(p, removeTime, removalSpeed, DataConfig.getConfig().getThirstFromFIle(p.getUniqueId()));
+					playerThirstData.put(p.getUniqueId().toString(), playerData);
+
+					return DataConfig.getConfig().getThirstFromFIle(p.getUniqueId());
+				}
 			}
-		}
-		else
-		{
-			return thirstCache.get(p);
+			else
+			{
+				return playerThirstData.get(p.getUniqueId().toString()).getThirstAmount();
+			}
 		}
 		return -1;
 	}
 
 	public ThirstData getThirstData(OfflinePlayer oP)
 	{
-		return thirstRemovalSpeed.get(oP.getUniqueId().toString());
+		return playerThirstData.get(oP.getUniqueId().toString());
 	}
 
 	public void setThirstData(Player p, ThirstData data)
 	{	
-		thirstRemovalSpeed.put(p.getUniqueId().toString(), data);
+		playerThirstData.put(p.getUniqueId().toString(), data);
 	}
 
 	public void displayThirst(Player p)
@@ -631,8 +559,8 @@ public class Thirst
 		else if (Main.getInstance().getYAMLConfig().DisplayType.equalsIgnoreCase("SCOREBOARD")) refreshScoreboard(p);
 	}
 
-	public FileConfiguration getThirstConfig()
+	public HashMap<String, ThirstData> getThirstDataMap()
 	{
-		return thirstConfig;
+		return playerThirstData;
 	}
 }
