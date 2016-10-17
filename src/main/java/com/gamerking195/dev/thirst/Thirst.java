@@ -1,7 +1,7 @@
 package com.gamerking195.dev.thirst;
 
-import java.util.HashMap;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -30,7 +30,7 @@ public class Thirst
 	public static Thirst getThirst() {	return instance;	 }
 
 	//All data for players thirst String = Player UUID.
-	private HashMap<String, ThirstData> playerThirstData = new HashMap<String, ThirstData>();
+	private ConcurrentHashMap<String, ThirstData> playerThirstData = new ConcurrentHashMap<String, ThirstData>();
 
 	private ScoreboardManager manager;
 
@@ -559,7 +559,7 @@ public class Thirst
 		else if (Main.getInstance().getYAMLConfig().DisplayType.equalsIgnoreCase("SCOREBOARD")) refreshScoreboard(p);
 	}
 
-	public HashMap<String, ThirstData> getThirstDataMap()
+	public ConcurrentHashMap<String, ThirstData> getThirstDataMap()
 	{
 		return playerThirstData;
 	}
