@@ -3,7 +3,6 @@ package com.gamerking195.dev.thirst.listeners;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -24,11 +23,9 @@ implements Listener
 		{
 			for (Player p : Bukkit.getOnlinePlayers())
 			{
-				if (!p.isOnline()) continue;
-				if (p.getGameMode() == GameMode.CREATIVE && Main.getInstance().getYAMLConfig().IgnoreCreative) continue;
-				if (p.isOp() && Main.getInstance().getYAMLConfig().IgnoreOP) continue;
-				if (p.hasPermission("thirst.ignore") || p.hasPermission("thirst.*")) continue;
-
+				if (!Thirst.getThirst().validatePlayer(p)) continue;
+				if (!Main.getInstance().getYAMLConfig().AlwaysShowActionBar) continue;
+				
 				Thirst.getThirst().displayThirst(p);
 			}
 		}
@@ -44,10 +41,9 @@ implements Listener
 					Thirst.getThirst().getThirstDataMap().remove(s);
 					continue;
 				}
-				if (p.getGameMode() == GameMode.CREATIVE && Main.getInstance().getYAMLConfig().IgnoreCreative) continue;
-				if (p.isOp() && Main.getInstance().getYAMLConfig().IgnoreOP) continue;
-				if (p.hasPermission("thirst.ignore") || p.hasPermission("thirst.*")) continue;
-
+				
+				if (!Thirst.getThirst().validatePlayer(p)) continue;
+				
 				if (System.currentTimeMillis() >= Thirst.getThirst().getThirstData(p).getTime())
 				{
 					Thirst.getThirst().removeThirst(p);
@@ -59,10 +55,7 @@ implements Listener
 		{
 			for (Player p : Bukkit.getOnlinePlayers())
 			{
-				if (!p.isOnline()) continue;
-				if (p.getGameMode() == GameMode.CREATIVE && Main.getInstance().getYAMLConfig().IgnoreCreative) continue;
-				if (p.isOp() && Main.getInstance().getYAMLConfig().IgnoreOP) continue;
-				if (p.hasPermission("thirst.ignore") || p.hasPermission("thirst.*")) continue;
+				if (!Thirst.getThirst().validatePlayer(p)) continue;
 
 				if (Thirst.getThirst().getPlayerThirst(p) <= Main.getInstance().getYAMLConfig().getDamagePercent())
 				{

@@ -36,6 +36,8 @@ extends JavaPlugin
 	private PluginDescriptionFile pdf;
 	private YAMLConfig yamlConf;
 	
+	private boolean worldGaurdEnabled = false;
+	
 	@Override
 	public void onEnable()
 	{
@@ -134,6 +136,31 @@ extends JavaPlugin
 
 		new Updater(this);
 
+		if (yamlConf.DisabledRegions != null && yamlConf.DisabledRegions.length > 0)
+		{
+			if (Bukkit.getPluginManager().isPluginEnabled("WorldGuard"))
+			{
+				worldGaurdEnabled = true;
+			}
+			else
+			{
+				log.log(Level.SEVERE, "=============================");
+				log.log(Level.SEVERE, "Error while initializing the config for "+pdf.getName()+" V"+pdf.getVersion());
+				log.log(Level.SEVERE, "WARNING, Thirst will not enable until the error is fixed!");
+				log.log(Level.SEVERE, "");
+				log.log(Level.SEVERE, "");
+				log.log(Level.SEVERE, "");
+				log.log(Level.SEVERE, "Printing Message:");
+				log.log(Level.SEVERE, "You are trying to use worldgaurd in the config but the plugin could not be found!");
+				log.log(Level.SEVERE, "");
+				log.log(Level.SEVERE, "");
+				log.log(Level.SEVERE, "");
+				log.log(Level.SEVERE, "END OF ERROR");
+				log.log(Level.SEVERE, "=============================");
+				this.setEnabled(false);
+			}
+		}
+		
 		//CLASSES
 		Thirst.getThirst().init(); 
 		DataConfig.getConfig().init();
@@ -169,6 +196,11 @@ extends JavaPlugin
 			return false;
 		}
 		return true;
+	}
+
+	public boolean isWorldGaurdEnabled() 
+	{
+		return worldGaurdEnabled;
 	}
 
 	public void disable()

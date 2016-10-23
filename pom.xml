@@ -2,18 +2,25 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.gamerking195.dev</groupId>
   <artifactId>Thirst</artifactId>
-  <version>1.4.3</version>
+  <version>1.5.1</version>
   <name>Thirst</name>
   <description>Adds a thirst mechanic into vanilla minecraft!</description>
-  
+  <url>https://www.spigotmc.org/resources/thirst.24610/</url>
   <repositories>
+    <!--Spigot/Bukkit-->
     <repository>
         <id>spigot-repo</id>
         <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
     </repository>
+    <!--PlaceholderAPI-->
     <repository>
         <id>placeholderapi</id>
         <url>http://repo.extendedclip.com/content/repositories/placeholderapi/</url>
+    </repository>
+    <!--sk89q-->
+    <repository>
+      <id>sk89q-repo</id>
+      <url>http://maven.sk89q.com/repo/</url>
     </repository>
   </repositories>
   <dependencies>
@@ -31,11 +38,42 @@
       <version>1.10-R0.1-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>
+    <!--PlaceholderAPI-->
     <dependency>
       <groupId>me.clip</groupId>
       <artifactId>placeholderapi</artifactId>
       <version>2.0.8</version>
       <scope>provided</scope>
     </dependency>
+    <!--WorldgaurdAPI-->
+    <dependency>
+      <groupId>com.sk89q</groupId>
+      <artifactId>worldguard</artifactId>
+      <version>6.1</version>
+    </dependency>
+    <dependency>
+      <groupId>com.googlecode.json-simple</groupId>
+      <artifactId>json-simple</artifactId>
+      <version>1.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.yaml</groupId>
+      <artifactId>snakeyaml</artifactId>
+      <version>1.17</version>
+    </dependency>
   </dependencies>
+  <build>
+    <defaultGoal>package</defaultGoal>
+    <plugins>
+      <plugin>
+        <version>3.1</version>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.7</source>
+          <target>1.7</target>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 </project>

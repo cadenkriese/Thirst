@@ -1,5 +1,8 @@
 package com.gamerking195.dev.thirst;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
@@ -15,6 +18,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
@@ -22,6 +26,8 @@ import org.bukkit.scoreboard.ScoreboardManager;
 
 import com.connorlinfoot.actionbarapi.ActionBarAPI;
 import com.gamerking195.dev.thirst.configs.DataConfig;
+import com.sk89q.worldguard.bukkit.WGBukkit;
+import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 
 public class Thirst
 {		
@@ -290,7 +296,7 @@ public class Thirst
 
 		String emphasis = "";
 
-		if (percent <= 5 && !Main.getInstance().getYAMLConfig().DisplayType.equalsIgnoreCase("SCOREBOARD")) emphasis = " &4!&c!&4! ";
+		if (percent <= Main.getInstance().getYAMLConfig().CriticalThristPercent && !Main.getInstance().getYAMLConfig().DisplayType.equalsIgnoreCase("SCOREBOARD")) emphasis = " &4!&c!&4! ";
 
 		String configMessage = Main.getInstance().getYAMLConfig().ThirstMessage.replace("%player%", p.getName()).replace("%percent%", getThirstPercent(p, true)).replace("%thirstbar%", "&1"+getThirstBar(p).replace("%removespeed%", String.valueOf(getThirstData(p).getSpeed()/1000)));
 
@@ -363,7 +369,7 @@ public class Thirst
 		long removalSpeed = calculateSpeed(p);
 		long removeTime = (long) (System.currentTimeMillis()+removalSpeed);
 		int startingThirst = 100;
-		
+
 		if (!p.hasPlayedBefore() || !DataConfig.getConfig().fileContains(pid))
 		{
 			DataConfig.getConfig().writeThirstToFile(pid, 100);
@@ -474,7 +480,7 @@ public class Thirst
 			}
 		}
 
-		if (thirst <= 35 && oldThirst != 0 & oldThirst != -1) p.sendMessage(ChatColor.translateAlternateColorCodes('&', Main.getInstance().getYAMLConfig().ThirstLowMessage.replace("%player%", p.getName()).replace("%percent%", getThirstPercent(p, true))));
+		if (thirst <= Main.getInstance().getYAMLConfig().CriticalThristPercent && oldThirst != 0 & oldThirst != -1) p.sendMessage(ChatColor.translateAlternateColorCodes('&', Main.getInstance().getYAMLConfig().ThirstLowMessage.replace("%player%", p.getName()).replace("%percent%", getThirstPercent(p, true))));
 
 		displayThirst(p);
 	}
@@ -515,6 +521,51 @@ public class Thirst
 		p.setScoreboard(board);
 	}
 
+	public void blipScoreboard(final Player p)
+	{
+		if (getThirstString(p).length() > 40)
+		{
+			Logger log = Main.getInstance().getLogger();
+			PluginDescriptionFile pdf = Main.getInstance().getDescription();
+
+			log.log(Level.SEVERE, "=============================");
+			log.log(Level.SEVERE, "Error while displaying scoreboard for "+p.getName()+" in "+pdf.getName()+" V"+pdf.getVersion());
+			log.log(Level.SEVERE, "");
+			log.log(Level.SEVERE, "");
+			log.log(Level.SEVERE, "");
+			log.log(Level.SEVERE, "Printing Message:");
+			log.log(Level.SEVERE, "The string "+getThirstString(p)+" is longer than 40 characters.");
+			log.log(Level.SEVERE, "You must have a thirst message under 40 characters to use the SCOREBOARD displaytype.");
+			log.log(Level.SEVERE, "");
+			log.log(Level.SEVERE, "NOTE: This message will be displayed every time Thirst trys to update someones thirst (A lot!)");
+			log.log(Level.SEVERE, "");
+			log.log(Level.SEVERE, "");
+			log.log(Level.SEVERE, "");
+			log.log(Level.SEVERE, "END OF ERROR");
+			log.log(Level.SEVERE, "=============================");
+
+			return;
+		}
+
+		Scoreboard board = manager.getNewScoreboard();
+		Objective obj = board.registerNewObjective(p.getName().toUpperCase(), "dummy");
+
+		obj.setDisplaySlot(DisplaySlot.SIDEBAR);
+		obj.setDisplayName(ChatColor.translateAlternateColorCodes('&', Main.getInstance().getYAMLConfig().ScoreboardName.replace("%player%", p.getName())));
+		obj.getScore(getThirstString(p)).setScore(-1);
+
+		p.setScoreboard(board);
+
+		new BukkitRunnable()
+		{
+			@Override
+			public void run()
+			{
+				p.setScoreboard(Bukkit.getServer().getScoreboardManager().getNewScoreboard());
+			}
+		}.runTaskLater(Main.getInstance(), 100L);
+	}
+
 	public int getPlayerThirst(Player p)
 	{
 		if (p != null)
@@ -551,16 +602,44 @@ public class Thirst
 
 	public void displayThirst(Player p)
 	{
-		if (p.getGameMode() == GameMode.CREATIVE && Main.getInstance().getYAMLConfig().IgnoreCreative) return;
-		if (p.isOp() && Main.getInstance().getYAMLConfig().IgnoreOP) return;
-		if (p.hasPermission("thirst.ignore") || p.hasPermission("thirst.*")) return;
-
-		if (Main.getInstance().getYAMLConfig().DisplayType.equalsIgnoreCase("ACTION")) ActionBarAPI.sendActionBar(p, Thirst.getThirst().getThirstString(p));
-		else if (Main.getInstance().getYAMLConfig().DisplayType.equalsIgnoreCase("SCOREBOARD")) refreshScoreboard(p);
+		if (validatePlayer(p))
+		{
+			if (Main.getInstance().getYAMLConfig().DisplayType.equalsIgnoreCase("ACTION")) ActionBarAPI.sendActionBar(p, Thirst.getThirst().getThirstString(p));
+			else if (Main.getInstance().getYAMLConfig().DisplayType.equalsIgnoreCase("SCOREBOARD") && !Main.getInstance().getYAMLConfig().AlwaysShowActionBar) blipScoreboard(p);
+			else if (Main.getInstance().getYAMLConfig().DisplayType.equalsIgnoreCase("SCOREBOARD")) refreshScoreboard(p);
+		}
 	}
 
 	public ConcurrentHashMap<String, ThirstData> getThirstDataMap()
 	{
 		return playerThirstData;
+	}
+
+	public boolean validatePlayer(Player p)
+	{
+		if (p == null) return false;
+		if (!p.isOnline()) return false;
+		if (p.getGameMode() == GameMode.CREATIVE && Main.getInstance().getYAMLConfig().IgnoreCreative) return false;
+		if (p.isOp() && Main.getInstance().getYAMLConfig().IgnoreOP)  return false;
+		if (p.hasPermission("thirst.ignore") || p.hasPermission("thirst.*"))  return false;
+
+		String world = p.getWorld().getName();
+		List<String> worlds = Arrays.asList(Main.getInstance().getYAMLConfig().DisabledWorlds);
+		if (worlds != null && worlds.size() > 0)
+		{
+			if (worlds.contains(world)) return false;
+		}
+
+		if (Main.getInstance().isWorldGaurdEnabled())
+		{
+			for(ProtectedRegion region : WGBukkit.getRegionManager(p.getWorld()).getApplicableRegions(p.getLocation()))
+			{
+				if (region == null) continue;
+				ArrayList<String> regions  = (ArrayList<String>) Arrays.asList(Main.getInstance().getYAMLConfig().DisabledRegions);
+
+				if (regions.contains(region)) return false;
+			}
+		}
+		return true;
 	}
 }

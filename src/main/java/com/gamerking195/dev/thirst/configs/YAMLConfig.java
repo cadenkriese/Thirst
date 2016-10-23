@@ -18,12 +18,6 @@ extends YamlConfig
 	/*
 	 * TODO
 	 * 
-	 * - Add support for biome percent multipliers
-	 * - Add support for day/night multipliers
-	 * - Add support for armor multipliers
-	 * - Add messages for all of the above
-	 * - Fix effects like SLOW_DIGGING (change it all to be split by periods) [DONE]
-	 * - Add sprinting multiplier
 	 * - Something with sleep?
 	 * - Add run sprinting multiplier.
 	 */
@@ -78,7 +72,28 @@ extends YamlConfig
 		"Default: 1"
 	})
 	public int RemoveThirst = 1;
-
+	
+	@Comments
+	({
+		"",
+		"ALWAYS_SHOW_ACTION_BAR",
+		"Desc: If set to false the action bar will only display when a players thirst changes.",
+		"Type: Boolean",
+		"Default: false",
+		"Notes: For scoreboards it will make the scoreboard pop up for 3 seconds then go away."
+	})
+	public boolean AlwaysShowActionBar = true;
+	
+	@Comments
+	({
+		"",
+		"CRITICAL_THIRST_PERCENT",
+		"Desc: The percent at which a players thirst becomes critical and the THIRST_LOW_MESSAGE and !!! will be displayed.",
+		"Type: Integer",
+		"Default: 10"
+	})
+	public int CriticalThristPercent = 10;
+	
 	@Comments
 	({
 		"",
@@ -205,7 +220,7 @@ extends YamlConfig
 	({
 		"",
 		"THIRST_LOW_MESSAGE",
-		"Desc: The message that will be displayed to a player when their thirst is below 30%",
+		"Desc: The message that will be displayed to a player when their thirst is below the critical thirst amount.",
 		"Type: String",
 		"Variables: %percent%, %player%",
 		"Default: &8[&bThirst&8] &aWatch out &e%player%, &ayour thirst is at &e%percent%!"
@@ -277,6 +292,28 @@ extends YamlConfig
 		"Default: &f&lTHIRST"
 	})
 	public String ScoreboardName = "&f&lTHIRST";
+	
+	@Comment("---------------Disabled Areas---------------")
+
+	@Comments
+	({
+		"",
+		"DISABLED_WORLDS",
+		"Desc: List all of the worlds that will be unnafected by thirst.",
+		"Type: String Array",
+		"Default: []"
+	})
+	public String[] DisabledWorlds = new String[0];	
+	
+	@Comments
+	({
+		"",
+		"DISABLED_REGIONS",
+		"Desc: List all of the worldgaurd regions that will be unnafected by thirst..",
+		"Type: String Array",
+		"Default: []"
+	})
+	public String[] DisabledRegions = new String[0];	
 
 	//CLASSES
 
