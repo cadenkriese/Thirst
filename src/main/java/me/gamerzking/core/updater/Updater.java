@@ -7,29 +7,34 @@ import org.bukkit.plugin.java.JavaPlugin;
 /**
  * Created by GamerzKing on 4/18/2016.
  */
-public class Updater implements Runnable {
+public class Updater implements Runnable 
+{
 
 	private JavaPlugin plugin;
 
-	public Updater(JavaPlugin plugin) {
-
+	public Updater(JavaPlugin plugin)
+	{
 		this.plugin = plugin;
 		plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, this, 0L, 1L);
 	}
 
 	@Override
-	public void run() {
-
+	public void run() 
+	{
 		for (UpdateType updateType : UpdateType.values()) 
 		{
-			if (updateType.elapsed()) 
+			if (updateType != null)
 			{
-				plugin.getServer().getPluginManager().callEvent(new UpdateEvent(updateType));
+				if (updateType.elapsed()) 
+				{
+					plugin.getServer().getPluginManager().callEvent(new UpdateEvent(updateType));
+				}
 			}
 		}
 	}
 
-	public JavaPlugin getPlugin() {
+	public JavaPlugin getPlugin() 
+	{
 		return plugin;
 	}
 }

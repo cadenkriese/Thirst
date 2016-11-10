@@ -44,12 +44,34 @@ extends YamlConfig
 		"DISPLAY_TYPE",
 		"Desc: Changes the way players see their thirst.",
 		"Type: Enum",
-		"Possible types: SCOREBOARD, ACTION, COMMAND", 
+		"Possible types: SCOREBOARD, ACTION, COMMAND, BOSSBAR", 
 		"Default: ACTION",
 		"Note: The command /thirst view, and /thirst view %player% will always be enabled, use command to disable scoreboard, and action."
 	})
 	public String DisplayType = "ACTION";
 
+	@Comments
+	({
+		"",
+		"BAR_COLOR",
+		"Desc: The colors for the bossbar, if that display type is chosen.",
+		"Type: Enum",
+		"Possible types: BLUE, GREEN, PINK, PURPLE, RED, YELLOW, WHITE", 
+		"Default: BLUE",
+	})
+	public String BarColor = "BLUE";
+	
+	@Comments
+	({
+		"",
+		"BAR_STYLE",
+		"Desc: The style for the bossbar, if that display type is chosen.",
+		"Type: Enum",
+		"Possible types: SOLID, SEGMENTED_6, SEGMENTED_10, SEGMENTED_12, SEGMENTED_20", 
+		"Default: SOLID",
+	})
+	public String BarStyle = "SOLID";
+	
 	@Comments
 	({
 		"",

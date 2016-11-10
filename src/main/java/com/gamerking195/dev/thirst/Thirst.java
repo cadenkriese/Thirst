@@ -14,6 +14,10 @@ import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Biome;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarFlag;
+import org.bukkit.boss.BarStyle;
+import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.potion.PotionEffect;
@@ -28,6 +32,8 @@ import com.connorlinfoot.actionbarapi.ActionBarAPI;
 import com.gamerking195.dev.thirst.configs.DataConfig;
 import com.sk89q.worldguard.bukkit.WGBukkit;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
+
+import net.cubespace.Yamler.Config.InvalidConfigurationException;
 
 public class Thirst
 {		
@@ -604,9 +610,44 @@ public class Thirst
 	{
 		if (validatePlayer(p))
 		{
-			if (Main.getInstance().getYAMLConfig().DisplayType.equalsIgnoreCase("ACTION")) ActionBarAPI.sendActionBar(p, Thirst.getThirst().getThirstString(p));
+			if (Main.getInstance().getYAMLConfig().DisplayType.equalsIgnoreCase("ACTION")) ActionBarAPI.sendActionBar(p, getThirstString(p));
 			else if (Main.getInstance().getYAMLConfig().DisplayType.equalsIgnoreCase("SCOREBOARD") && !Main.getInstance().getYAMLConfig().AlwaysShowActionBar) blipScoreboard(p);
 			else if (Main.getInstance().getYAMLConfig().DisplayType.equalsIgnoreCase("SCOREBOARD")) refreshScoreboard(p);
+			else if (Main.getInstance().getYAMLConfig().DisplayType.equalsIgnoreCase("BOSSBAR")) sendBossBar(p);
+		}
+	}
+
+	private void sendBossBar(Player p)
+	{
+		if (Bukkit.getBukkitVersion().contains("1.9") || Bukkit.getServer().getBukkitVersion().contains("1.10") || Bukkit.getBukkitVersion().contains("1.11"))
+		{
+			if (validateColor(Main.getInstance().getYAMLConfig().BarColor) != null && validateStyle(Main.getInstance().getYAMLConfig().BarStyle) != null)
+			{
+				if (getThirstData(p).getBar() != null)
+					getThirstData(p).getBar().removePlayer(p);
+				
+				BossBar bar = Bukkit.createBossBar(ChatColor.translateAlternateColorCodes('&', getThirstString(p)), BarColor.valueOf(Main.getInstance().getYAMLConfig().BarColor.toUpperCase()), BarStyle.valueOf(Main.getInstance().getYAMLConfig().BarStyle.toUpperCase()), new BarFlag[0]);
+				bar.addPlayer(p);
+				
+				getThirstData(p).setBar(bar);
+			}
+		}
+		else
+		{
+			try 
+			{
+				Main.getInstance().getLogger().log(Level.SEVERE, "[Thirst V"+Main.getInstance().getDescription().getVersion()+"] Your Spigot version is not compatible with the Bossbar display type, please use version 1.9 or higher.");
+				Main.getInstance().getLogger().log(Level.SEVERE, "[Thirst V"+Main.getInstance().getDescription().getVersion()+"] Changing to display type ACTION...");
+
+				ActionBarAPI.sendActionBar(p, Thirst.getThirst().getThirstString(p));
+
+				Main.getInstance().getYAMLConfig().DisplayType = "ACTION";
+				Main.getInstance().getYAMLConfig().save();
+			} 
+			catch (InvalidConfigurationException e) 
+			{
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -641,5 +682,29 @@ public class Thirst
 			}
 		}
 		return true;
+	}
+
+	private BarColor validateColor(String name)
+	{
+		try 
+		{
+			return Enum.valueOf(BarColor.class, name.toUpperCase());
+		}
+		catch (IllegalArgumentException iae) 
+		{
+			return null;
+		}
+	}
+
+	private BarStyle validateStyle(String name)
+	{
+		try 
+		{
+			return Enum.valueOf(BarStyle.class, name.toUpperCase());
+		}
+		catch (IllegalArgumentException iae) 
+		{
+			return null;
+		}
 	}
 }

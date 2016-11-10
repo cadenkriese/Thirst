@@ -7,6 +7,11 @@ import me.gamerzking.core.updater.Updater;
 import net.cubespace.Yamler.Config.InvalidConfigurationException;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarFlag;
+import org.bukkit.boss.BarStyle;
+import org.bukkit.boss.BossBar;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -51,7 +56,7 @@ extends JavaPlugin
 			{
 				loadFiles();
 			}
-		}.runTaskLater(this, 5L);
+		}.runTaskLater(this, 2L);
 
 		log.log(Level.INFO, "V"+pdf.getVersion()+" enabled!");
 		log.log(Level.INFO, pdf.getName()+" developed by "+pdf.getAuthors());
@@ -60,7 +65,6 @@ extends JavaPlugin
 	@Override
 	public void onDisable()
 	{
-
 		try 
 		{
 			yamlConf.reload();
@@ -88,9 +92,12 @@ extends JavaPlugin
 		}
 	}
 
+	//TODO Loadfiles Method
 	private void loadFiles()
 	{
-		//API
+		//CONFIGS
+		DataConfig.getConfig().init();
+		
 		try
 		{
 			yamlConf = new YAMLConfig(this);
@@ -120,6 +127,7 @@ extends JavaPlugin
 			return;
 		}
 
+		//API
 		if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI"))
 		{
 			if (new Placeholders(this).hook())
@@ -163,7 +171,6 @@ extends JavaPlugin
 		
 		//CLASSES
 		Thirst.getThirst().init(); 
-		DataConfig.getConfig().init();
 
 		//COMMANDS
 		this.getCommand("thirst").setExecutor(new ThirstCommand());
@@ -178,6 +185,42 @@ extends JavaPlugin
 		pm.registerEvents(new PlayerCommandPreProcessListener(), instance);
 		pm.registerEvents(new UpdateListener(), instance);
 		pm.registerEvents(new PlayerRespawnListener(), instance);
+		
+		//VALIDATION
+		if (!Bukkit.getBukkitVersion().contains("1.9") && !Bukkit.getBukkitVersion().contains("1.10") && !Bukkit.getBukkitVersion().contains("1.11"))
+		{
+			try 
+			{
+				Main.getInstance().getLogger().log(Level.SEVERE, "[Thirst V"+Main.getInstance().getDescription().getVersion()+"] Your Spigot version is not compatible with the Bossbar display type, please use version 1.9 or higher.");
+				Main.getInstance().getLogger().log(Level.SEVERE, "[Thirst V"+Main.getInstance().getDescription().getVersion()+"] Changing to display type ACTION...");
+				
+				Main.getInstance().getYAMLConfig().DisplayType = "ACTION";
+				Main.getInstance().getYAMLConfig().save();
+			} 
+			catch (InvalidConfigurationException ex) 
+			{
+				log.log(Level.SEVERE, "=============================");
+				log.log(Level.SEVERE, "Error while validating the config for "+pdf.getName()+" V"+pdf.getVersion());
+				log.log(Level.SEVERE, "WARNING, Thirst will not enable until the error is fixed!");
+				log.log(Level.SEVERE, "");
+				log.log(Level.SEVERE, "");
+				log.log(Level.SEVERE, "");
+				log.log(Level.SEVERE, "Printing StackTrace:");
+				ex.printStackTrace();
+				log.log(Level.SEVERE, "");
+				log.log(Level.SEVERE, "");
+				log.log(Level.SEVERE, "");
+				log.log(Level.SEVERE, "Printing Message:");
+				log.log(Level.SEVERE, ex.getMessage());
+				log.log(Level.SEVERE, "");
+				log.log(Level.SEVERE, "");
+				log.log(Level.SEVERE, "");
+				log.log(Level.SEVERE, "END OF ERROR");
+				log.log(Level.SEVERE, "=============================");
+				this.setEnabled(false);
+				return;
+			}
+		}
 	}
 
 	public YAMLConfig getYAMLConfig() 

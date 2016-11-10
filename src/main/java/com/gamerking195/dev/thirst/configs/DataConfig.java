@@ -32,9 +32,28 @@ public class DataConfig
 				thirstFile.createNewFile();
 				thirstConfig.save(thirstFile);
 			}
-			catch (IOException e)
-			{ 
-				e.printStackTrace();
+			catch (IOException ex)
+			{ 			
+				Logger log = Main.getInstance().getLogger();
+				PluginDescriptionFile pdf = Main.getInstance().getDescription();
+
+				log.log(Level.SEVERE, "=============================");
+				log.log(Level.SEVERE, "Error while saving Thirst.yml for "+pdf.getName()+" V"+pdf.getVersion());
+				log.log(Level.SEVERE, "");
+				log.log(Level.SEVERE, "");
+				log.log(Level.SEVERE, "");
+				log.log(Level.SEVERE, "Printing StackTrace:");
+				ex.printStackTrace();
+				log.log(Level.SEVERE, "");
+				log.log(Level.SEVERE, "");
+				log.log(Level.SEVERE, "");
+				log.log(Level.SEVERE, "Printing Message:");
+				log.log(Level.SEVERE, ex.getMessage());
+				log.log(Level.SEVERE, "");
+				log.log(Level.SEVERE, "");
+				log.log(Level.SEVERE, "");
+				log.log(Level.SEVERE, "END OF ERROR");
+				log.log(Level.SEVERE, "=============================");
 			}
 		}
 	}
@@ -86,7 +105,7 @@ public class DataConfig
 	{	
 		thirstConfig.set(pid.toString(), amount);
 	}
-	
+
 	public boolean fileContains(UUID pid)
 	{
 		return thirstConfig.contains(pid.toString());

@@ -1,5 +1,6 @@
 package com.gamerking195.dev.thirst;
 
+import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 
 public class ThirstData 
@@ -11,6 +12,8 @@ public class ThirstData
 	private long removalSpeed;
 	//the amount of thirst the player has out of 100.
 	private int thirstAmount;
+	//the active bossbar for the player.
+	private BossBar bar;
 	
 	/**
 	 * @author GamerKing195
@@ -68,5 +71,15 @@ public class ThirstData
 		
 		
 		this.thirstAmount = thirstAmount;
+	}
+
+	public BossBar getBar() 
+	{
+		return bar;
+	}
+
+	public void setBar(BossBar bar) 
+	{
+		this.bar = bar;
 	}
 }

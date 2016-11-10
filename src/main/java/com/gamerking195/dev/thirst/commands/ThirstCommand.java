@@ -19,6 +19,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import com.gamerking195.dev.thirst.Main;
 import com.gamerking195.dev.thirst.Thirst;
+import com.gamerking195.dev.thirst.ThirstData;
 import com.gamerking195.dev.thirst.configs.DataConfig;
 
 public class ThirstCommand 
@@ -131,6 +132,16 @@ implements CommandExecutor
 				}
 				else if (args[0].equalsIgnoreCase("reload") || args[0].equalsIgnoreCase("rl"))
 				{
+					for (Player p : Bukkit.getOnlinePlayers())
+					{
+						ThirstData data = Thirst.getThirst().getThirstData(p);
+						
+						if (data.getBar() != null)
+						{
+							data.getBar().removePlayer(p);
+						}
+					}
+					
 					try 
 					{	
 						Main.getInstance().getYAMLConfig().reload();
@@ -179,11 +190,11 @@ implements CommandExecutor
 						Main.getInstance().disable();
 						return true;
 					}
+					
 					for (Player p : Bukkit.getServer().getOnlinePlayers())
 					{
 						Thirst.getThirst().displayThirst(p);
 					}
-
 					return true;
 				}
 				else if (args[0].equalsIgnoreCase("list"))

@@ -6,6 +6,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import com.gamerking195.dev.thirst.Thirst;
+import com.gamerking195.dev.thirst.ThirstData;
 import com.gamerking195.dev.thirst.configs.DataConfig;
 
 public class PlayerCommandPreProcessListener
@@ -23,6 +24,13 @@ implements Listener
 				DataConfig.getConfig().writeThirstToFile(p.getUniqueId(), Thirst.getThirst().getPlayerThirst(p));
 
 				DataConfig.getConfig().saveFile();
+				
+				ThirstData data = Thirst.getThirst().getThirstData(p);
+				
+				if (data.getBar() != null)
+				{
+					data.getBar().removePlayer(p);
+				}
 			}
 		}
 	}

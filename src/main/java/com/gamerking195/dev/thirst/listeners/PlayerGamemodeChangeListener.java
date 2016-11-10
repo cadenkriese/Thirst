@@ -11,6 +11,7 @@ import org.bukkit.potion.PotionEffect;
 import com.connorlinfoot.actionbarapi.ActionBarAPI;
 import com.gamerking195.dev.thirst.Main;
 import com.gamerking195.dev.thirst.Thirst;
+import com.gamerking195.dev.thirst.ThirstData;
 
 public class PlayerGamemodeChangeListener
 implements Listener
@@ -23,6 +24,7 @@ implements Listener
 		if (event.getNewGameMode() != GameMode.CREATIVE && Main.getInstance().getYAMLConfig().IgnoreCreative)
 		{
 			Thirst.getThirst().displayThirst(p);
+			return;
 		}
 		else if (event.getNewGameMode() == GameMode.CREATIVE && Main.getInstance().getYAMLConfig().IgnoreCreative)
 		{
@@ -30,7 +32,6 @@ implements Listener
 			{
 				p.removePotionEffect(effect.getType());
 			}
-			return;
 		}
 
 		if (Main.getInstance().getYAMLConfig().DisplayType.equalsIgnoreCase("scoreboard"))
@@ -40,6 +41,15 @@ implements Listener
 		else if (Main.getInstance().getYAMLConfig().DisplayType.equalsIgnoreCase("action"))
 		{
 			ActionBarAPI.sendActionBar(p, "");
+		}
+		else if (Main.getInstance().getYAMLConfig().DisplayType.equalsIgnoreCase("bossbar"))
+		{
+			ThirstData data = Thirst.getThirst().getThirstData(p);
+			
+			if (data.getBar() != null)
+			{
+				data.getBar().removePlayer(p);
+			}
 		}
 		else
 		{
