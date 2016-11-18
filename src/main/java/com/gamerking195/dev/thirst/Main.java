@@ -26,6 +26,7 @@ import com.gamerking195.dev.thirst.listeners.PlayerDeathListener;
 import com.gamerking195.dev.thirst.listeners.PlayerGamemodeChangeListener;
 import com.gamerking195.dev.thirst.listeners.PlayerItemConsumeListener;
 import com.gamerking195.dev.thirst.listeners.PlayerJoinLeaveListener;
+import com.gamerking195.dev.thirst.listeners.PlayerMoveListener;
 import com.gamerking195.dev.thirst.listeners.PlayerRespawnListener;
 import com.gamerking195.dev.thirst.listeners.UpdateListener;
 import com.gamerking195.dev.thirst.placeholderapi.Placeholders;
@@ -171,6 +172,7 @@ extends JavaPlugin
 		
 		//CLASSES
 		Thirst.getThirst().init(); 
+		PlayerMoveListener.init();
 
 		//COMMANDS
 		this.getCommand("thirst").setExecutor(new ThirstCommand());
@@ -185,6 +187,7 @@ extends JavaPlugin
 		pm.registerEvents(new PlayerCommandPreProcessListener(), instance);
 		pm.registerEvents(new UpdateListener(), instance);
 		pm.registerEvents(new PlayerRespawnListener(), instance);
+		pm.registerEvents(new PlayerMoveListener(), instance);
 		
 		//VALIDATION
 		if (!Bukkit.getBukkitVersion().contains("1.9") && !Bukkit.getBukkitVersion().contains("1.10") && !Bukkit.getBukkitVersion().contains("1.11"))

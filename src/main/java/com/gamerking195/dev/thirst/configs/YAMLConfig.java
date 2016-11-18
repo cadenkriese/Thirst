@@ -102,7 +102,7 @@ extends YamlConfig
 		"Desc: If set to false the action bar will only display when a players thirst changes.",
 		"Type: Boolean",
 		"Default: false",
-		"Notes: For scoreboards it will make the scoreboard pop up for 3 seconds then go away."
+		"Notes: For scoreboards & bossbar it will make the scoreboard pop up for 3 seconds then go away."
 	})
 	public boolean AlwaysShowActionBar = true;
 	
@@ -146,6 +146,16 @@ extends YamlConfig
 		"Default: false"
 	})
 	public boolean IgnoreOP = false;
+	
+	@Comments
+	({
+		"",
+		"DRINK_BLOCK_WATER",
+		"Desc: If true, players will recover 2% of their thirst every second, if they are swimming in water.",
+		"Type: Boolean",
+		"Default: false"
+	})
+	public boolean drinkBlockWater = false;
 
 	@Comment("---------------Multipliers---------------")
 	@Comments

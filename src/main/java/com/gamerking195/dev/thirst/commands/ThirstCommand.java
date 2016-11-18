@@ -222,7 +222,7 @@ implements CommandExecutor
 						{
 							if (effect != null)
 							{
-								sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&b"+effect.toString()));
+								sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&b"+effect.getName()));
 							}
 						}
 						sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&f&m-----------------------"));

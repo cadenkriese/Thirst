@@ -529,39 +529,8 @@ public class Thirst
 
 	public void blipScoreboard(final Player p)
 	{
-		if (getThirstString(p).length() > 40)
-		{
-			Logger log = Main.getInstance().getLogger();
-			PluginDescriptionFile pdf = Main.getInstance().getDescription();
-
-			log.log(Level.SEVERE, "=============================");
-			log.log(Level.SEVERE, "Error while displaying scoreboard for "+p.getName()+" in "+pdf.getName()+" V"+pdf.getVersion());
-			log.log(Level.SEVERE, "");
-			log.log(Level.SEVERE, "");
-			log.log(Level.SEVERE, "");
-			log.log(Level.SEVERE, "Printing Message:");
-			log.log(Level.SEVERE, "The string "+getThirstString(p)+" is longer than 40 characters.");
-			log.log(Level.SEVERE, "You must have a thirst message under 40 characters to use the SCOREBOARD displaytype.");
-			log.log(Level.SEVERE, "");
-			log.log(Level.SEVERE, "NOTE: This message will be displayed every time Thirst trys to update someones thirst (A lot!)");
-			log.log(Level.SEVERE, "");
-			log.log(Level.SEVERE, "");
-			log.log(Level.SEVERE, "");
-			log.log(Level.SEVERE, "END OF ERROR");
-			log.log(Level.SEVERE, "=============================");
-
-			return;
-		}
-
-		Scoreboard board = manager.getNewScoreboard();
-		Objective obj = board.registerNewObjective(p.getName().toUpperCase(), "dummy");
-
-		obj.setDisplaySlot(DisplaySlot.SIDEBAR);
-		obj.setDisplayName(ChatColor.translateAlternateColorCodes('&', Main.getInstance().getYAMLConfig().ScoreboardName.replace("%player%", p.getName())));
-		obj.getScore(getThirstString(p)).setScore(-1);
-
-		p.setScoreboard(board);
-
+		refreshScoreboard(p);
+		
 		new BukkitRunnable()
 		{
 			@Override
@@ -613,6 +582,7 @@ public class Thirst
 			if (Main.getInstance().getYAMLConfig().DisplayType.equalsIgnoreCase("ACTION")) ActionBarAPI.sendActionBar(p, getThirstString(p));
 			else if (Main.getInstance().getYAMLConfig().DisplayType.equalsIgnoreCase("SCOREBOARD") && !Main.getInstance().getYAMLConfig().AlwaysShowActionBar) blipScoreboard(p);
 			else if (Main.getInstance().getYAMLConfig().DisplayType.equalsIgnoreCase("SCOREBOARD")) refreshScoreboard(p);
+			else if (Main.getInstance().getYAMLConfig().DisplayType.equalsIgnoreCase("BOSSBAR") && !Main.getInstance().getYAMLConfig().AlwaysShowActionBar) blipBossbar(p);
 			else if (Main.getInstance().getYAMLConfig().DisplayType.equalsIgnoreCase("BOSSBAR")) sendBossBar(p);
 		}
 	}
@@ -649,6 +619,25 @@ public class Thirst
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	private void blipBossbar(final Player p)
+	{
+		sendBossBar(p);
+		
+		new BukkitRunnable()
+		{
+			@Override
+			public void run()
+			{
+				ThirstData data = Thirst.getThirst().getThirstData(p);
+				
+				if (data.getBar() != null)
+				{
+					data.getBar().removePlayer(p);
+				}
+			}
+		}.runTaskLater(Main.getInstance(), 100L);
 	}
 
 	public ConcurrentHashMap<String, ThirstData> getThirstDataMap()
