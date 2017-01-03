@@ -21,12 +21,12 @@ implements Listener
 	{
 		Player p = event.getPlayer();
 
-		if (event.getNewGameMode() != GameMode.CREATIVE && Main.getInstance().getYAMLConfig().IgnoreCreative)
+		if (event.getNewGameMode() != GameMode.CREATIVE || Main.getInstance().getYAMLConfig().IgnoreCreative)
 		{
 			Thirst.getThirst().displayThirst(p);
 			return;
 		}
-		else if (event.getNewGameMode() == GameMode.CREATIVE && Main.getInstance().getYAMLConfig().IgnoreCreative)
+		else if (event.getNewGameMode() == GameMode.CREATIVE && !Main.getInstance().getYAMLConfig().IgnoreCreative)
 		{
 			for (PotionEffect effect : p.getActivePotionEffects())
 			{

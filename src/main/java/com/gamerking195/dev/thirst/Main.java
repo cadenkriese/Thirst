@@ -93,7 +93,6 @@ extends JavaPlugin
 		}
 	}
 
-	//TODO Loadfiles Method
 	private void loadFiles()
 	{
 		//CONFIGS

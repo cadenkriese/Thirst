@@ -304,7 +304,7 @@ public class Thirst
 
 		if (percent <= Main.getInstance().getYAMLConfig().CriticalThristPercent && !Main.getInstance().getYAMLConfig().DisplayType.equalsIgnoreCase("SCOREBOARD")) emphasis = " &4!&c!&4! ";
 
-		String configMessage = Main.getInstance().getYAMLConfig().ThirstMessage.replace("%player%", p.getName()).replace("%percent%", getThirstPercent(p, true)).replace("%thirstbar%", "&1"+getThirstBar(p).replace("%removespeed%", String.valueOf(getThirstData(p).getSpeed()/1000)));
+		String configMessage = Main.getInstance().getYAMLConfig().ThirstMessage.replace("%player%", p.getName()).replace("%percent%", getThirstPercent(p, true)).replace("%thirstbar%", "&1"+getThirstBar(p)).replace("%removespeed%", String.valueOf(getThirstData(p).getSpeed()/1000));
 
 		return ChatColor.translateAlternateColorCodes('&', emphasis+configMessage+emphasis);
 	}
@@ -649,7 +649,7 @@ public class Thirst
 	{
 		if (p == null) return false;
 		if (!p.isOnline()) return false;
-		if (p.getGameMode() == GameMode.CREATIVE && Main.getInstance().getYAMLConfig().IgnoreCreative) return false;
+		if (p.getGameMode() == GameMode.CREATIVE && !Main.getInstance().getYAMLConfig().IgnoreCreative) return false;
 		if (p.isOp() && Main.getInstance().getYAMLConfig().IgnoreOP)  return false;
 		if (p.hasPermission("thirst.ignore") || p.hasPermission("thirst.*"))  return false;
 
