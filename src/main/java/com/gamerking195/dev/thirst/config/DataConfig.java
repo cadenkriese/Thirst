@@ -1,4 +1,4 @@
-package com.gamerking195.dev.thirst.configs;
+package com.gamerking195.dev.thirst.config;
 
 import java.io.File;
 import java.io.IOException;

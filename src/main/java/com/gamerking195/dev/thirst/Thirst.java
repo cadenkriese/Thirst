@@ -8,6 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.gamerking195.dev.thirst.util.UtilActionBar;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -28,8 +29,7 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
 
-import com.connorlinfoot.actionbarapi.ActionBarAPI;
-import com.gamerking195.dev.thirst.configs.DataConfig;
+import com.gamerking195.dev.thirst.config.DataConfig;
 import com.sk89q.worldguard.bukkit.WGBukkit;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 
@@ -89,45 +89,13 @@ public class Thirst
 			String[] split = s.split("\\.");
 
 			if (!Main.getInstance().isInt(split[1]))
-			{
-				Logger log = Main.getInstance().getLogger();
-				PluginDescriptionFile pdf = Main.getInstance().getDescription();
-
-				log.log(Level.SEVERE, "=============================");
-				log.log(Level.SEVERE, "Error while reading the config for "+pdf.getName()+" V"+pdf.getVersion());
-				log.log(Level.SEVERE, "");
-				log.log(Level.SEVERE, "");
-				log.log(Level.SEVERE, "");
-				log.log(Level.SEVERE, "Printing Error:");
-				log.log(Level.SEVERE, "String '"+split[1]+"' is not a valid number!");
-				log.log(Level.SEVERE, "");
-				log.log(Level.SEVERE, "");
-				log.log(Level.SEVERE, "");
-				log.log(Level.SEVERE, "END OF ERROR");
-				log.log(Level.SEVERE, "=============================");
-			}
+                Main.getInstance().printPluginError("Error while reading the config.", "String '"+split[1]+"' is not a valid number!");
 
 			String biome = split[0];
 			int timeRemoved = Integer.valueOf(split[1])*1000;
 
-			if (Biome.valueOf(biome) == null)
-			{
-				Logger log = Main.getInstance().getLogger();
-				PluginDescriptionFile pdf = Main.getInstance().getDescription();
-
-				log.log(Level.SEVERE, "=============================");
-				log.log(Level.SEVERE, "Error while reading the config for "+pdf.getName()+" V"+pdf.getVersion());
-				log.log(Level.SEVERE, "");
-				log.log(Level.SEVERE, "");
-				log.log(Level.SEVERE, "");
-				log.log(Level.SEVERE, "Printing Error:");
-				log.log(Level.SEVERE, "String '"+split[0]+"' is not a valid biome!");
-				log.log(Level.SEVERE, "");
-				log.log(Level.SEVERE, "");
-				log.log(Level.SEVERE, "");
-				log.log(Level.SEVERE, "END OF ERROR");
-				log.log(Level.SEVERE, "=============================");
-			}
+            if (Arrays.stream(Biome.values()).noneMatch((biome2) -> biome2.name().equals(biome.toUpperCase())))
+                Main.getInstance().printPluginError("Error while reading the config.", "String '"+split[0]+"' is not a valid biome!");
 
 			if (b.toString().equalsIgnoreCase(biome))
 			{
@@ -143,23 +111,7 @@ public class Thirst
 			if (split.length == 2)
 			{
 				if (!Main.getInstance().isInt(split[1]))
-				{
-					Logger log = Main.getInstance().getLogger();
-					PluginDescriptionFile pdf = Main.getInstance().getDescription();
-
-					log.log(Level.SEVERE, "=============================");
-					log.log(Level.SEVERE, "Error while reading the config for "+pdf.getName()+" V"+pdf.getVersion());
-					log.log(Level.SEVERE, "");
-					log.log(Level.SEVERE, "");
-					log.log(Level.SEVERE, "");
-					log.log(Level.SEVERE, "Printing Error:");
-					log.log(Level.SEVERE, "String '"+split[1]+"' is not a valid number!");
-					log.log(Level.SEVERE, "");
-					log.log(Level.SEVERE, "");
-					log.log(Level.SEVERE, "");
-					log.log(Level.SEVERE, "END OF ERROR");
-					log.log(Level.SEVERE, "=============================");
-				}
+                    Main.getInstance().printPluginError("Error while reading the config.", "String '"+split[1]+"' is not a valid number!");
 
 				String armorType = split[0];
 				int timeRemoved = Integer.valueOf(split[1])*1000;
@@ -211,42 +163,10 @@ public class Thirst
 					}
 				}
 				else
-				{
-					Logger log = Main.getInstance().getLogger();
-					PluginDescriptionFile pdf = Main.getInstance().getDescription();
-
-					log.log(Level.SEVERE, "=============================");
-					log.log(Level.SEVERE, "Error while reading the config for "+pdf.getName()+" V"+pdf.getVersion());
-					log.log(Level.SEVERE, "");
-					log.log(Level.SEVERE, "");
-					log.log(Level.SEVERE, "");
-					log.log(Level.SEVERE, "Printing Error:");
-					log.log(Level.SEVERE, "String '"+armorType+"' is not a valid item!");
-					log.log(Level.SEVERE, "");
-					log.log(Level.SEVERE, "");
-					log.log(Level.SEVERE, "");
-					log.log(Level.SEVERE, "END OF ERROR");
-					log.log(Level.SEVERE, "=============================");
-				}
+                    Main.getInstance().printPluginError("Error while reading the config.", "String '"+armorType+"' is not a valid item!");
 			}
 			else
-			{
-				Logger log = Main.getInstance().getLogger();
-				PluginDescriptionFile pdf = Main.getInstance().getDescription();
-
-				log.log(Level.SEVERE, "=============================");
-				log.log(Level.SEVERE, "Error while reading the config for "+pdf.getName()+" V"+pdf.getVersion());
-				log.log(Level.SEVERE, "");
-				log.log(Level.SEVERE, "");
-				log.log(Level.SEVERE, "");
-				log.log(Level.SEVERE, "Printing Error:");
-				log.log(Level.SEVERE, "String '"+s+"' is in an invalid format!");
-				log.log(Level.SEVERE, "");
-				log.log(Level.SEVERE, "");
-				log.log(Level.SEVERE, "");
-				log.log(Level.SEVERE, "END OF ERROR");
-				log.log(Level.SEVERE, "=============================");
-			}
+				Main.getInstance().printPluginError("Error while reading the config.", "String '"+s+"' is in an invalid format!");
 		}
 
 		//DAY
@@ -425,21 +345,7 @@ public class Thirst
 
 				if (parts.length != 4)
 				{
-					Logger log = Main.getInstance().getLogger();
-					PluginDescriptionFile pdf = Main.getInstance().getDescription();
-
-					log.log(Level.SEVERE, "=============================");
-					log.log(Level.SEVERE, "Error while reading the config for "+pdf.getName()+" V"+pdf.getVersion());
-					log.log(Level.SEVERE, "");
-					log.log(Level.SEVERE, "");
-					log.log(Level.SEVERE, "");
-					log.log(Level.SEVERE, "Printing Error:");
-					log.log(Level.SEVERE, "String '"+s+"' is in an invalid format!");
-					log.log(Level.SEVERE, "");
-					log.log(Level.SEVERE, "");
-					log.log(Level.SEVERE, "");
-					log.log(Level.SEVERE, "END OF ERROR");
-					log.log(Level.SEVERE, "=============================");
+					Main.getInstance().printPluginError("Error occured while reading the config", "String '"+s+"' is in an invalid format!");
 					return;
 				}
 
@@ -456,21 +362,7 @@ public class Thirst
 
 					if (type == null)
 					{
-						Logger log = Main.getInstance().getLogger();
-						PluginDescriptionFile pdf = Main.getInstance().getDescription();
-
-						log.log(Level.SEVERE, "=============================");
-						log.log(Level.SEVERE, "Error while reading the config for "+pdf.getName()+" V"+pdf.getVersion());
-						log.log(Level.SEVERE, "");
-						log.log(Level.SEVERE, "");
-						log.log(Level.SEVERE, "");
-						log.log(Level.SEVERE, "Printing Error:");
-						log.log(Level.SEVERE, "String '"+s+"' is in an invalid format!");
-						log.log(Level.SEVERE, "");
-						log.log(Level.SEVERE, "");
-						log.log(Level.SEVERE, "");
-						log.log(Level.SEVERE, "END OF ERROR");
-						log.log(Level.SEVERE, "=============================");
+                        Main.getInstance().printPluginError("Error occured while reading the config", "String '"+s+"' is in an invalid format!");
 						return;
 					}
 
@@ -498,22 +390,10 @@ public class Thirst
 			Logger log = Main.getInstance().getLogger();
 			PluginDescriptionFile pdf = Main.getInstance().getDescription();
 
-			log.log(Level.SEVERE, "=============================");
-			log.log(Level.SEVERE, "Error while displaying scoreboard for "+p.getName()+" in "+pdf.getName()+" V"+pdf.getVersion());
-			log.log(Level.SEVERE, "");
-			log.log(Level.SEVERE, "");
-			log.log(Level.SEVERE, "");
-			log.log(Level.SEVERE, "Printing Message:");
-			log.log(Level.SEVERE, "The string "+getThirstString(p)+" is longer than 40 characters.");
-			log.log(Level.SEVERE, "You must have a thirst message under 40 characters to use the SCOREBOARD displaytype.");
-			log.log(Level.SEVERE, "");
-			log.log(Level.SEVERE, "NOTE: This message will be displayed every time Thirst trys to update someones thirst (A lot!)");
-			log.log(Level.SEVERE, "");
-			log.log(Level.SEVERE, "");
-			log.log(Level.SEVERE, "");
-			log.log(Level.SEVERE, "END OF ERROR");
-			log.log(Level.SEVERE, "=============================");
-
+            Main.getInstance().printPluginError("Error occured while displaying scoreboard.", "The string "+getThirstString(p)+" is longer than 40 characters." +
+                                                                                                  "\nYou must have a thirst message under 40 characters to use the SCOREBOARD displaytype." +
+                                                                                                  "\n " +
+                                                                                                  "\nNOTE: This message will be displayed every time Thirst tries to update someones thirst (A lot!)");
 			return;
 		}
 
@@ -579,7 +459,7 @@ public class Thirst
 	{
 		if (validatePlayer(p))
 		{
-			if (Main.getInstance().getYAMLConfig().DisplayType.equalsIgnoreCase("ACTION")) ActionBarAPI.sendActionBar(p, getThirstString(p));
+			if (Main.getInstance().getYAMLConfig().DisplayType.equalsIgnoreCase("ACTION")) UtilActionBar.getInstance().sendActionBar(p, getThirstString(p));
 			else if (Main.getInstance().getYAMLConfig().DisplayType.equalsIgnoreCase("SCOREBOARD") && !Main.getInstance().getYAMLConfig().AlwaysShowActionBar) blipScoreboard(p);
 			else if (Main.getInstance().getYAMLConfig().DisplayType.equalsIgnoreCase("SCOREBOARD")) refreshScoreboard(p);
 			else if (Main.getInstance().getYAMLConfig().DisplayType.equalsIgnoreCase("BOSSBAR") && !Main.getInstance().getYAMLConfig().AlwaysShowActionBar) blipBossbar(p);
@@ -609,7 +489,7 @@ public class Thirst
 				Main.getInstance().getLogger().log(Level.SEVERE, "[Thirst V"+Main.getInstance().getDescription().getVersion()+"] Your Spigot version is not compatible with the Bossbar display type, please use version 1.9 or higher.");
 				Main.getInstance().getLogger().log(Level.SEVERE, "[Thirst V"+Main.getInstance().getDescription().getVersion()+"] Changing to display type ACTION...");
 
-				ActionBarAPI.sendActionBar(p, Thirst.getThirst().getThirstString(p));
+				UtilActionBar.getInstance().sendActionBar(p, Thirst.getThirst().getThirstString(p));
 
 				Main.getInstance().getYAMLConfig().DisplayType = "ACTION";
 				Main.getInstance().getYAMLConfig().save();

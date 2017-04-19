@@ -1,4 +1,4 @@
-package com.gamerking195.dev.thirst.listeners;
+package com.gamerking195.dev.thirst.listener;
 
 import java.util.HashMap;
 import java.util.UUID;

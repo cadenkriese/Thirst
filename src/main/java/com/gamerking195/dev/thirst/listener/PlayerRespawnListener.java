@@ -1,4 +1,4 @@
-package com.gamerking195.dev.thirst.listeners;
+package com.gamerking195.dev.thirst.listener;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

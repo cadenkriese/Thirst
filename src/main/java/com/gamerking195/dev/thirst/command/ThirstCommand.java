@@ -1,8 +1,6 @@
-package com.gamerking195.dev.thirst.commands;
+package com.gamerking195.dev.thirst.command;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
+import com.gamerking195.dev.thirst.autoupdater.VersionChecker;
 import net.cubespace.Yamler.Config.InvalidConfigurationException;
 import net.md_5.bungee.api.ChatColor;
 
@@ -14,13 +12,12 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.potion.PotionEffectType;
 
 import com.gamerking195.dev.thirst.Main;
 import com.gamerking195.dev.thirst.Thirst;
 import com.gamerking195.dev.thirst.ThirstData;
-import com.gamerking195.dev.thirst.configs.DataConfig;
+import com.gamerking195.dev.thirst.config.DataConfig;
 
 public class ThirstCommand 
 implements CommandExecutor
@@ -128,7 +125,15 @@ implements CommandExecutor
 					sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&b/thirst view [PLAYER] | &fDisplays the thirst of the specified player."));
 					sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&b/thirst list [BIOMES:FOOD:EFFECTS] | &fLists all possible config nodes for the specified category."));
 					sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&b/thirst reload | &fReloads the configuration and data files."));
+					sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&b/thirst update | &fAutomatically updates the plugin to the latest version."));
 					sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&f&m-----------------------"));
+				}
+				else if (args[0].equalsIgnoreCase("update")) {
+				    if (sender instanceof Player) {
+                        if (sender.hasPermission("thirst.command.update") || sender.hasPermission("thirst.*")) {
+                            VersionChecker.getInstance().update((Player) sender);
+                        }
+                    }
 				}
 				else if (args[0].equalsIgnoreCase("reload") || args[0].equalsIgnoreCase("rl"))
 				{
@@ -163,27 +168,7 @@ implements CommandExecutor
 					} 
 					catch (InvalidConfigurationException ex)
 					{
-						Logger log = Main.getInstance().getLogger();
-						PluginDescriptionFile pdf = Main.getInstance().getDescription();
-
-						log.log(Level.SEVERE, "=============================");
-						log.log(Level.SEVERE, "Error while reloading the config for "+pdf.getName()+" V"+pdf.getVersion());
-						log.log(Level.SEVERE, "WARNING, Thirst is now disabled!");
-						log.log(Level.SEVERE, "");
-						log.log(Level.SEVERE, "");
-						log.log(Level.SEVERE, "");
-						log.log(Level.SEVERE, "Printing StackTrace:");
-						ex.printStackTrace();
-						log.log(Level.SEVERE, "");
-						log.log(Level.SEVERE, "");
-						log.log(Level.SEVERE, "");
-						log.log(Level.SEVERE, "Printing Message:");
-						log.log(Level.SEVERE, ex.getMessage());
-						log.log(Level.SEVERE, "");
-						log.log(Level.SEVERE, "");
-						log.log(Level.SEVERE, "");
-						log.log(Level.SEVERE, "END OF ERROR");
-						log.log(Level.SEVERE, "=============================");
+						Main.getInstance().printError(ex, "WARNING, Thirst is now disabled.");
 
 						sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&8[&1Thirst&8] &bconfig.yml reloading failed! Check the console for more info."));
 

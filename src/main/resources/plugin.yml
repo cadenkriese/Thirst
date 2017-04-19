@@ -1,5 +1,5 @@
 name: Thirst
-version: 1.6.2
+version: 1.7.1
 description: Adds a thirst mechanic into vanilla minecraft!
 main: com.gamerking195.dev.thirst.Main
 author: GamerKing195
@@ -32,4 +32,7 @@ permissions:
     description: Makes it so a player is not affected by thirst.
   thirst.command.list:
     default: op
-    description: Gives access to the command /thirst list [Effects/Food]
+    description: Gives access to the command /thirst list [Effects/Food].
+  thirst.command.update:
+    default: op
+    description: Gives access to the command /thirst update.

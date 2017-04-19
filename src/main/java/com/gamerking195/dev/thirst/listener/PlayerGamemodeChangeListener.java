@@ -1,5 +1,6 @@
-package com.gamerking195.dev.thirst.listeners;
+package com.gamerking195.dev.thirst.listener;
 
+import com.gamerking195.dev.thirst.util.UtilActionBar;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
@@ -8,7 +9,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.potion.PotionEffect;
 
-import com.connorlinfoot.actionbarapi.ActionBarAPI;
 import com.gamerking195.dev.thirst.Main;
 import com.gamerking195.dev.thirst.Thirst;
 import com.gamerking195.dev.thirst.ThirstData;
@@ -40,7 +40,7 @@ implements Listener
 		}
 		else if (Main.getInstance().getYAMLConfig().DisplayType.equalsIgnoreCase("action"))
 		{
-			ActionBarAPI.sendActionBar(p, "");
+			UtilActionBar.getInstance().sendActionBar(p, "");
 		}
 		else if (Main.getInstance().getYAMLConfig().DisplayType.equalsIgnoreCase("bossbar"))
 		{
@@ -50,10 +50,6 @@ implements Listener
 			{
 				data.getBar().removePlayer(p);
 			}
-		}
-		else
-		{
-			return;
 		}
 	}
 }

@@ -7,29 +7,35 @@ import me.gamerzking.core.updater.Updater;
 import net.cubespace.Yamler.Config.InvalidConfigurationException;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.boss.BarColor;
-import org.bukkit.boss.BarFlag;
-import org.bukkit.boss.BarStyle;
-import org.bukkit.boss.BossBar;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import com.connorlinfoot.actionbarapi.ActionBarAPI;
-import com.gamerking195.dev.thirst.commands.ThirstCommand;
-import com.gamerking195.dev.thirst.configs.DataConfig;
-import com.gamerking195.dev.thirst.configs.YAMLConfig;
-import com.gamerking195.dev.thirst.listeners.PlayerCommandPreProcessListener;
-import com.gamerking195.dev.thirst.listeners.PlayerDeathListener;
-import com.gamerking195.dev.thirst.listeners.PlayerGamemodeChangeListener;
-import com.gamerking195.dev.thirst.listeners.PlayerItemConsumeListener;
-import com.gamerking195.dev.thirst.listeners.PlayerJoinLeaveListener;
-import com.gamerking195.dev.thirst.listeners.PlayerMoveListener;
-import com.gamerking195.dev.thirst.listeners.PlayerRespawnListener;
-import com.gamerking195.dev.thirst.listeners.UpdateListener;
+import com.gamerking195.dev.thirst.command.ThirstCommand;
+import com.gamerking195.dev.thirst.config.DataConfig;
+import com.gamerking195.dev.thirst.config.YAMLConfig;
+import com.gamerking195.dev.thirst.listener.PlayerCommandPreProcessListener;
+import com.gamerking195.dev.thirst.listener.PlayerDeathListener;
+import com.gamerking195.dev.thirst.listener.PlayerGamemodeChangeListener;
+import com.gamerking195.dev.thirst.listener.PlayerItemConsumeListener;
+import com.gamerking195.dev.thirst.listener.PlayerJoinLeaveListener;
+import com.gamerking195.dev.thirst.listener.PlayerMoveListener;
+import com.gamerking195.dev.thirst.listener.PlayerRespawnListener;
+import com.gamerking195.dev.thirst.listener.UpdateListener;
 import com.gamerking195.dev.thirst.placeholderapi.Placeholders;
+
+/*
+ * Thirst plugin by GamerKing195
+ *
+ * Found on Spigot @ https://www.spigotmc.org/resources/thirst.24610/
+ *
+ * Found on GitHub @ https://github.com/GamerKing195/Thirst
+ *
+ * This plugin is using the GNU General Public Liscense which basically means
+ * sure take the code but you must make whatever you make with this open source aswell.
+ */
 
 public class Main 
 extends JavaPlugin
@@ -41,7 +47,9 @@ extends JavaPlugin
 	private Logger log;
 	private PluginDescriptionFile pdf;
 	private YAMLConfig yamlConf;
-	
+
+	private boolean betaVersion = true;
+
 	private boolean worldGaurdEnabled = false;
 	
 	@Override
@@ -66,6 +74,15 @@ extends JavaPlugin
 	@Override
 	public void onDisable()
 	{
+        for (Player p : Bukkit.getServer().getOnlinePlayers())
+        {
+            p.setScoreboard(Bukkit.getServer().getScoreboardManager().getNewScoreboard());
+
+            DataConfig.getConfig().writeThirstToFile(p.getUniqueId(), Thirst.getThirst().getPlayerThirst(p));
+        }
+
+        DataConfig.getConfig().saveFile();
+
 		try 
 		{
 			yamlConf.reload();
@@ -73,23 +90,7 @@ extends JavaPlugin
 		} 
 		catch(InvalidConfigurationException ex) 
 		{
-			log.log(Level.SEVERE, "=============================");
-			log.log(Level.SEVERE, "Error while saving the config for "+pdf.getName()+" V"+pdf.getVersion());
-			log.log(Level.SEVERE, "");
-			log.log(Level.SEVERE, "");
-			log.log(Level.SEVERE, "");
-			log.log(Level.SEVERE, "Printing StackTrace:");
-			ex.printStackTrace();
-			log.log(Level.SEVERE, "");
-			log.log(Level.SEVERE, "");
-			log.log(Level.SEVERE, "");
-			log.log(Level.SEVERE, "Printing Message:");
-			log.log(Level.SEVERE, ex.getMessage());
-			log.log(Level.SEVERE, "");
-			log.log(Level.SEVERE, "");
-			log.log(Level.SEVERE, "");
-			log.log(Level.SEVERE, "END OF ERROR");
-			log.log(Level.SEVERE, "=============================");
+            printError(ex, "Error while saving the config.yml file please check that you didn't use tabs and all formatting is correct.");
 		}
 	}
 
@@ -105,24 +106,7 @@ extends JavaPlugin
 		}
 		catch(InvalidConfigurationException ex)
 		{
-			log.log(Level.SEVERE, "=============================");
-			log.log(Level.SEVERE, "Error while initializing the config for "+pdf.getName()+" V"+pdf.getVersion());
-			log.log(Level.SEVERE, "WARNING, Thirst will not enable until the error is fixed!");
-			log.log(Level.SEVERE, "");
-			log.log(Level.SEVERE, "");
-			log.log(Level.SEVERE, "");
-			log.log(Level.SEVERE, "Printing StackTrace:");
-			ex.printStackTrace();
-			log.log(Level.SEVERE, "");
-			log.log(Level.SEVERE, "");
-			log.log(Level.SEVERE, "");
-			log.log(Level.SEVERE, "Printing Message:");
-			log.log(Level.SEVERE, ex.getMessage());
-			log.log(Level.SEVERE, "");
-			log.log(Level.SEVERE, "");
-			log.log(Level.SEVERE, "");
-			log.log(Level.SEVERE, "END OF ERROR");
-			log.log(Level.SEVERE, "=============================");
+            printError(ex, "Error while initializing the config.yml file please check that you didn't use tabs and all formatting is correct.");
 			this.setEnabled(false);
 			return;
 		}
@@ -136,11 +120,9 @@ extends JavaPlugin
 			}
 			else
 			{
-				log.log(Level.WARNING, "Found PlaceholderAPI, but the placeholders did not hook!");
-			}
+                printPluginError("Error occured while adding placeholder support.", "The plugin failed to hook with Placeholder API, please report this bug.");
+            }
 		}
-
-		ActionBarAPI.init();
 
 		new Updater(this);
 
@@ -152,19 +134,8 @@ extends JavaPlugin
 			}
 			else
 			{
-				log.log(Level.SEVERE, "=============================");
-				log.log(Level.SEVERE, "Error while initializing the config for "+pdf.getName()+" V"+pdf.getVersion());
-				log.log(Level.SEVERE, "WARNING, Thirst will not enable until the error is fixed!");
-				log.log(Level.SEVERE, "");
-				log.log(Level.SEVERE, "");
-				log.log(Level.SEVERE, "");
-				log.log(Level.SEVERE, "Printing Message:");
-				log.log(Level.SEVERE, "You are trying to use worldgaurd in the config but the plugin could not be found!");
-				log.log(Level.SEVERE, "");
-				log.log(Level.SEVERE, "");
-				log.log(Level.SEVERE, "");
-				log.log(Level.SEVERE, "END OF ERROR");
-				log.log(Level.SEVERE, "=============================");
+			    printPluginError("Error occured while parsing config.", "You are trying to use worldgaurd in the config but the plugin could not be found!");
+
 				this.setEnabled(false);
 			}
 		}
@@ -201,29 +172,15 @@ extends JavaPlugin
 			} 
 			catch (InvalidConfigurationException ex) 
 			{
-				log.log(Level.SEVERE, "=============================");
-				log.log(Level.SEVERE, "Error while validating the config for "+pdf.getName()+" V"+pdf.getVersion());
-				log.log(Level.SEVERE, "WARNING, Thirst will not enable until the error is fixed!");
-				log.log(Level.SEVERE, "");
-				log.log(Level.SEVERE, "");
-				log.log(Level.SEVERE, "");
-				log.log(Level.SEVERE, "Printing StackTrace:");
-				ex.printStackTrace();
-				log.log(Level.SEVERE, "");
-				log.log(Level.SEVERE, "");
-				log.log(Level.SEVERE, "");
-				log.log(Level.SEVERE, "Printing Message:");
-				log.log(Level.SEVERE, ex.getMessage());
-				log.log(Level.SEVERE, "");
-				log.log(Level.SEVERE, "");
-				log.log(Level.SEVERE, "");
-				log.log(Level.SEVERE, "END OF ERROR");
-				log.log(Level.SEVERE, "=============================");
+			    printError(ex, "Error while validating the config.yml file please check that you used all spaces and all formatting is correct.");
 				this.setEnabled(false);
-				return;
 			}
 		}
 	}
+
+	public boolean isBeta() {
+	    return betaVersion;
+    }
 
 	public YAMLConfig getYAMLConfig() 
 	{
@@ -251,5 +208,48 @@ extends JavaPlugin
 	public void disable()
 	{
 		this.setEnabled(false);
+	}
+
+    public void printError(Exception ex) {
+        log.severe("A severe error has occured with the Thirst plugin.");
+        log.severe("If you cannot figure out this error on your own (e.g. a config error) please copy and paste everything from here to END ERROR and post it at https://github.com/GamerKing195/Thirst/issues.");
+        log.severe("");
+        log.severe("============== BEGIN ERROR ==============");
+        log.severe("PLUGIN VERSION: Thirst V" + getDescription().getVersion());
+        log.severe("");
+        log.severe("MESSAGE: " + ex.getMessage());
+        log.severe("");
+        log.severe("STACKTRACE: ");
+        ex.printStackTrace();
+        log.severe("");
+        log.severe("============== END ERROR ==============");
+    }
+
+    public void printError(Exception ex, String extraInfo) {
+	    log.severe("A severe error has occured with the Thirst plugin.");
+        log.severe("If you cannot figure out this error on your own (e.g. a config error) please copy and paste everything from here to END ERROR and post it at https://github.com/GamerKing195/Thirst/issues.");
+        log.severe("");
+        log.severe("============== BEGIN ERROR ==============");
+        log.severe("PLUGIN VERSION: Thirst V" + getDescription().getVersion());
+        log.severe("");
+        log.severe("PLUGIN MESSAGE: "+extraInfo);
+        log.severe("");
+        log.severe("MESSAGE: " + ex.getMessage());
+        log.severe("");
+        log.severe("STACKTRACE: ");
+        ex.printStackTrace();
+        log.severe("");
+        log.severe("============== END ERROR ==============");
+    }
+
+    public void printPluginError(String header, String message) {
+        log.severe("============== BEGIN ERROR ==============");
+        log.severe(header);
+        log.severe("");
+        log.severe("PLUGIN VERSION: Thirst V" + getDescription().getVersion());
+        log.severe("");
+        log.severe("PLUGIN MESSAGE: "+message);
+        log.severe("");
+        log.severe("============== END ERROR ==============");
 	}
 }

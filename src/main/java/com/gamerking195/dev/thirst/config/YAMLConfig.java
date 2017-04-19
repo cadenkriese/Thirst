@@ -1,4 +1,4 @@
-package com.gamerking195.dev.thirst.configs;
+package com.gamerking195.dev.thirst.config;
 
 import java.io.File;
 import java.util.logging.Level;
@@ -331,7 +331,7 @@ extends YamlConfig
 	({
 		"",
 		"DISABLED_WORLDS",
-		"Desc: List all of the worlds that will be unnafected by thirst.",
+		"Desc: List all of the worlds that will be unnaffected by thirst.",
 		"Type: String Array",
 		"Default: []"
 	})
@@ -341,7 +341,7 @@ extends YamlConfig
 	({
 		"",
 		"DISABLED_REGIONS",
-		"Desc: List all of the worldgaurd regions that will be unnafected by thirst..",
+		"Desc: List all of the worldgaurd regions that will be unnaffected by thirst..",
 		"Type: String Array",
 		"Default: []"
 	})

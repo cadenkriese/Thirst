@@ -1,4 +1,4 @@
-package com.gamerking195.dev.thirst.listeners;
+package com.gamerking195.dev.thirst.listener;
 
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
@@ -9,7 +9,7 @@ import org.bukkit.material.MaterialData;
 
 import com.gamerking195.dev.thirst.Main;
 import com.gamerking195.dev.thirst.Thirst;
-import com.gamerking195.dev.thirst.configs.YAMLConfig.ThirstItem;
+import com.gamerking195.dev.thirst.config.YAMLConfig.ThirstItem;
 
 public class PlayerItemConsumeListener 
 implements Listener

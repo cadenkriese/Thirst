@@ -1,4 +1,4 @@
-package com.gamerking195.dev.thirst.listeners;
+package com.gamerking195.dev.thirst.listener;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -7,7 +7,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import com.gamerking195.dev.thirst.Thirst;
 import com.gamerking195.dev.thirst.ThirstData;
-import com.gamerking195.dev.thirst.configs.DataConfig;
+import com.gamerking195.dev.thirst.config.DataConfig;
 
 public class PlayerCommandPreProcessListener
 implements Listener
