@@ -129,10 +129,21 @@ implements CommandExecutor
 					sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&f&m-----------------------"));
 				}
 				else if (args[0].equalsIgnoreCase("update")) {
-				    if (sender instanceof Player) {
-                        if (sender.hasPermission("thirst.command.update") || sender.hasPermission("thirst.*")) {
-                            VersionChecker.getInstance().update((Player) sender);
+				    if (sender.isOp() || sender.hasPermission("thirst.command.update") || sender.hasPermission("thirst.*")) {
+                        if (!VersionChecker.getInstance().getLatestVersionName().equalsIgnoreCase(Main.getInstance().getDescription().getVersion())) {
+                            if (sender instanceof Player) {
+                                VersionChecker.getInstance().update((Player) sender);
+                            } else {
+                                VersionChecker.getInstance().update(null);
+                            }
                         }
+                        else {
+                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&8[&1Thirst&8] &cYour version, V"+Main.getInstance().getDescription().getVersion()+" is up to date!"));
+                        }
+
+                    }
+                    else {
+				        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', Main.getInstance().getYAMLConfig().NoPermissionMesage));
                     }
 				}
 				else if (args[0].equalsIgnoreCase("reload") || args[0].equalsIgnoreCase("rl"))

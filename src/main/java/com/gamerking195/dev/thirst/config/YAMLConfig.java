@@ -157,7 +157,7 @@ extends YamlConfig
 	})
 	public boolean drinkBlockWater = false;
 
-	@Comment("---------------Multipliers---------------")
+    @Comment("---------------Multipliers---------------")
 	@Comments
 	({
 		"",		
