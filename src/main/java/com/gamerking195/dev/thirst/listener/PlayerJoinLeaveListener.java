@@ -1,7 +1,7 @@
 package com.gamerking195.dev.thirst.listener;
 
 import com.gamerking195.dev.thirst.Main;
-import com.gamerking195.dev.thirst.autoupdater.VersionChecker;
+import com.gamerking195.dev.thirst.util.UtilUpdater;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -31,14 +31,13 @@ implements Listener
 		Thirst.getThirst().playerJoin(player);
 
 		if (player.isOp() || player.hasPermission("thirst.command.update") || player.hasPermission("thirst.*")) {
-		    if (!VersionChecker.getInstance().isLatestVersion()) {
-
+		    if (Main.getInstance().getYAMLConfig().EnableUpdater && UtilUpdater.getInstance().isUpdateAvailable()) {
 		        new BukkitRunnable() {
                     @Override
                     public void run() {
                         String currentVersion = Main.getInstance().getDescription().getVersion();
-                        String newVersion = VersionChecker.getInstance().getLatestVersionName();
-                        List<String> testedVersions = VersionChecker.getInstance().getTestedVersions();
+                        String newVersion = UtilUpdater.getInstance().getLatestVersion();
+                        List<String> testedVersions = UtilUpdater.getInstance().getTestedVersions();
                         String mcVersion = Bukkit.getServer().getClass().getPackage().getName();
                         mcVersion = mcVersion.substring(mcVersion.lastIndexOf(".") + 1);
                         mcVersion = mcVersion.substring(1, mcVersion.length()-3);
@@ -54,7 +53,7 @@ implements Listener
                             player.sendMessage(ChatColor.RED+"Warning your current version, "+mcVersion+", is not supported by this update, there may be unexpected bugs!");
                         player.sendMessage("");
 
-                        TextComponent accept = new TextComponent("[UPDATE]");
+                        TextComponent accept = new TextComponent("[CLICK TO UPDATE]");
                         accept.setColor(ChatColor.DARK_AQUA);
                         accept.setBold(true);
                         accept.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/thirst update"));

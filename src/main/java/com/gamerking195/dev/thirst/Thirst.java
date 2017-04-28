@@ -63,7 +63,7 @@ public class Thirst
 		long speed = calculateSpeed(p);
 		ThirstData data = getThirstData(p);
 		data.setSpeed(speed);
-		data.setTime((long) (System.currentTimeMillis()+speed));
+		data.setTime(System.currentTimeMillis()+speed);
 		setThirstData(p, data);
 
 		displayThirst(p);

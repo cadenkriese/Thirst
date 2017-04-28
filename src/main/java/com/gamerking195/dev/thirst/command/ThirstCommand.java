@@ -1,6 +1,6 @@
 package com.gamerking195.dev.thirst.command;
 
-import com.gamerking195.dev.thirst.autoupdater.VersionChecker;
+import com.gamerking195.dev.thirst.util.UtilUpdater;
 import net.cubespace.Yamler.Config.InvalidConfigurationException;
 import net.md_5.bungee.api.ChatColor;
 
@@ -64,23 +64,23 @@ implements CommandExecutor
 							}
 						}
 
-						OfflinePlayer oP = Bukkit.getOfflinePlayer(args[1]);
-						if (oP == null || !oP.hasPlayedBefore() || !DataConfig.getConfig().fileContains(oP.getUniqueId()))
+						OfflinePlayer op = Bukkit.getOfflinePlayer(args[1]);
+						if (op == null || !op.hasPlayedBefore() || !DataConfig.getConfig().fileContains(op.getUniqueId()))
 						{
 							sender.sendMessage(ChatColor.translateAlternateColorCodes('&', Main.getInstance().getYAMLConfig().InvalidCommandMessage));
 							return true;
 						}
-						else if (oP != null && oP.hasPlayedBefore() && DataConfig.getConfig().fileContains(oP.getUniqueId()))
+						else if (op.hasPlayedBefore() && DataConfig.getConfig().fileContains(op.getUniqueId()))
 						{
 							//if they run /thirst view %player%
 							String thirstViewPlayerMessage = Main.getInstance().getYAMLConfig().ThirstViewPlayerMessage
-									.replace("%player%", oP.getName())
-									.replace("%bar%", Thirst.getThirst().getThirstBar(oP)
-											.replace("%percent%", Thirst.getThirst().getThirstPercent(oP, true)
-													.replace("%thirstmessage%", Thirst.getThirst().getThirstString(oP)
-															.replace("%removespeed%", String.valueOf(Thirst.getThirst().getThirstData(oP).getSpeed()/1000)))));
+									.replace("%player%", op.getName())
+									.replace("%bar%", Thirst.getThirst().getThirstBar(op)
+											.replace("%percent%", Thirst.getThirst().getThirstPercent(op, true)
+													.replace("%thirstmessage%", Thirst.getThirst().getThirstString(op)
+															.replace("%removespeed%", String.valueOf(Thirst.getThirst().getThirstData(op).getSpeed()/1000)))));
 
-							sender.sendMessage(ChatColor.translateAlternateColorCodes('&', thirstViewPlayerMessage.replace("%thirstmessage%", Thirst.getThirst().getThirstString(oP))));
+							sender.sendMessage(ChatColor.translateAlternateColorCodes('&', thirstViewPlayerMessage.replace("%thirstmessage%", Thirst.getThirst().getThirstString(op))));
 							return true;
 						}
 					}
@@ -128,13 +128,13 @@ implements CommandExecutor
 					sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&b/thirst update | &fAutomatically updates the plugin to the latest version."));
 					sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&f&m-----------------------"));
 				}
-				else if (args[0].equalsIgnoreCase("update")) {
+				else if (args[0].equalsIgnoreCase("update") && Main.getInstance().getYAMLConfig().EnableUpdater) {
 				    if (sender.isOp() || sender.hasPermission("thirst.command.update") || sender.hasPermission("thirst.*")) {
-                        if (!VersionChecker.getInstance().getLatestVersionName().equalsIgnoreCase(Main.getInstance().getDescription().getVersion())) {
+                        if (UtilUpdater.getInstance().isUpdateAvailable()) {
                             if (sender instanceof Player) {
-                                VersionChecker.getInstance().update((Player) sender);
+                                UtilUpdater.getInstance().update((Player) sender);
                             } else {
-                                VersionChecker.getInstance().update(null);
+								UtilUpdater.getInstance().update(null);
                             }
                         }
                         else {

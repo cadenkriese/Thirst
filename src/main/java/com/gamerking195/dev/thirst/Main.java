@@ -3,6 +3,7 @@ package com.gamerking195.dev.thirst;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.gamerking195.dev.thirst.util.UtilUpdater;
 import me.gamerzking.core.updater.Updater;
 import net.cubespace.Yamler.Config.InvalidConfigurationException;
 
@@ -143,6 +144,7 @@ extends JavaPlugin
 		//CLASSES
 		Thirst.getThirst().init(); 
 		PlayerMoveListener.init();
+		UtilUpdater.getInstance().init();
 
 		//COMMANDS
 		this.getCommand("thirst").setExecutor(new ThirstCommand());
