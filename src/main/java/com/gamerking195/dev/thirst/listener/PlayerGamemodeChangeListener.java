@@ -14,19 +14,19 @@ import com.gamerking195.dev.thirst.Thirst;
 import com.gamerking195.dev.thirst.ThirstData;
 
 public class PlayerGamemodeChangeListener
-implements Listener
+		implements Listener
 {
 	@EventHandler
 	public void onGamemodeChange(PlayerGameModeChangeEvent event)
 	{
 		Player p = event.getPlayer();
 
-		if (event.getNewGameMode() != GameMode.CREATIVE || Main.getInstance().getYAMLConfig().IgnoreCreative)
+		if (event.getNewGameMode() != GameMode.CREATIVE || Main.getInstance().getYAMLConfig().ignoreCreative)
 		{
 			Thirst.getThirst().displayThirst(p);
 			return;
 		}
-		else if (event.getNewGameMode() == GameMode.CREATIVE && !Main.getInstance().getYAMLConfig().IgnoreCreative)
+		else if (event.getNewGameMode() == GameMode.CREATIVE && !Main.getInstance().getYAMLConfig().ignoreCreative)
 		{
 			for (PotionEffect effect : p.getActivePotionEffects())
 			{
@@ -34,18 +34,19 @@ implements Listener
 			}
 		}
 
-		if (Main.getInstance().getYAMLConfig().DisplayType.equalsIgnoreCase("scoreboard"))
+		if (Main.getInstance().getYAMLConfig().displayType.equalsIgnoreCase("scoreboard"))
 		{
-			p.setScoreboard(Bukkit.getServer().getScoreboardManager().getNewScoreboard());
+			if (Main.getInstance().getYAMLConfig().displayType.equalsIgnoreCase("SCOREBOARD"))
+				p.setScoreboard(Bukkit.getServer().getScoreboardManager().getNewScoreboard());
 		}
-		else if (Main.getInstance().getYAMLConfig().DisplayType.equalsIgnoreCase("action"))
+		else if (Main.getInstance().getYAMLConfig().displayType.equalsIgnoreCase("action"))
 		{
 			UtilActionBar.getInstance().sendActionBar(p, "");
 		}
-		else if (Main.getInstance().getYAMLConfig().DisplayType.equalsIgnoreCase("bossbar"))
+		else if (Main.getInstance().getYAMLConfig().displayType.equalsIgnoreCase("bossbar"))
 		{
 			ThirstData data = Thirst.getThirst().getThirstData(p);
-			
+
 			if (data.getBar() != null)
 			{
 				data.getBar().removePlayer(p);

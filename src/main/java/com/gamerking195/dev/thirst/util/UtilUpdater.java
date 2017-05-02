@@ -5,7 +5,6 @@ import com.gamerking195.dev.pluginupdater.Updater;
 import com.gamerking195.dev.thirst.Main;
 import com.gamerking195.dev.thirst.Thirst;
 import com.gamerking195.dev.thirst.ThirstData;
-import com.gamerking195.dev.thirst.config.DataConfig;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
@@ -39,7 +38,7 @@ public class UtilUpdater {
      */
 
     public void init() {
-        if (Main.getInstance().getYAMLConfig().EnableUpdater) {
+        if (Main.getInstance().getYAMLConfig().enableUpdater) {
             //Initialize the latest version & tested version variables.
             Gson gson = new Gson();
             try {
@@ -70,8 +69,8 @@ public class UtilUpdater {
     }
 
     public void update(Player initiater) {
-        if (Main.getInstance().getYAMLConfig().EnableUpdater && updateAvailable && !updating) {
-            UtilActionBar.getInstance().sendActionBar(initiater, ChatColor.translateAlternateColorCodes('&', "&f&lUPDATING &1&lTHIRST V" + Main.getInstance().getDescription().getVersion() + " &b&l» &1&lV" + latestVersion + " &8[RETREIVING UPDATER]"));
+        if (Main.getInstance().getYAMLConfig().enableUpdater && updateAvailable && !updating) {
+            UtilActionBar.getInstance().sendActionBar(initiater, ChatColor.translateAlternateColorCodes('&', "&f&lUPDATING &1&lTHIRST &b&lV" + Main.getInstance().getDescription().getVersion() + " &a&l» &b&lV" + latestVersion + " &8[RETREIVING UPDATER]"));
 
             updating = true;
             try {
@@ -99,7 +98,7 @@ public class UtilUpdater {
 
                     bar = bar.substring(0, currentProgress + 2) + "&c" + bar.substring(currentProgress + 2);
 
-                    UtilActionBar.getInstance().sendActionBar(initiater, ChatColor.translateAlternateColorCodes('&', "&f&lUPDATING &1&lTHIRST V" + Main.getInstance().getDescription().getVersion() + " &b&l» &1&lV" + latestVersion + " &8&l| " + bar + " &8&l| &2" + currentPercent + "% &8[DOWNLAODING UPDATER]"));
+                    UtilActionBar.getInstance().sendActionBar(initiater, ChatColor.translateAlternateColorCodes('&', "&f&lUPDATING &1&lTHIRST &b&lV" + Main.getInstance().getDescription().getVersion() + " &a&l» &b&lV" + latestVersion + " &8&l| " + bar + " &8&l| &2" + currentPercent + "% &8[DOWNLAODING UPDATER]"));
 
                     bout.write(data, 0, x);
                 }
@@ -107,7 +106,7 @@ public class UtilUpdater {
                 bout.close();
                 in.close();
 
-                UtilActionBar.getInstance().sendActionBar(initiater, ChatColor.translateAlternateColorCodes('&', "&f&lUPDATING &1&lTHIRST V" + Main.getInstance().getDescription().getVersion() + " &b&l» &1&lV" + latestVersion + " &8[RUNNING UPDATER]"));
+                UtilActionBar.getInstance().sendActionBar(initiater, ChatColor.translateAlternateColorCodes('&', "&f&lUPDATING &1&lTHIRST &b&lV" + Main.getInstance().getDescription().getVersion() + " &a&l» &b&lV" + latestVersion + " &8[RUNNING UPDATER]"));
 
                 Plugin target = Bukkit.getPluginManager().loadPlugin(new File(Main.getInstance().getDataFolder().getPath().substring(0, Main.getInstance().getDataFolder().getPath().lastIndexOf("/")) + "/PluginUpdater.jar"));
                 target.onLoad();
@@ -125,21 +124,13 @@ public class UtilUpdater {
 
                 Main.getInstance().getYAMLConfig().save();
 
-                for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-                    p.setScoreboard(Bukkit.getServer().getScoreboardManager().getNewScoreboard());
-
-                    DataConfig.getConfig().writeThirstToFile(p.getUniqueId(), Thirst.getThirst().getPlayerThirst(p));
-                }
-
-                DataConfig.getConfig().saveFile();
-
                 UpdateLocale locale = new UpdateLocale();
                 locale.fileName = "Thirst-" + latestVersion;
 
                 new Updater(initiater, Main.getInstance(), 24610, locale, true).update();
             } catch (Exception ex) {
                 Main.getInstance().printError(ex, "Error occured whilst downloading resource update.");
-                UtilActionBar.getInstance().sendActionBar(initiater, ChatColor.translateAlternateColorCodes('&', "&f&lUPDATING &1&lTHIRST V" + Main.getInstance().getDescription().getVersion() + " &b&l» &1&lV" + latestVersion + " &8[&c&lUPDATE FAILED &7&o(Check Console)&8]"));
+                UtilActionBar.getInstance().sendActionBar(initiater, ChatColor.translateAlternateColorCodes('&', "&f&lUPDATING &1&lTHIRST &b&lV" + Main.getInstance().getDescription().getVersion() + " &b&l» &1&lV" + latestVersion + " &8[&c&lUPDATE FAILED &7&o(Check Console)&8]"));
             }
         }
     }

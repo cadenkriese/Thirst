@@ -31,7 +31,7 @@ implements Listener
 		Thirst.getThirst().playerJoin(player);
 
 		if (player.isOp() || player.hasPermission("thirst.command.update") || player.hasPermission("thirst.*")) {
-		    if (Main.getInstance().getYAMLConfig().EnableUpdater && UtilUpdater.getInstance().isUpdateAvailable()) {
+		    if (Main.getInstance().getYAMLConfig().enableUpdater && UtilUpdater.getInstance().isUpdateAvailable()) {
 		        new BukkitRunnable() {
                     @Override
                     public void run() {

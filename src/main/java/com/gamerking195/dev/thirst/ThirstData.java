@@ -1,5 +1,6 @@
 package com.gamerking195.dev.thirst;
 
+import org.bukkit.Location;
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 
@@ -14,6 +15,8 @@ public class ThirstData
 	private int thirstAmount;
 	//the active bossbar for the player.
 	private BossBar bar;
+	//The last known location of the player.
+	private Location location;
 	
 	/**
 	 * @author GamerKing195
@@ -22,55 +25,73 @@ public class ThirstData
 	 * @param speed the interval at which the players thirst will be removed.
 	 * @param amount the amount of thirst a player has 0-100.
 	 */
-	public ThirstData(Player p, long time, long speed, int amount)
+    ThirstData(Player p, long time, long speed, int amount)
 	{
 		this.p = p;
 		thirstTime = time;
 		removalSpeed = speed;
 		thirstAmount = amount;
+		this.location = p.getLocation();
 	}
-	
-	public Player getPlayer()
-	{
-		return p;
-	}
-	
-	public long getTime()
-	{
-		return thirstTime;
-	}
-	
-	public void setTime(long l)
+
+    /*
+     * SETTERS
+     */
+
+    void setTime(long l)
 	{
 		thirstTime = l;
 	}
 	
-	public long getSpeed()
-	{
-		return removalSpeed;
-	}
-	
-	public void setSpeed(long speed)
+    void setSpeed(long speed)
 	{
 		if (speed < 100)
 			speed = 100;
 		removalSpeed = speed;
 	}
 
-	public int getThirstAmount() 
+    void setThirstAmount(int thirstAmount)
+    {
+        if (thirstAmount > 100)
+            thirstAmount = 100;
+        if (thirstAmount < 0)
+            thirstAmount = 0;
+
+
+        this.thirstAmount = thirstAmount;
+    }
+
+    void setBar(BossBar bar)
+    {
+        this.bar = bar;
+    }
+
+    public void setLastLocation(Location location) {
+        this.location = location;
+    }
+
+    /*
+     * GETTERS
+     */
+
+    public long getSpeed()
+    {
+        return removalSpeed;
+    }
+
+    public Player getPlayer()
+    {
+        return p;
+    }
+
+    public long getTime()
+    {
+        return thirstTime;
+    }
+
+    int getThirstAmount()
 	{
 		return thirstAmount;
-	}
-
-	public void setThirstAmount(int thirstAmount)
-	{
-		if (thirstAmount > 100)
-			thirstAmount = 100;
-		if (thirstAmount < 0)
-			thirstAmount = 0;
-		
-		
-		this.thirstAmount = thirstAmount;
 	}
 
 	public BossBar getBar() 
@@ -78,8 +99,7 @@ public class ThirstData
 		return bar;
 	}
 
-	public void setBar(BossBar bar) 
-	{
-		this.bar = bar;
-	}
+    public Location getLastLocation() {
+        return location;
+    }
 }

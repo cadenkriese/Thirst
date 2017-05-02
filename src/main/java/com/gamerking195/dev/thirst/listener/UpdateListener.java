@@ -14,54 +14,62 @@ import me.gamerzking.core.updater.UpdateType;
 import me.gamerzking.core.updater.event.UpdateEvent;
 
 public class UpdateListener
-implements Listener
+        implements Listener
 {
-	@EventHandler
-	public void onUpdate(UpdateEvent event)
-	{
-		if (event.getType() == UpdateType.SECOND)
-		{
-			for (Player p : Bukkit.getOnlinePlayers())
-			{
-				if (!Thirst.getThirst().validatePlayer(p)) continue;
-				if (!Main.getInstance().getYAMLConfig().AlwaysShowActionBar) continue;
-				
-				Thirst.getThirst().displayThirst(p);
-			}
-		}
+    @EventHandler
+    public void onUpdate(UpdateEvent event)
+    {
+        if (event.getType() == UpdateType.SECOND)
+        {
+            for (Player p : Bukkit.getOnlinePlayers())
+            {
+                if (!Thirst.getThirst().validatePlayer(p)) continue;
+                if (!Main.getInstance().getYAMLConfig().alwaysShowActionBar) continue;
 
-		if (event.getType() == UpdateType.CENTI_SECOND)
-		{
-			for (String s : Thirst.getThirst().getThirstDataMap().keySet())
-			{
-				Player p = Bukkit.getServer().getPlayer(UUID.fromString(s));
+                Thirst.getThirst().displayThirst(p);
+            }
+        }
 
-				if (p == null)
-				{
-					Thirst.getThirst().getThirstDataMap().remove(s);
-					continue;
-				}
-				
-				if (!Thirst.getThirst().validatePlayer(p)) continue;
-				
-				if (System.currentTimeMillis() >= Thirst.getThirst().getThirstData(p).getTime())
-				{
-					Thirst.getThirst().removeThirst(p);
-				}
-			}
-		}
+        if (event.getType() == UpdateType.CENTI_SECOND)
+        {
+            for (String s : Thirst.getThirst().getThirstDataMap().keySet())
+            {
+                Player p = Bukkit.getServer().getPlayer(UUID.fromString(s));
 
-		if (event.getType() == UpdateType.DAMAGE)
-		{
-			for (Player p : Bukkit.getOnlinePlayers())
-			{
-				if (!Thirst.getThirst().validatePlayer(p)) continue;
+                if (p == null)
+                {
+                    Thirst.getThirst().getThirstDataMap().remove(s);
+                    continue;
+                }
 
-				if (Thirst.getThirst().getPlayerThirst(p) <= Main.getInstance().getYAMLConfig().getDamagePercent())
-				{
-					p.damage(Main.getInstance().getYAMLConfig().getDamageAmount());
-				}
-			}
-		}
-	}
+                if (!Thirst.getThirst().validatePlayer(p)) continue;
+
+                if (System.currentTimeMillis() >= Thirst.getThirst().getThirstData(p).getTime())
+                {
+                    if (!Main.getInstance().getYAMLConfig().removeAFK) {
+                        if (p.getLocation().getBlockX() != Thirst.getThirst().getThirstData(p).getLastLocation().getBlockX() || p.getLocation().getBlockY() != Thirst.getThirst().getThirstData(p).getLastLocation().getBlockY() || p.getLocation().getBlockZ() != Thirst.getThirst().getThirstData(p).getLastLocation().getBlockZ()) {
+                            Thirst.getThirst().removeThirst(p);
+
+                            Thirst.getThirst().getThirstData(p).setLastLocation(p.getLocation());
+                        }
+                    }
+                    else
+                        Thirst.getThirst().removeThirst(p);
+                }
+            }
+        }
+
+        if (event.getType() == UpdateType.DAMAGE)
+        {
+            for (Player p : Bukkit.getOnlinePlayers())
+            {
+                if (!Thirst.getThirst().validatePlayer(p)) continue;
+
+                if (Thirst.getThirst().getPlayerThirst(p) <= Main.getInstance().getYAMLConfig().getDamagePercent())
+                {
+                    p.damage(Main.getInstance().getYAMLConfig().getDamageAmount());
+                }
+            }
+        }
+    }
 }

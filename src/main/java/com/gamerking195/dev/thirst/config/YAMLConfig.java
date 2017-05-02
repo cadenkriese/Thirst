@@ -2,6 +2,7 @@ package com.gamerking195.dev.thirst.config;
 
 import java.io.File;
 
+import net.cubespace.Yamler.Config.Path;
 import org.apache.commons.lang.math.NumberUtils;
 
 import com.gamerking195.dev.thirst.Main;
@@ -33,39 +34,41 @@ public class YAMLConfig extends YamlConfig {
 
     //CONFIG
 
-    @Comments
-            ({
-                     "",
-                     "DISPLAY_TYPE",
-                     "Desc: Changes the way players see their thirst.",
-                     "Type: Enum",
-                     "Possible types: SCOREBOARD, ACTION, COMMAND, BOSSBAR",
-                     "Default: ACTION",
-                     "Note: The command /thirst view, and /thirst view %player% will always be enabled, use command to disable scoreboard, and action."
-            })
-    public String DisplayType = "ACTION";
+    @Comment("---------------General---------------")
 
     @Comments
             ({
                      "",
-                     "BAR_COLOR",
-                     "Desc: The colors for the bossbar, if that display type is chosen.",
-                     "Type: Enum",
-                     "Possible types: BLUE, GREEN, PINK, PURPLE, RED, YELLOW, WHITE",
-                     "Default: BLUE",
+                     "REMOVE_THIRST",
+                     "Desc: The amount of thirst that will be removed every THIRST_DELAY",
+                     "Type: int (100 or lower.)",
+                     "Default: 1"
             })
-    public String BarColor = "BLUE";
+    @Path("Remove-Thirst")
+    public int removeThirst = 1;
 
     @Comments
             ({
                      "",
-                     "BAR_STYLE",
-                     "Desc: The style for the bossbar, if that display type is chosen.",
-                     "Type: Enum",
-                     "Possible types: SOLID, SEGMENTED_6, SEGMENTED_10, SEGMENTED_12, SEGMENTED_20",
-                     "Default: SOLID",
+                     "CRITICAL_THIRST_PERCENT",
+                     "Desc: The percent at which a players thirst becomes critical and the THIRST_LOW_MESSAGE and !!! will be displayed.",
+                     "Type: Integer",
+                     "Default: 10"
             })
-    public String BarStyle = "SOLID";
+    @Path("Critical-Thirst-Percent")
+    public int criticalThristPercent = 10;
+
+    @Comments
+            ({
+                     "",
+                     "THIRST_DELAY",
+                     "Desc: The delay in seconds before thirst is removed from every player.",
+                     "Type: float (Time in seconds)",
+                     "Default: 36 (will remove 100% over three days, just like in real life!)",
+                     "Note: This does support values under one second without any changes in lag!"
+            })
+    @Path("Thirst-Delay")
+    public float thirstDelay = 36;
 
     @Comments
             ({
@@ -78,49 +81,8 @@ public class YAMLConfig extends YamlConfig {
                      "- GOLDEN_APPLE.100.1",
                      "Requirements: Should be in format: ITEM.PERCENT.METADATE(metadata optional)"
             })
-    public String[] ThirstQuenchingItems = {"POTION.20", "GOLDEN_APPLE.100.1"};
-
-    @Comments
-            ({
-                     "",
-                     "REMOVE_THIRST",
-                     "Desc: The amount of thirst that will be removed every ThirstDelay",
-                     "Type: int (100 or lower.)",
-                     "Default: 1"
-            })
-    public int RemoveThirst = 1;
-
-    @Comments
-            ({
-                     "",
-                     "ALWAYS_SHOW_ACTION_BAR",
-                     "Desc: If set to false the action bar will only display when a players thirst changes.",
-                     "Type: Boolean",
-                     "Default: false",
-                     "Notes: For scoreboards & bossbar it will make the scoreboard pop up for 3 seconds then go away."
-            })
-    public boolean AlwaysShowActionBar = true;
-
-    @Comments
-            ({
-                     "",
-                     "CRITICAL_THIRST_PERCENT",
-                     "Desc: The percent at which a players thirst becomes critical and the THIRST_LOW_MESSAGE and !!! will be displayed.",
-                     "Type: Integer",
-                     "Default: 10"
-            })
-    public int CriticalThristPercent = 10;
-
-    @Comments
-            ({
-                     "",
-                     "THIRST_DELAY",
-                     "Desc: The delay in seconds before thirst is removed from every player.",
-                     "Type: float (Time in seconds)",
-                     "Default: 36 (will remove 100% over three days, just like in real life!)",
-                     "Note: This does support values under one second without any changes in lag!"
-            })
-    public float ThirstDelay = 36;
+    @Path("Thirst-Quenching-Items")
+    public String[] thirstQuenchingItems = {"POTION.20", "GOLDEN_APPLE.100.1"};
 
     @Comments
             ({
@@ -130,7 +92,8 @@ public class YAMLConfig extends YamlConfig {
                      "Type: Boolean",
                      "Default: true"
             })
-    public boolean IgnoreCreative = true;
+    @Path("Ignore-Creative")
+    public boolean ignoreCreative = true;
 
     @Comments
             ({
@@ -140,7 +103,8 @@ public class YAMLConfig extends YamlConfig {
                      "Type: Boolean",
                      "Default: false"
             })
-    public boolean IgnoreOP = false;
+    @Path("Ignore-OP")
+    public boolean ignoreOP = false;
 
     @Comments
             ({
@@ -150,6 +114,7 @@ public class YAMLConfig extends YamlConfig {
                      "Type: Boolean",
                      "Default: false"
             })
+    @Path("Drink-Block-Water")
     public boolean drinkBlockWater = false;
 
     @Comments
@@ -160,7 +125,68 @@ public class YAMLConfig extends YamlConfig {
                      "Type: Boolean",
                      "Default: true"
             })
-    public boolean EnableUpdater = true;
+    @Path("Enable-Updater")
+    public boolean enableUpdater = true;
+
+    @Comments
+            ({
+                     "",
+                     "REMOVE_WHEN_AFK",
+                     "Desc: If false, thirst will not remove thirst whenever the player hasn't moved since their last removal of thirst.",
+                     "Type: Boolean",
+                     "Default: true"
+            })
+    @Path("Remove-When-AFK")
+    public boolean removeAFK = true;
+
+    @Comment("---------------Display---------------")
+    @Comments
+            ({
+                     "",
+                     "DISPLAY_TYPE",
+                     "Desc: Changes the way players see their thirst.",
+                     "Type: Enum",
+                     "Possible types: SCOREBOARD, ACTION, COMMAND, BOSSBAR",
+                     "Default: ACTION",
+                     "Note: The command /thirst view, and /thirst view %player% will always be enabled, use command to disable scoreboard, and action."
+            })
+    @Path("Display.Display-Type")
+    public String displayType = "ACTION";
+
+    @Comments
+            ({
+                     "",
+                     "BAR_COLOR",
+                     "Desc: The colors for the bossbar, if that display type is chosen.",
+                     "Type: Enum",
+                     "Possible types: BLUE, GREEN, PINK, PURPLE, RED, YELLOW, WHITE",
+                     "Default: BLUE",
+            })
+    @Path("Display.Bar-Color")
+    public String barColor = "BLUE";
+
+    @Comments
+            ({
+                     "",
+                     "BAR_STYLE",
+                     "Desc: The style for the bossbar, if that display type is chosen.",
+                     "Type: Enum",
+                     "Possible types: SOLID, SEGMENTED_6, SEGMENTED_10, SEGMENTED_12, SEGMENTED_20",
+                     "Default: SOLID",
+            })
+    @Path("Display.Bar-Style")
+    public String barStyle = "SOLID";
+    @Comments
+            ({
+                     "",
+                     "ALWAYS_SHOWING",
+                     "Desc: If set to false thirst will only display when a players thirst changes.",
+                     "Type: Boolean",
+                     "Default: false",
+                     "Notes: For scoreboards & bossbar it will make the scoreboard pop up for 3 seconds then go away."
+            })
+    @Path("Display.Always-Showing")
+    public boolean alwaysShowActionBar = true;
 
     @Comment("---------------Multipliers---------------")
     @Comments
@@ -173,7 +199,8 @@ public class YAMLConfig extends YamlConfig {
                      "DESERT.5",
                      "HELL.10"
             })
-    public String[] Biomes = new String[]{"DESERT.5", "HELL.10"};
+    @Path("Multipliers.Biomes")
+    public String[] biomes = new String[]{"DESERT.5", "HELL.10"};
     @Comments
             ({
                      "",
@@ -184,7 +211,8 @@ public class YAMLConfig extends YamlConfig {
                      "LEATHER.5",
                      "IRON_CHESTPLATE.10"
             })
-    public String[] Armor = new String[]{"LEATHER.5", "IRON_CHESTPLATE.10"};
+    @Path("Multipliers.Armor")
+    public String[] armor = new String[]{"LEATHER.5", "IRON_CHESTPLATE.10"};
     @Comments
             ({
                      "",
@@ -193,27 +221,30 @@ public class YAMLConfig extends YamlConfig {
                      "Type: Integer",
                      "Default: -1"
             })
-    public int Sprint = -1;
+    @Path("Multipliers.Sprint")
+    public int sprint = -1;
     @Comments
             ({
                      "",
-                     "DAY_MULTIPLIER",
+                     "DAY",
                      "Desc: How much quicker you want thirst to be removed when it is day, put 0 to make no thirst removed, put negative to make thirst take longer to be removed.",
                      "Type: Integer",
                      "Default: 0"
             })
-    public int DayMultiplier = 0;
+    @Path("Multipliers.Day")
+    public int dayMultiplier = 0;
     @Comments
             ({
                      "",
-                     "NIGHT_MULTIPLIER",
+                     "NIGHT",
                      "Desc: How much quicker you want thirst to be removed when it is night, put 0 to make no thirst removed, put negative to make thirst take longer to be removed.",
                      "Type: Integer",
                      "Default: 0"
             })
-    public int NightMultiplier = 0;
+    @Path("Multipliers.Night")
+    public int nightMultiplier = 0;
 
-    @Comment("---------------Effects---------------")
+    @Comment("---------------potions---------------")
     @Comments
             ({
                      "",
@@ -222,13 +253,14 @@ public class YAMLConfig extends YamlConfig {
                      "Type: Boolean",
                      "Default: true"
             })
-    public boolean Enabled = true;
+    @Path("Effects.Enabled")
+    public boolean effectsEnabled = true;
 
     @Comments
             ({
                      "",
                      "EFFECTS",
-                     "Desc: If false, all potion effects will not be given.",
+                     "Desc: The effects that will be applied on low thirst.",
                      "Type: Formatted string array",
                      "Default:",
                      "- 10.SLOW_DIGGING.30.1",
@@ -237,7 +269,8 @@ public class YAMLConfig extends YamlConfig {
                      "Note: To damage a player use the effect damage the duration will be the time between each damage",
                      "and the amplifier is how much damage done (out of 20)."
             })
-    public String[] Effects = {"10.CONFUSION.30.1", "0.DAMAGE.2.3"};
+    @Path("Effects.Potions")
+    public String[] potions = {"10.CONFUSION.30.1", "0.DAMAGE.2.3"};
 
 
     @Comment("---------------Messages---------------")
@@ -251,7 +284,8 @@ public class YAMLConfig extends YamlConfig {
                      "Variables: %thirstbar%, %percent%, %player%, %removespeed%",
                      "Default: &bTHIRST &f- &8[%thirstbar%&8] %percent%"
             })
-    public String ThirstMessage = "&b&lTHIRST &f- &8[%thirstbar%&8] %percent%";
+    @Path("Messages.ThirstMessage")
+    public String thirstMessage = "&b&lTHIRST &f- &8[%thirstbar%&8] %percent%";
 
     @Comments
             ({
@@ -262,7 +296,8 @@ public class YAMLConfig extends YamlConfig {
                      "Variables: %percent%, %player%",
                      "Default: &8[&bThirst&8] &aWatch out &e%player%, &ayour thirst is at &e%percent%!"
             })
-    public String ThirstLowMessage = "&8[&1Thirst&8] &bWatch out &f%player%, &byour thirst is at &f%percent%!";
+    @Path("Messages.ThirstLowMessage")
+    public String thirstLowMessage = "&8[&1Thirst&8] &bWatch out &f%player%, &byour thirst is at &f%percent%!";
 
     @Comments
             ({
@@ -273,7 +308,8 @@ public class YAMLConfig extends YamlConfig {
                      "Variables: %player%",
                      "Default: &f%player% didn't drink his water bottle."
             })
-    public String ThirstDeathMessage = "&f%player% didn't drink his water bottle.";
+    @Path("Messages.Thirst-Death-Message")
+    public String thirstDeathMessage = "&f%player% didn't drink his water bottle.";
 
     @Comments
             ({
@@ -284,7 +320,8 @@ public class YAMLConfig extends YamlConfig {
                      "Variables: %player%, %thirstbar%, %percent%, %thirstmessage%, %removespeed%",
                      "Default: &f%player%'s &bthirst: %thirstmessage%"
             })
-    public String ThirstViewPlayerMessage = "&8[&1Thirst&8] &f%player%'s &bthirst: %thirstmessage%";
+    @Path("Messages.Thirst-View-Player")
+    public String thirstViewPlayerMessage = "&8[&1Thirst&8] &f%player%'s &bthirst: %thirstmessage%";
 
     @Comments
             ({
@@ -297,7 +334,8 @@ public class YAMLConfig extends YamlConfig {
                      "Note: This message will be displayed before the %thirstmessage%",
                      "Note: There will not be a space between messages unless you add one."
             })
-    public String ThirstViewMessage = "&8[&1Thirst&8] &bYour thirst: ";
+    @Path("Messages.Thirst-View-Message")
+    public String thirstViewMessage = "&8[&1Thirst&8] &bYour thirst: ";
 
     @Comments
             ({
@@ -307,7 +345,8 @@ public class YAMLConfig extends YamlConfig {
                      "Type: String",
                      "Default: &8[&1Thirst&8] &bInvalid command syntax!"
             })
-    public String InvalidCommandMessage = "&8[&1Thirst&8] &bInvalid command syntax!";
+    @Path("Messages.Invalid-Command-Message")
+    public String invalidCommandMessage = "&8[&1Thirst&8] &bInvalid command syntax!";
 
     @Comments
             ({
@@ -317,7 +356,8 @@ public class YAMLConfig extends YamlConfig {
                      "Type: String",
                      "Default: &8[&1Thirst&8] &bYou do not have permission to do that!"
             })
-    public String NoPermissionMesage = "&8[&1Thirst&8] &bYou do not have permission to do that!";
+    @Path("Messages.No-Permission-Message")
+    public String noPermissionMesage = "&8[&1Thirst&8] &bYou do not have permission to do that!";
 
     @Comments
             ({
@@ -328,7 +368,8 @@ public class YAMLConfig extends YamlConfig {
                      "Variables: %player%",
                      "Default: &f&lTHIRST"
             })
-    public String ScoreboardName = "&f&lTHIRST";
+    @Path("Messages.Scoreboard-Title")
+    public String scoreboardName = "&f&lTHIRST";
 
     @Comment("---------------Disabled Areas---------------")
 
@@ -340,7 +381,8 @@ public class YAMLConfig extends YamlConfig {
                      "Type: String Array",
                      "Default: []"
             })
-    public String[] DisabledWorlds = new String[0];
+    @Path("DisabledAreas.Disabled-Worlds")
+    public String[] disabledWorlds = new String[0];
 
     @Comments
             ({
@@ -350,7 +392,71 @@ public class YAMLConfig extends YamlConfig {
                      "Type: String Array",
                      "Default: []"
             })
-    public String[] DisabledRegions = new String[0];
+    @Path("DisabledAreas.Disabled-Regions")
+    public String[] disabledRegions = new String[0];
+
+    @Comment("---------------SQL Database---------------")
+
+    @Comments
+            ({
+                     "",
+                     "ENABLE_SQL",
+                     "Desc: Should thirst data be stored in a MySQL database so you can sync thirst between servers.",
+                     "Type: boolean",
+                     "Default: false"
+            })
+    @Path("SQL.Enable-Sql")
+    public boolean enableSQL = false;
+
+    @Comments
+            ({
+                     "",
+                     "HOST_NAME",
+                     "Desc: Hostname / IP to the MySQL db.",
+                     "Type: sting"
+            })
+    @Path("SQL.Hostname")
+    public String hostName = "0.0.0.0";
+
+    @Comments
+            ({
+                     "",
+                     "USERNAME",
+                     "Desc: Username Thirst will use to connect to the database.",
+                     "Type: boolean"
+            })
+    @Path("SQL.Username")
+    public String username = "root";
+
+    @Comments
+            ({
+                     "",
+                     "PASSWORD",
+                     "Desc: Username Thirst will use to connect to the database.",
+                     "Type: boolean"
+            })
+    @Path("SQL.Password")
+    public String password = "1234";
+
+    @Comments
+            ({
+                     "",
+                     "DATABASE",
+                     "Desc: The database that Thirst will store its table in.",
+                     "Type: boolean"
+            })
+    @Path("SQL.Database")
+    public String database = "db";
+
+    @Comments
+            ({
+                     "",
+                     "TABLENAME",
+                     "Desc: The name of the table Thirst will store data in.",
+                     "Type: boolean"
+            })
+    @Path("SQL.Tablename")
+    public String tablename = "thirst";
 
     //CLASSES
 
@@ -390,16 +496,8 @@ public class YAMLConfig extends YamlConfig {
             return "" + item.toUpperCase() + "-" + quenchPercent;
         }
 
-        public void setItem(String itemString) {
-            item = itemString;
-        }
-
         public String getItem() {
             return item;
-        }
-
-        public void setQuenchPercent(int percent) {
-            quenchPercent = percent;
         }
 
         public int getQuenchPercent() {
@@ -409,16 +507,12 @@ public class YAMLConfig extends YamlConfig {
         public int getMetaData() {
             return metaData;
         }
-
-        public void setMetaData(int metaData) {
-            this.metaData = metaData;
-        }
     }
 
     //METHODS
 
     public int getDamageInterval() {
-        for (String s : Effects) {
+        for (String s : potions) {
             String[] parts = s.split("\\.");
             if (parts.length != 4) {
                 Main.getInstance().printPluginError("Error while reading the config.", "String '" + s + "' is in an invalid format!");
@@ -434,7 +528,7 @@ public class YAMLConfig extends YamlConfig {
     }
 
     public int getDamageAmount() {
-        for (String s : Effects) {
+        for (String s : potions) {
             String[] parts = s.split("\\.");
             if (parts.length != 4) {
                 Main.getInstance().printPluginError("Error while reading the config.", "String '" + s + "' is in an invalid format!");
@@ -450,7 +544,7 @@ public class YAMLConfig extends YamlConfig {
     }
 
     public int getDamagePercent() {
-        for (String s : Effects) {
+        for (String s : potions) {
             String[] parts = s.split("\\.");
             if (parts.length != 4) {
                 Main.getInstance().printPluginError("Error while reading the config.", "String '" + s + "' is in an invalid format!");

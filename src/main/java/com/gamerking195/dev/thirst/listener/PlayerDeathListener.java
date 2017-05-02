@@ -18,7 +18,7 @@ implements Listener
 	{
 		Player p = event.getEntity();
 		boolean damageEffects = false;
-		for (String s : Main.getInstance().getYAMLConfig().Effects)
+		for (String s : Main.getInstance().getYAMLConfig().potions)
 		{
 			if (s.contains("DAMAGE") && event.getDeathMessage().equalsIgnoreCase(p.getName()+" died"))
 			{
@@ -28,7 +28,7 @@ implements Listener
 		
 		if (Thirst.getThirst().getPlayerThirst(p) <= Main.getInstance().getYAMLConfig().getDamagePercent() && damageEffects)
 		{
-			event.setDeathMessage(ChatColor.translateAlternateColorCodes('&', Main.getInstance().getYAMLConfig().ThirstDeathMessage.replace("%player%", p.getName())));
+			event.setDeathMessage(ChatColor.translateAlternateColorCodes('&', Main.getInstance().getYAMLConfig().thirstDeathMessage.replace("%player%", p.getName())));
 
 			Thirst.getThirst().setThirst(p, 100);
 		}

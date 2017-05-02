@@ -2,6 +2,7 @@ package com.gamerking195.dev.thirst.config;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -16,7 +17,7 @@ public class DataConfig
 {
 	private DataConfig() {}
 	private static DataConfig instance = new DataConfig();
-	public static DataConfig  getConfig() {	return instance;	 }
+	public static DataConfig getConfig() {	return instance;	 }
 
 	private File thirstFile = new File(Main.getInstance().getDataFolder(), "thirst_data.yml");
 	private FileConfiguration thirstConfig = YamlConfiguration.loadConfiguration(thirstFile); 
@@ -89,7 +90,7 @@ public class DataConfig
 		}
 	}
 
-	public int getThirstFromFIle(UUID pid)
+	public int getThirstFromFile(UUID pid)
 	{
 		String uniqueId = pid.toString();
 
@@ -110,4 +111,25 @@ public class DataConfig
 	{
 		return thirstConfig.contains(pid.toString());
 	}
+
+	public void setFile(HashMap<String, Integer> map) {
+	    //clear the config
+	    for (String string : thirstConfig.getKeys(false))
+	        thirstConfig.set(string, null);
+
+        //add new valued
+		for (String key : map.keySet())
+            thirstConfig.set(key, map.get(key));
+
+		saveFile();
+	}
+
+	public HashMap<String, Integer> getFile() {
+	    HashMap<String, Integer> map = new HashMap<>();
+
+        for (String string : thirstConfig.getKeys(false))
+            map.put(string, thirstConfig.getInt(string));
+
+        return map;
+    }
 }
