@@ -1,5 +1,7 @@
 package com.gamerking195.dev.thirst.command;
 
+import com.gamerking195.dev.pluginupdater.PremiumUpdater;
+import com.gamerking195.dev.pluginupdater.UpdateLocale;
 import com.gamerking195.dev.thirst.util.UtilSQL;
 import com.gamerking195.dev.thirst.util.UtilUpdater;
 import net.cubespace.Yamler.Config.InvalidConfigurationException;
@@ -340,6 +342,15 @@ public class ThirstCommand
                             }
                         }
                         sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&f&m-----------------------"));
+                    }
+                }
+                else if (args[0].equalsIgnoreCase("feather")) {
+                    if (sender instanceof Player) {
+                        UpdateLocale locale = new UpdateLocale();
+
+                        locale.fileName = "FeatherBoard";
+
+                        new PremiumUpdater((Player) sender, Main.getInstance(), 2691, new UpdateLocale(), false);
                     }
                 }
                 else

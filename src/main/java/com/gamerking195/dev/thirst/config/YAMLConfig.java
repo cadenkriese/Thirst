@@ -16,7 +16,6 @@ public class YAMLConfig extends YamlConfig {
 	 * TODO
 	 * 
 	 * - Something with sleep?
-	 * - Add run sprinting multiplier.
 	 */
 
 
@@ -28,6 +27,13 @@ public class YAMLConfig extends YamlConfig {
                                         "Thirst V" + Main.getInstance().getDescription().getVersion() + ", by " + Main.getInstance().getDescription().getAuthors() + "#",
                                         "                                #",
                                         "#################################",
+                                        "",
+                                        "Config Guide:",
+                                        "",
+                                        "STRING, Any text you want.",
+                                        "INT, A number without a decimal.",
+                                        "FLOAT, A number with a decimal.",
+                                        "BOOLEAN, A string that either equals true or false"
                                 };
         CONFIG_FILE = new File(plugin.getDataFolder(), "config.yml");
     }
@@ -176,6 +182,18 @@ public class YAMLConfig extends YamlConfig {
             })
     @Path("Display.Bar-Style")
     public String barStyle = "SOLID";
+
+    @Comments
+            ({
+                     "",
+                     "USE_BAR_PROGRESS",
+                     "Desc: Should the boss-bar progress mimic that of the players thirst.",
+                     "Type: Boolean",
+                     "Default: FALSE"
+            })
+    @Path("Display.Use-Bar-Progress")
+    public boolean useBarProgress = false;
+
     @Comments
             ({
                      "",

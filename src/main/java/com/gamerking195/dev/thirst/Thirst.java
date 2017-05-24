@@ -388,7 +388,7 @@ public class Thirst
             @Override
             public void run()
             {
-                    p.setScoreboard(Bukkit.getServer().getScoreboardManager().getNewScoreboard());
+                p.setScoreboard(Bukkit.getServer().getScoreboardManager().getNewScoreboard());
             }
         }.runTaskLater(Main.getInstance(), 100L);
     }
@@ -431,9 +431,6 @@ public class Thirst
                     }
                 }
             }
-            else {
-                Bukkit.broadcastMessage("BOI ITS NULL");
-            }
         }
         else if (DataConfig.getConfig().fileContains(p.getUniqueId()))
         {
@@ -469,15 +466,22 @@ public class Thirst
     {
         if (Bukkit.getBukkitVersion().contains("1.9") || Bukkit.getServer().getBukkitVersion().contains("1.10") || Bukkit.getBukkitVersion().contains("1.11"))
         {
-            if (validateColor(Main.getInstance().getYAMLConfig().barColor) != null && validateStyle(Main.getInstance().getYAMLConfig().barStyle) != null)
-            {
-                if (getThirstData(p).getBar() != null)
-                    getThirstData(p).getBar().removePlayer(p);
+            if (validateColor(Main.getInstance().getYAMLConfig().barColor) != null && validateStyle(Main.getInstance().getYAMLConfig().barStyle) != null) {
+                BossBar bar;
 
-                BossBar bar = Bukkit.createBossBar(ChatColor.translateAlternateColorCodes('&', getThirstString(p)), BarColor.valueOf(Main.getInstance().getYAMLConfig().barColor.toUpperCase()), BarStyle.valueOf(Main.getInstance().getYAMLConfig().barStyle.toUpperCase()), new BarFlag[0]);
-                bar.addPlayer(p);
+                if (getThirstData(p).getBar() != null) {
+                    bar = getThirstData(p).getBar();
+                    bar.setTitle(ChatColor.translateAlternateColorCodes('&', getThirstString(p)));
+                    bar.setColor(BarColor.valueOf(Main.getInstance().getYAMLConfig().barColor.toUpperCase()));
+                    bar.setStyle(BarStyle.valueOf(Main.getInstance().getYAMLConfig().barStyle.toUpperCase()));
+                } else {
+                    bar = Bukkit.createBossBar(ChatColor.translateAlternateColorCodes('&', getThirstString(p)), BarColor.valueOf(Main.getInstance().getYAMLConfig().barColor.toUpperCase()), BarStyle.valueOf(Main.getInstance().getYAMLConfig().barStyle.toUpperCase()), new BarFlag[0]);
+                    bar.addPlayer(p);
+                    getThirstData(p).setBar(bar);
+                }
 
-                getThirstData(p).setBar(bar);
+                if (Main.getInstance().getYAMLConfig().useBarProgress)
+                    bar.setProgress((double) getPlayerThirst(p) / 100);
             }
         }
         else

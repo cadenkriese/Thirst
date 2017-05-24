@@ -73,44 +73,49 @@ public class UtilUpdater {
             UtilActionBar.getInstance().sendActionBar(initiater, ChatColor.translateAlternateColorCodes('&', "&f&lUPDATING &1&lTHIRST &b&lV" + Main.getInstance().getDescription().getVersion() + " &a&l» &b&lV" + latestVersion + " &8[RETREIVING UPDATER]"));
 
             updating = true;
+            boolean delete = true;
             try {
-                //Download AutoUpdaterAPI
-                URL url = new URL("https://api.spiget.org/v2/resources/39719/download");
-                HttpURLConnection httpConnection = (HttpURLConnection) url.openConnection();
-                httpConnection.setRequestProperty("User-Agent", "SpigetResourceUpdater");
-                long completeFileSize = httpConnection.getContentLength();
+                if (!Bukkit.getPluginManager().isPluginEnabled("PluginUpdater")) {
+                    delete = false;
+                    //Download AutoUpdaterAPI
+                    URL url = new URL("https://api.spiget.org/v2/resources/39719/download");
+                    HttpURLConnection httpConnection = (HttpURLConnection) url.openConnection();
+                    httpConnection.setRequestProperty("User-Agent", "SpigetResourceUpdater");
+                    long completeFileSize = httpConnection.getContentLength();
 
-                BufferedInputStream in = new java.io.BufferedInputStream(httpConnection.getInputStream());
-                FileOutputStream fos = new java.io.FileOutputStream(new File(Main.getInstance().getDataFolder().getPath().substring(0, Main.getInstance().getDataFolder().getPath().lastIndexOf("/")) + "/PluginUpdater.jar"));
-                BufferedOutputStream bout = new BufferedOutputStream(fos, 1024);
+                    BufferedInputStream in = new java.io.BufferedInputStream(httpConnection.getInputStream());
+                    FileOutputStream fos = new java.io.FileOutputStream(new File(Main.getInstance().getDataFolder().getPath().substring(0, Main.getInstance().getDataFolder().getPath().lastIndexOf("/")) + "/PluginUpdater.jar"));
+                    BufferedOutputStream bout = new BufferedOutputStream(fos, 1024);
 
-                byte[] data = new byte[1024];
-                long downloadedFileSize = 0;
-                int x;
-                while ((x = in.read(data, 0, 1024)) >= 0) {
-                    downloadedFileSize += x;
+                    byte[] data = new byte[1024];
+                    long downloadedFileSize = 0;
+                    int x;
+                    while ((x = in.read(data, 0, 1024)) >= 0) {
+                        downloadedFileSize += x;
 
-                    final int currentProgress = (int) ((((double) downloadedFileSize) / ((double) completeFileSize)) * 15);
+                        final int currentProgress = (int) ((((double) downloadedFileSize) / ((double) completeFileSize)) * 15);
 
-                    final String currentPercent = String.format("%.2f", (((double) downloadedFileSize) / ((double) completeFileSize)) * 100);
+                        final String currentPercent = String.format("%.2f", (((double) downloadedFileSize) / ((double) completeFileSize)) * 100);
 
-                    String bar = "&a:::::::::::::::";
+                        String bar = "&a:::::::::::::::";
 
-                    bar = bar.substring(0, currentProgress + 2) + "&c" + bar.substring(currentProgress + 2);
+                        bar = bar.substring(0, currentProgress + 2) + "&c" + bar.substring(currentProgress + 2);
 
-                    UtilActionBar.getInstance().sendActionBar(initiater, ChatColor.translateAlternateColorCodes('&', "&f&lUPDATING &1&lTHIRST &b&lV" + Main.getInstance().getDescription().getVersion() + " &a&l» &b&lV" + latestVersion + " &8&l| " + bar + " &8&l| &2" + currentPercent + "% &8[DOWNLAODING UPDATER]"));
+                        UtilActionBar.getInstance().sendActionBar(initiater, ChatColor.translateAlternateColorCodes('&', "&f&lUPDATING &1&lTHIRST &b&lV" + Main.getInstance().getDescription().getVersion() + " &a&l» &b&lV" + latestVersion + " &8&l| " + bar + " &8&l| &2" + currentPercent + "% &8[DOWNLAODING UPDATER]"));
 
-                    bout.write(data, 0, x);
+                        bout.write(data, 0, x);
+                    }
+
+                    bout.close();
+                    in.close();
+
+                    UtilActionBar.getInstance().sendActionBar(initiater, ChatColor.translateAlternateColorCodes('&', "&f&lUPDATING &1&lTHIRST &b&lV" + Main.getInstance().getDescription().getVersion() + " &a&l» &b&lV" + latestVersion + " &8[RUNNING UPDATER]"));
+
+                    Plugin target = Bukkit.getPluginManager().loadPlugin(new File(Main.getInstance().getDataFolder().getPath().substring(0, Main.getInstance().getDataFolder().getPath().lastIndexOf("/")) + "/PluginUpdater.jar"));
+                    target.onLoad();
+                    Bukkit.getPluginManager().enablePlugin(target);
                 }
 
-                bout.close();
-                in.close();
-
-                UtilActionBar.getInstance().sendActionBar(initiater, ChatColor.translateAlternateColorCodes('&', "&f&lUPDATING &1&lTHIRST &b&lV" + Main.getInstance().getDescription().getVersion() + " &a&l» &b&lV" + latestVersion + " &8[RUNNING UPDATER]"));
-
-                Plugin target = Bukkit.getPluginManager().loadPlugin(new File(Main.getInstance().getDataFolder().getPath().substring(0, Main.getInstance().getDataFolder().getPath().lastIndexOf("/")) + "/PluginUpdater.jar"));
-                target.onLoad();
-                Bukkit.getPluginManager().enablePlugin(target);
 
                 //Save player data
 
@@ -127,7 +132,7 @@ public class UtilUpdater {
                 UpdateLocale locale = new UpdateLocale();
                 locale.fileName = "Thirst-" + latestVersion;
 
-                new Updater(initiater, Main.getInstance(), 24610, locale, true).update();
+                new Updater(initiater, Main.getInstance(), 24610, locale, delete).update();
             } catch (Exception ex) {
                 Main.getInstance().printError(ex, "Error occured whilst downloading resource update.");
                 UtilActionBar.getInstance().sendActionBar(initiater, ChatColor.translateAlternateColorCodes('&', "&f&lUPDATING &1&lTHIRST &b&lV" + Main.getInstance().getDescription().getVersion() + " &b&l» &1&lV" + latestVersion + " &8[&c&lUPDATE FAILED &7&o(Check Console)&8]"));
