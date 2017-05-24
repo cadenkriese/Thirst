@@ -344,15 +344,6 @@ public class ThirstCommand
                         sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&f&m-----------------------"));
                     }
                 }
-                else if (args[0].equalsIgnoreCase("feather")) {
-                    if (sender instanceof Player) {
-                        UpdateLocale locale = new UpdateLocale();
-
-                        locale.fileName = "FeatherBoard";
-
-                        new PremiumUpdater((Player) sender, Main.getInstance(), 2691, new UpdateLocale(), false);
-                    }
-                }
                 else
                 {
                     sender.sendMessage(ChatColor.translateAlternateColorCodes('&', Main.getInstance().getYAMLConfig().invalidCommandMessage));
