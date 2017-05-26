@@ -18,7 +18,10 @@ import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.Base64;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class UtilUpdater {
     private UtilUpdater() {}
@@ -28,6 +31,7 @@ public class UtilUpdater {
     }
 
     private String latestVersion;
+    private String updateInfo;
     private List<String> testedVersions;
 
     private boolean updateAvailable;
@@ -62,6 +66,26 @@ public class UtilUpdater {
 
                 Type arrayType = new TypeToken<List<String>>(){}.getType();
                 testedVersions = gson.fromJson(pluginInfoObject.get("testedVersions"), arrayType);
+
+                String latestUpdate = readFrom("https://api.spiget.org/v2/resources/24610/updates/latest");
+
+                JsonObject latestUpdateObject = gson.fromJson(latestUpdate, pluginInfoType);
+
+                Type stringType = new TypeToken<String>(){}.getType();
+
+                String descriptionBase64 = gson.fromJson(latestUpdateObject.get("description"), stringType);
+                String decodedDescription = new String(Base64.getDecoder().decode(descriptionBase64));
+
+                Pattern pat = Pattern.compile("<li>(.*)</li>");
+
+                Matcher match = pat.matcher(decodedDescription);
+
+                StringBuilder sb = new StringBuilder();
+
+                while (match.find())
+                    sb.append("&f - ").append(match.group(1)).append("\n");
+
+                updateInfo = sb.toString();
             } catch (Exception exception) {
                 Main.getInstance().printError(exception, "Error occured whilst pinging spiget.");
             }
@@ -156,9 +180,14 @@ public class UtilUpdater {
         return updateAvailable;
     }
 
+    public String getUpdateInfo() {
+        return updateInfo;
+    }
+
     /*
-         * PRIVATE UTILITIES
-         */
+     * PRIVATE UTILITIES
+     */
+
     private String readFrom(String url) throws IOException
     {
         try (InputStream is = new URL(url).openStream()) {

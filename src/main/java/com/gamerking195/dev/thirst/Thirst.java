@@ -49,7 +49,7 @@ public class Thirst
 
     private ScoreboardManager manager;
 
-    public void init()
+    void init()
     {
         manager = Bukkit.getScoreboardManager();
 
@@ -72,7 +72,7 @@ public class Thirst
         displayThirst(p);
     }
 
-    public long calculateSpeed(Player p)
+    private long calculateSpeed(Player p)
     {
         long speed = (long) (Main.getInstance().getYAMLConfig().thirstDelay *1000);
 
@@ -531,13 +531,13 @@ public class Thirst
     {
         if (p == null) return false;
         if (!p.isOnline()) return false;
-        if (p.getGameMode() == GameMode.CREATIVE && !Main.getInstance().getYAMLConfig().ignoreCreative) return false;
+        if (p.getGameMode() == GameMode.CREATIVE && Main.getInstance().getYAMLConfig().ignoreCreative) return false;
         if (p.isOp() && Main.getInstance().getYAMLConfig().ignoreOP)  return false;
         if (p.hasPermission("thirst.ignore") || p.hasPermission("thirst.*"))  return false;
 
         String world = p.getWorld().getName();
         List<String> worlds = Arrays.asList(Main.getInstance().getYAMLConfig().disabledWorlds);
-        if (worlds != null && worlds.size() > 0)
+        if ( worlds.size() > 0)
         {
             if (worlds.contains(world)) return false;
         }

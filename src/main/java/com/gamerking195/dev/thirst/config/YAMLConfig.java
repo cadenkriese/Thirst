@@ -12,12 +12,6 @@ import net.cubespace.Yamler.Config.Comments;
 import net.cubespace.Yamler.Config.YamlConfig;
 
 public class YAMLConfig extends YamlConfig {
-    /*
-	 * TODO
-	 * 
-	 * - Something with sleep?
-	 */
-
 
     public YAMLConfig(Main plugin) {
         CONFIG_HEADER = new String[]
@@ -262,7 +256,7 @@ public class YAMLConfig extends YamlConfig {
     @Path("Multipliers.Night")
     public int nightMultiplier = 0;
 
-    @Comment("---------------potions---------------")
+    @Comment("---------------Potions---------------")
     @Comments
             ({
                      "",

@@ -48,6 +48,7 @@ implements Listener
                         player.sendMessage("");
                         player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&bThere is a Thirst update available!"));
                         player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&bVersion: &f" + newVersion));
+                        player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&bUpdates: \n" + UtilUpdater.getInstance().getUpdateInfo()));
                         player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&bSupported MC Versions: &f" + StringUtils.join(testedVersions, ", ")));
                         if (!testedVersions.contains(mcVersion))
                             player.sendMessage(ChatColor.RED+"Warning your current version, "+mcVersion+", is not supported by this update, there may be unexpected bugs!");
