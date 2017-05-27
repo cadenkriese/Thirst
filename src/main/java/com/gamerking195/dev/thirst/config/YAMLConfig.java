@@ -56,7 +56,7 @@ public class YAMLConfig extends YamlConfig {
                      "Default: 10"
             })
     @Path("Critical-Thirst-Percent")
-    public int criticalThristPercent = 10;
+    public int criticalThirstPercent = 10;
 
     @Comments
             ({
@@ -79,7 +79,7 @@ public class YAMLConfig extends YamlConfig {
                      "Default:",
                      "- POTION.20",
                      "- GOLDEN_APPLE.100.1",
-                     "Requirements: Should be in format: ITEM.PERCENT.METADATE(metadata optional)"
+                     "Requirements: Should be in format: ITEM.PERCENT.METADATA(metadata optional)"
             })
     @Path("Thirst-Quenching-Items")
     public String[] thirstQuenchingItems = {"POTION.20", "GOLDEN_APPLE.100.1"};
@@ -122,6 +122,7 @@ public class YAMLConfig extends YamlConfig {
                      "",
                      "ENABLE_UPDATER",
                      "Desc: If true, the auto-updater will ping the spigot site and alert you about new updates, and even automatically install them.",
+                     "Note: If set to false you can still install updates via /thirst update.",
                      "Type: Boolean",
                      "Default: true"
             })
@@ -181,7 +182,7 @@ public class YAMLConfig extends YamlConfig {
             ({
                      "",
                      "USE_BAR_PROGRESS",
-                     "Desc: Should the boss-bar progress mimic that of the players thirst.",
+                     "Desc: Should the bossbar progress mimic that of the players thirst.",
                      "Type: Boolean",
                      "Default: FALSE"
             })
@@ -369,7 +370,7 @@ public class YAMLConfig extends YamlConfig {
                      "Default: &8[&1Thirst&8] &bYou do not have permission to do that!"
             })
     @Path("Messages.No-Permission-Message")
-    public String noPermissionMesage = "&8[&1Thirst&8] &bYou do not have permission to do that!";
+    public String noPermissionMessage = "&8[&1Thirst&8] &bYou do not have permission to do that!";
 
     @Comments
             ({

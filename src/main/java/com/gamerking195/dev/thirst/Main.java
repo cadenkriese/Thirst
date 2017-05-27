@@ -36,7 +36,7 @@ import com.gamerking195.dev.thirst.placeholder.ClipPlaceholders;
  * Found on GitHub @ https://github.com/GamerKing195/Thirst
  *
  * This plugin is using the GNU General Public License which basically means
- * sure take the code but you must make whatever you make with this open source aswell & register under the same license.
+ * sure take the code but you must make whatever you make with this open source as well & register under the same license.
  */
 
 public class Main
@@ -173,11 +173,11 @@ public class Main
 		{
 			if (new ClipPlaceholders(this).hook())
 			{
-				log.log(Level.INFO, "Found PlaceholderAPI, sucsesfully hooked!");
+				log.log(Level.INFO, "Found PlaceholderAPI, successfully hooked!");
 			}
 			else
 			{
-				printPluginError("Error occured while adding placeholder support.", "The plugin failed to hook with Placeholder API, please report this bug.");
+				printPluginError("Error occurred while adding placeholder support.", "The plugin failed to hook with Placeholder API, please report this bug.");
 			}
 		}
 
@@ -191,7 +191,7 @@ public class Main
 			}
 			else
 			{
-				printPluginError("Error occured while parsing config.", "You are trying to use worldgaurd in the config but the plugin could not be found!");
+				printPluginError("Error occurred while parsing config.", "You are trying to use worldgaurd in the config but the plugin could not be found!");
 
 				this.setEnabled(false);
 			}

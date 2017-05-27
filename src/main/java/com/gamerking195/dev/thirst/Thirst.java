@@ -211,7 +211,7 @@ public class Thirst
 
         String emphasis = "";
 
-        if (percent <= Main.getInstance().getYAMLConfig().criticalThristPercent && !Main.getInstance().getYAMLConfig().displayType.equalsIgnoreCase("SCOREBOARD")) emphasis = " &4!&c!&4! ";
+        if (percent <= Main.getInstance().getYAMLConfig().criticalThirstPercent && !Main.getInstance().getYAMLConfig().displayType.equalsIgnoreCase("SCOREBOARD")) emphasis = " &4!&c!&4! ";
 
         String configMessage = Main.getInstance().getYAMLConfig().thirstMessage.replace("%player%", p.getName()).replace("%percent%", getThirstPercent(p, true)).replace("%thirstbar%", "&1"+getThirstBar(p)).replace("%removespeed%", String.valueOf(getThirstData(p).getSpeed()/1000));
 
@@ -350,7 +350,7 @@ public class Thirst
             }
         }
 
-        if (thirst <= Main.getInstance().getYAMLConfig().criticalThristPercent && oldThirst != 0 & oldThirst != -1) p.sendMessage(ChatColor.translateAlternateColorCodes('&', Main.getInstance().getYAMLConfig().thirstLowMessage.replace("%player%", p.getName()).replace("%percent%", getThirstPercent(p, true))));
+        if (thirst <= Main.getInstance().getYAMLConfig().criticalThirstPercent && oldThirst != 0 & oldThirst != -1) p.sendMessage(ChatColor.translateAlternateColorCodes('&', Main.getInstance().getYAMLConfig().thirstLowMessage.replace("%player%", p.getName()).replace("%percent%", getThirstPercent(p, true))));
 
         displayThirst(p);
     }

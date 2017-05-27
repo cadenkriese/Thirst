@@ -30,7 +30,7 @@ public class UpdateListener
             }
         }
 
-        if (event.getType() == UpdateType.CENTI_SECOND)
+        else if (event.getType() == UpdateType.CENTI_SECOND)
         {
             for (String s : Thirst.getThirst().getThirstDataMap().keySet())
             {
@@ -59,7 +59,7 @@ public class UpdateListener
             }
         }
 
-        if (event.getType() == UpdateType.DAMAGE)
+        else if (event.getType() == UpdateType.DAMAGE)
         {
             for (Player p : Bukkit.getOnlinePlayers())
             {

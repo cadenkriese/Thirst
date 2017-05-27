@@ -1,7 +1,6 @@
 package com.gamerking195.dev.thirst.command;
 
-import com.gamerking195.dev.pluginupdater.PremiumUpdater;
-import com.gamerking195.dev.pluginupdater.UpdateLocale;
+import com.gamerking195.dev.thirst.util.UtilActionBar;
 import com.gamerking195.dev.thirst.util.UtilSQL;
 import com.gamerking195.dev.thirst.util.UtilUpdater;
 import net.cubespace.Yamler.Config.InvalidConfigurationException;
@@ -44,7 +43,7 @@ public class ThirstCommand
                     Player p = (Player) sender;
                     if (!p.hasPermission("thirst.command") && !p.hasPermission("thirst.*"))
                     {
-                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', Main.getInstance().getYAMLConfig().noPermissionMesage));
+                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', Main.getInstance().getYAMLConfig().noPermissionMessage));
                         return true;
                     }
                 }
@@ -68,7 +67,7 @@ public class ThirstCommand
                             Player p = (Player) sender;
                             if (!p.hasPermission("thirst.command.view.other") && !p.hasPermission("thirst.*"))
                             {
-                                p.sendMessage(ChatColor.translateAlternateColorCodes('&', Main.getInstance().getYAMLConfig().noPermissionMesage));
+                                p.sendMessage(ChatColor.translateAlternateColorCodes('&', Main.getInstance().getYAMLConfig().noPermissionMessage));
                                 return true;
                             }
                         }
@@ -100,7 +99,7 @@ public class ThirstCommand
                             Player p = (Player) sender;
                             if (!p.hasPermission("thirst.command.view") && !p.hasPermission("thirst.*"))
                             {
-                                p.sendMessage(ChatColor.translateAlternateColorCodes('&', Main.getInstance().getYAMLConfig().noPermissionMesage));
+                                p.sendMessage(ChatColor.translateAlternateColorCodes('&', Main.getInstance().getYAMLConfig().noPermissionMessage));
                                 return true;
                             }
 
@@ -121,7 +120,7 @@ public class ThirstCommand
                         Player p = (Player) sender;
                         if (!p.hasPermission("thirst.command.help") && !p.hasPermission("thirst.*"))
                         {
-                            p.sendMessage(ChatColor.translateAlternateColorCodes('&', Main.getInstance().getYAMLConfig().noPermissionMesage));
+                            p.sendMessage(ChatColor.translateAlternateColorCodes('&', Main.getInstance().getYAMLConfig().noPermissionMessage));
                             return true;
                         }
                     }
@@ -137,8 +136,13 @@ public class ThirstCommand
                     sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&b/thirst update | &fAutomatically updates the plugin to the latest version."));
                     sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&f&m-----------------------"));
                 }
-                else if (args[0].equalsIgnoreCase("update") && Main.getInstance().getYAMLConfig().enableUpdater) {
+                else if (args[0].equalsIgnoreCase("update")) {
                     if (sender.isOp() || sender.hasPermission("thirst.command.update") || sender.hasPermission("thirst.*")) {
+                        if (sender instanceof Player)
+                            UtilActionBar.getInstance().sendActionBar((Player) sender, "&1&lTHIRST &f&lCHECKING FOR UPDATES...");
+
+                        UtilUpdater.getInstance().checkForUpdate();
+
                         if (UtilUpdater.getInstance().isUpdateAvailable()) {
                             if (sender instanceof Player) {
                                 UtilUpdater.getInstance().update((Player) sender);
@@ -152,7 +156,7 @@ public class ThirstCommand
 
                     }
                     else {
-                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', Main.getInstance().getYAMLConfig().noPermissionMesage));
+                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', Main.getInstance().getYAMLConfig().noPermissionMessage));
                     }
                 }
                 else if (args[0].equalsIgnoreCase("reload") || args[0].equalsIgnoreCase("rl"))
@@ -247,7 +251,6 @@ public class ThirstCommand
                                         new BukkitRunnable() {
                                             @Override
                                             public void run() {
-                                                Bukkit.broadcastMessage("WRITING DATA TO FILE ("+thirstData.size()+")");
                                                 DataConfig.getConfig().setFile(thirstData);
                                             }
                                         }.runTask(Main.getInstance());
@@ -281,7 +284,7 @@ public class ThirstCommand
                         Player p = (Player) sender;
                         if (!p.hasPermission("thirst.command.list") && !p.hasPermission("thirst.*"))
                         {
-                            p.sendMessage(ChatColor.translateAlternateColorCodes('&', Main.getInstance().getYAMLConfig().noPermissionMesage));
+                            p.sendMessage(ChatColor.translateAlternateColorCodes('&', Main.getInstance().getYAMLConfig().noPermissionMessage));
                             return true;
                         }
                     }
