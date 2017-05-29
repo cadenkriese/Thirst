@@ -133,6 +133,9 @@ public class UtilUpdater {
             }
         } catch (Exception exception) {
             Main.getInstance().printError(exception, "Error occurred whilst pinging spiget.");
+            try {
+                Main.getInstance().printPluginError("Json received from spigot.", readFrom("https://api.spiget.org/v2/resources/24610/"));
+            } catch (Exception ignored) {}
         }
     }
 

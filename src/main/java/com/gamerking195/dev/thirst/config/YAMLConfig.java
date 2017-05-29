@@ -1,6 +1,8 @@
 package com.gamerking195.dev.thirst.config;
 
 import java.io.File;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import net.cubespace.Yamler.Config.Path;
 import org.apache.commons.lang.math.NumberUtils;
@@ -10,6 +12,7 @@ import com.gamerking195.dev.thirst.Main;
 import net.cubespace.Yamler.Config.Comment;
 import net.cubespace.Yamler.Config.Comments;
 import net.cubespace.Yamler.Config.YamlConfig;
+import org.bukkit.Bukkit;
 
 public class YAMLConfig extends YamlConfig {
 
@@ -77,12 +80,12 @@ public class YAMLConfig extends YamlConfig {
                      "Desc: The item that will quench the thirst of a player.",
                      "Type: Formatted string array",
                      "Default:",
-                     "- POTION.20",
-                     "- GOLDEN_APPLE.100.1",
-                     "Requirements: Should be in format: ITEM.PERCENT.METADATA(metadata optional)"
+                     "- POTION=20",
+                     "- GOLDEN_APPLE:1=100",
+                     "Requirements: Should be in format: ITEM:METADATA=PERCENT(metadata optional)"
             })
     @Path("Thirst-Quenching-Items")
-    public String[] thirstQuenchingItems = {"POTION.20", "GOLDEN_APPLE.100.1"};
+    public String[] thirstQuenchingItems = {"POTION=20", "GOLDEN_APPLE:1=100"};
 
     @Comments
             ({
@@ -479,30 +482,52 @@ public class YAMLConfig extends YamlConfig {
         private int metaData = 0;
 
         public ThirstItem(String s) {
-            if (!s.contains(".")) {
+            if (!s.contains("=")) {
                 Main.getInstance().printPluginError("Error while reading the config.", "String '" + s + "' is in an invalid format!");
 
-                item = "NULL";
+                item = "AIR";
                 quenchPercent = 0;
                 return;
             }
 
-            String[] parts = s.split("\\.");
+            Pattern pat = Pattern.compile("(.*?):(\\d*)=(\\d*)");
+            Matcher match = pat.matcher(s);
 
-            if (!NumberUtils.isNumber(parts[1]) || parts.length > 3) {
-                Main.getInstance().printPluginError("Error while reading the config.", "String '" + s + "' is in an invalid format!");
+            if (match.find()) {
+                if (NumberUtils.isNumber(match.group(2)) && NumberUtils.isNumber(match.group(3))) {
+                    item = match.group(1);
+                    metaData = Integer.valueOf(match.group(2));
+                    quenchPercent = Integer.valueOf(match.group(3));
+                }
+                else {
+                    Main.getInstance().printPluginError("Error while reading the config.", "String '" + s + "' is in an invalid format!");
 
-                item = "NULL";
-                quenchPercent = 0;
-                return;
+                    item = "AIR";
+                    quenchPercent = 0;
+                }
             }
+            else {
+                Pattern pat2 = Pattern.compile("(.*?)=(\\d*)");
+                Matcher match2 = pat2.matcher(s);
 
-            if (parts.length == 3) {
-                metaData = Integer.valueOf(parts[2]);
+                if (match2.find()) {
+                    if (NumberUtils.isNumber(match2.group(2))) {
+                        item = match2.group(1);
+                        quenchPercent = Integer.valueOf(match2.group(2));
+                    } else {
+                        Main.getInstance().printPluginError("Error while reading the config.", "String '" + s + "' is in an invalid format!");
+
+                        item = "AIR";
+                        quenchPercent = 0;
+                    }
+                }
+                else {
+                    Main.getInstance().printPluginError("Error while reading the config.", "String '" + s + "' is in an invalid format!");
+
+                    item = "AIR";
+                    quenchPercent = 0;
+                }
             }
-
-            item = parts[0];
-            quenchPercent = Integer.valueOf(parts[1]);
         }
 
         public String toString() {
