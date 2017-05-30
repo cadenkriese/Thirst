@@ -19,10 +19,10 @@ public class PlayerMoveListener
 {
 	public static void init()
 	{
-		runnable.runTaskTimer(Main.getInstance(), 20L, 20L);
+		runnable.runTaskTimer(Main.getInstance(), Main.getInstance().getYAMLConfig().blockDrinkDelay*20, Main.getInstance().getYAMLConfig().blockDrinkDelay*20);
 	}
 
-	private static HashMap<String, Player> drinkingMap = new HashMap<String, Player>();
+	private static HashMap<String, Player> drinkingMap = new HashMap<>();
 
 	private static BukkitRunnable runnable = new BukkitRunnable()
 	{
@@ -36,7 +36,7 @@ public class PlayerMoveListener
 
 				if (p != null)
 				{
-					Thirst.getThirst().setThirst(p, Thirst.getThirst().getPlayerThirst(p)+2);
+					Thirst.getThirst().setThirst(p, Thirst.getThirst().getPlayerThirst(p)+1);
 				}
 			}
 		}

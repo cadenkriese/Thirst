@@ -123,6 +123,17 @@ public class YAMLConfig extends YamlConfig {
     @Comments
             ({
                      "",
+                     "BLOCK_DRINK_DELAY",
+                     "Desc: Time in seconds between when players gain 1 Thirst from being under water.",
+                     "Type: Float (Seconds)",
+                     "Default: 1"
+            })
+    @Path("Block-Drink-Delay")
+    public int blockDrinkDelay = 1;
+
+    @Comments
+            ({
+                     "",
                      "ENABLE_UPDATER",
                      "Desc: If true, the auto-updater will ping the spigot site and alert you about new updates, and even automatically install them.",
                      "Note: If set to false you can still install updates via /thirst update.",

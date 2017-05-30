@@ -157,19 +157,17 @@ public class Thirst
                         }
                     }
                 }
-                Material mat = Material.valueOf(armorType);
-                if (mat != null)
-                {
-                    if ((p.getInventory().getBoots() != null && p.getInventory().getBoots().getType() == mat) || (p.getInventory().getLeggings() != null && p.getInventory().getLeggings().getType() == mat)  || (p.getInventory().getChestplate() != null && p.getInventory().getChestplate().getType() == mat) || (p.getInventory().getHelmet() != null && p.getInventory().getHelmet().getType() == mat))
-                    {
-                        speed -= timeRemoved;
+                else if (!armorType.equalsIgnoreCase("LEATHER") && !armorType.equalsIgnoreCase("GOLD") && !armorType.equalsIgnoreCase("CHAINMAIL") && !armorType.equalsIgnoreCase("IRON") && !armorType.equalsIgnoreCase("DIAMOND")) {
+                    if (validateMaterial(armorType) != null) {
+                        Material mat = Material.valueOf(armorType);
+                        if ((p.getInventory().getBoots() != null && p.getInventory().getBoots().getType() == mat) || (p.getInventory().getLeggings() != null && p.getInventory().getLeggings().getType() == mat) || (p.getInventory().getChestplate() != null && p.getInventory().getChestplate().getType() == mat) || (p.getInventory().getHelmet() != null && p.getInventory().getHelmet().getType() == mat)) {
+                            speed -= timeRemoved;
+                        }
                     }
+                    else
+                        Main.getInstance().printPluginError("Error while reading the config.", "String '"+s+"' is in an invalid format!");
                 }
-                else
-                    Main.getInstance().printPluginError("Error while reading the config.", "String '"+armorType+"' is not a valid item!");
             }
-            else
-                Main.getInstance().printPluginError("Error while reading the config.", "String '"+s+"' is in an invalid format!");
         }
 
         //DAY
@@ -213,7 +211,7 @@ public class Thirst
 
         if (percent <= Main.getInstance().getYAMLConfig().criticalThirstPercent && !Main.getInstance().getYAMLConfig().displayType.equalsIgnoreCase("SCOREBOARD")) emphasis = " &4!&c!&4! ";
 
-        String configMessage = Main.getInstance().getYAMLConfig().thirstMessage.replace("%player%", p.getName()).replace("%percent%", getThirstPercent(p, true)).replace("%thirstbar%", "&1"+getThirstBar(p)).replace("%removespeed%", String.valueOf(getThirstData(p).getSpeed()/1000));
+        String configMessage = Main.getInstance().getYAMLConfig().thirstMessage.replace("%player%", p.getName()).replace("%percent%", getThirstPercent(p, true)).replace("%thirstbar%", "&1"+getThirstBar(p)).replace("%removespeed%", String.valueOf((double) getThirstData(p).getSpeed()/1000));
 
         return ChatColor.translateAlternateColorCodes('&', emphasis+configMessage+emphasis);
     }
@@ -572,6 +570,17 @@ public class Thirst
         try
         {
             return Enum.valueOf(BarStyle.class, name.toUpperCase());
+        }
+        catch (IllegalArgumentException iae)
+        {
+            return null;
+        }
+    }
+
+    private Material validateMaterial(String name) {
+        try
+        {
+            return Enum.valueOf(Material.class, name.toUpperCase());
         }
         catch (IllegalArgumentException iae)
         {
