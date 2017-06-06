@@ -348,12 +348,12 @@ public class Thirst
             }
         }
 
-        if (thirst <= Main.getInstance().getYAMLConfig().criticalThirstPercent && oldThirst != 0 & oldThirst != -1) player.sendMessage(ChatColor.translateAlternateColorCodes('&', Main.getInstance().getYAMLConfig().thirstLowMessage.replace("%player%", player.getName()).replace("%percent%", getThirstPercent(player, true))));
+        if (thirst <= Main.getInstance().getYAMLConfig().criticalThirstPercent && oldThirst != -1 && oldThirst > thirst) player.sendMessage(ChatColor.translateAlternateColorCodes('&', Main.getInstance().getYAMLConfig().thirstLowMessage.replace("%player%", player.getName()).replace("%percent%", getThirstPercent(player, true))));
 
         displayThirst(player);
     }
 
-    public void refreshScoreboard (Player player)
+    private void refreshScoreboard(Player player)
     {
         if (getThirstString(player).length() > 40)
         {

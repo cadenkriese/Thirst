@@ -1,5 +1,6 @@
 package com.gamerking195.dev.thirst.command;
 
+import com.gamerking195.dev.thirst.listener.PlayerMoveListener;
 import com.gamerking195.dev.thirst.util.UtilActionBar;
 import com.gamerking195.dev.thirst.util.UtilSQL;
 import com.gamerking195.dev.thirst.util.UtilUpdater;
@@ -268,6 +269,8 @@ public class ThirstCommand
                         sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&8[&1Thirst&8] &bconfig.yml reloading failed! Check the console for more info."));
                         return true;
                     }
+
+                    PlayerMoveListener.reload();
 
                     for (Player p : Bukkit.getServer().getOnlinePlayers())
                     {

@@ -22,6 +22,29 @@ public class PlayerMoveListener
 		runnable.runTaskTimer(Main.getInstance(), (long) Main.getInstance().getYAMLConfig().blockDrinkDelay*20, (long) Main.getInstance().getYAMLConfig().blockDrinkDelay*20);
 	}
 
+	public static void reload() {
+	    Bukkit.getScheduler().cancelTask(runnable.getTaskId());
+
+	    runnable = new BukkitRunnable()
+        {
+            @Override
+            public void run()
+            {
+                for (String uuid : drinkingMap.keySet())
+                {
+                    UUID pid = UUID.fromString(uuid);
+                    Player player = Bukkit.getPlayer(pid);
+
+                    if (player != null) {
+                        Thirst.getThirst().setThirst(player, Thirst.getThirst().getPlayerThirst(player)+1);
+                    }
+                }
+            }
+        };
+
+	    init();
+    }
+
 	private static HashMap<String, Player> drinkingMap = new HashMap<>();
 
 	private static BukkitRunnable runnable = new BukkitRunnable()
