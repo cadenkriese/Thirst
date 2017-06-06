@@ -53,31 +53,31 @@ public class Thirst
     {
         manager = Bukkit.getScoreboardManager();
 
-        for (Player p : Bukkit.getServer().getOnlinePlayers())
+        for (Player player : Bukkit.getServer().getOnlinePlayers())
         {
-            playerJoin(p);
+            playerJoin(player);
         }
     }
 
-    public void removeThirst(Player p)
+    public void removeThirst(Player player)
     {
-        setThirst(p, getPlayerThirst(p)-Main.getInstance().getYAMLConfig().removeThirst);
+        setThirst(player, getPlayerThirst(player)-Main.getInstance().getYAMLConfig().removeThirst);
 
-        long speed = calculateSpeed(p);
-        ThirstData data = getThirstData(p);
+        long speed = calculateSpeed(player);
+        ThirstData data = getThirstData(player);
         data.setSpeed(speed);
         data.setTime(System.currentTimeMillis()+speed);
-        setThirstData(p, data);
+        setThirstData(player, data);
 
-        displayThirst(p);
+        displayThirst(player);
     }
 
-    private long calculateSpeed(Player p)
+    private long calculateSpeed(Player player)
     {
         long speed = (long) (Main.getInstance().getYAMLConfig().thirstDelay *1000);
 
         //SPRINT
-        if(p.isSprinting())
+        if(player.isSprinting())
         {
             if (Main.getInstance().getYAMLConfig().sprint != -1 && Main.getInstance().getYAMLConfig().sprint != -0)
             {
@@ -86,7 +86,7 @@ public class Thirst
         }
 
         //BIOME
-        Biome b = p.getWorld().getBiome(p.getLocation().getBlockX(), p.getLocation().getBlockZ());
+        Biome b = player.getWorld().getBiome(player.getLocation().getBlockX(), player.getLocation().getBlockZ());
         for(String s : Main.getInstance().getYAMLConfig().biomes)
         {
             String[] split = s.split("\\.");
@@ -107,9 +107,9 @@ public class Thirst
         }
 
         //ARMOR
-        for (String s : Main.getInstance().getYAMLConfig().armor)
+        for (String string : Main.getInstance().getYAMLConfig().armor)
         {
-            String[] split = s.split("\\.");
+            String[] split = string.split("\\.");
 
             if (split.length == 2)
             {
@@ -119,39 +119,39 @@ public class Thirst
                 String armorType = split[0];
                 int timeRemoved = Integer.valueOf(split[1])*1000;
 
-                if (p.getInventory().getBoots() != null && p.getInventory().getLeggings() != null && p.getInventory().getChestplate() != null && p.getInventory().getHelmet() != null)
+                if (player.getInventory().getBoots() != null && player.getInventory().getLeggings() != null && player.getInventory().getChestplate() != null && player.getInventory().getHelmet() != null)
                 {
                     if (armorType.equalsIgnoreCase("LEATHER"))
                     {
-                        if (p.getInventory().getHelmet().getType() == Material.LEATHER_HELMET && p.getInventory().getChestplate().getType() == Material.LEATHER_CHESTPLATE && p.getInventory().getLeggings().getType() == Material.LEATHER_LEGGINGS && p.getInventory().getBoots().getType() == Material.LEATHER_BOOTS)
+                        if (player.getInventory().getHelmet().getType() == Material.LEATHER_HELMET && player.getInventory().getChestplate().getType() == Material.LEATHER_CHESTPLATE && player.getInventory().getLeggings().getType() == Material.LEATHER_LEGGINGS && player.getInventory().getBoots().getType() == Material.LEATHER_BOOTS)
                         {
                             speed -= timeRemoved;
                         }
                     }
                     else if (armorType.equalsIgnoreCase("GOLD"))
                     {
-                        if (p.getInventory().getHelmet().getType() == Material.GOLD_HELMET && p.getInventory().getChestplate().getType() == Material.GOLD_CHESTPLATE && p.getInventory().getLeggings().getType() == Material.GOLD_LEGGINGS && p.getInventory().getBoots().getType() == Material.GOLD_BOOTS)
+                        if (player.getInventory().getHelmet().getType() == Material.GOLD_HELMET && player.getInventory().getChestplate().getType() == Material.GOLD_CHESTPLATE && player.getInventory().getLeggings().getType() == Material.GOLD_LEGGINGS && player.getInventory().getBoots().getType() == Material.GOLD_BOOTS)
                         {
                             speed -= timeRemoved;
                         }
                     }
                     else if (armorType.equalsIgnoreCase("CHAINMAIL"))
                     {
-                        if (p.getInventory().getHelmet().getType() == Material.CHAINMAIL_HELMET && p.getInventory().getChestplate().getType() == Material.CHAINMAIL_CHESTPLATE && p.getInventory().getLeggings().getType() == Material.CHAINMAIL_LEGGINGS && p.getInventory().getBoots().getType() == Material.CHAINMAIL_BOOTS)
+                        if (player.getInventory().getHelmet().getType() == Material.CHAINMAIL_HELMET && player.getInventory().getChestplate().getType() == Material.CHAINMAIL_CHESTPLATE && player.getInventory().getLeggings().getType() == Material.CHAINMAIL_LEGGINGS && player.getInventory().getBoots().getType() == Material.CHAINMAIL_BOOTS)
                         {
                             speed -= timeRemoved;
                         }
                     }
                     else if (armorType.equalsIgnoreCase("IRON"))
                     {
-                        if (p.getInventory().getHelmet().getType() == Material.IRON_HELMET && p.getInventory().getChestplate().getType() == Material.IRON_CHESTPLATE && p.getInventory().getLeggings().getType() == Material.IRON_LEGGINGS && p.getInventory().getBoots().getType() == Material.IRON_BOOTS)
+                        if (player.getInventory().getHelmet().getType() == Material.IRON_HELMET && player.getInventory().getChestplate().getType() == Material.IRON_CHESTPLATE && player.getInventory().getLeggings().getType() == Material.IRON_LEGGINGS && player.getInventory().getBoots().getType() == Material.IRON_BOOTS)
                         {
                             speed -= timeRemoved;
                         }
                     }
                     else if (armorType.equalsIgnoreCase("DIAMOND"))
                     {
-                        if (p.getInventory().getHelmet().getType() == Material.DIAMOND_HELMET && p.getInventory().getChestplate().getType() == Material.DIAMOND_CHESTPLATE && p.getInventory().getLeggings().getType() == Material.DIAMOND_LEGGINGS && p.getInventory().getBoots().getType() == Material.DIAMOND_BOOTS)
+                        if (player.getInventory().getHelmet().getType() == Material.DIAMOND_HELMET && player.getInventory().getChestplate().getType() == Material.DIAMOND_CHESTPLATE && player.getInventory().getLeggings().getType() == Material.DIAMOND_LEGGINGS && player.getInventory().getBoots().getType() == Material.DIAMOND_BOOTS)
                         {
                             speed -= timeRemoved;
                         }
@@ -160,18 +160,18 @@ public class Thirst
                 else if (!armorType.equalsIgnoreCase("LEATHER") && !armorType.equalsIgnoreCase("GOLD") && !armorType.equalsIgnoreCase("CHAINMAIL") && !armorType.equalsIgnoreCase("IRON") && !armorType.equalsIgnoreCase("DIAMOND")) {
                     if (validateMaterial(armorType) != null) {
                         Material mat = Material.valueOf(armorType);
-                        if ((p.getInventory().getBoots() != null && p.getInventory().getBoots().getType() == mat) || (p.getInventory().getLeggings() != null && p.getInventory().getLeggings().getType() == mat) || (p.getInventory().getChestplate() != null && p.getInventory().getChestplate().getType() == mat) || (p.getInventory().getHelmet() != null && p.getInventory().getHelmet().getType() == mat)) {
+                        if ((player.getInventory().getBoots() != null && player.getInventory().getBoots().getType() == mat) || (player.getInventory().getLeggings() != null && player.getInventory().getLeggings().getType() == mat) || (player.getInventory().getChestplate() != null && player.getInventory().getChestplate().getType() == mat) || (player.getInventory().getHelmet() != null && player.getInventory().getHelmet().getType() == mat)) {
                             speed -= timeRemoved;
                         }
                     }
                     else
-                        Main.getInstance().printPluginError("Error while reading the config.", "String '"+s+"' is in an invalid format!");
+                        Main.getInstance().printPluginError("Error while reading the config.", "String '"+string+"' is in an invalid format!");
                 }
             }
         }
 
         //DAY
-        if (p.getWorld().getTime() > 0 && p.getWorld().getTime() < 12300)
+        if (player.getWorld().getTime() > 0 && player.getWorld().getTime() < 12300)
         {
             if (Main.getInstance().getYAMLConfig().dayMultiplier > 0)
             {
@@ -203,22 +203,22 @@ public class Thirst
         return speed;
     }
 
-    public String getThirstString(OfflinePlayer p)
+    public String getThirstString(OfflinePlayer offlinePlayer)
     {
-        int percent = getPlayerThirst(p);
+        int percent = getPlayerThirst(offlinePlayer);
 
         String emphasis = "";
 
         if (percent <= Main.getInstance().getYAMLConfig().criticalThirstPercent && !Main.getInstance().getYAMLConfig().displayType.equalsIgnoreCase("SCOREBOARD")) emphasis = " &4!&c!&4! ";
 
-        String configMessage = Main.getInstance().getYAMLConfig().thirstMessage.replace("%player%", p.getName()).replace("%percent%", getThirstPercent(p, true)).replace("%thirstbar%", "&1"+getThirstBar(p)).replace("%removespeed%", String.valueOf((double) getThirstData(p).getSpeed()/1000));
+        String configMessage = Main.getInstance().getYAMLConfig().thirstMessage.replace("%player%", offlinePlayer.getName()).replace("%percent%", getThirstPercent(offlinePlayer, true)).replace("%thirstbar%", "&1"+getThirstBar(offlinePlayer)).replace("%removespeed%", String.valueOf((double) getThirstData(offlinePlayer).getSpeed()/1000));
 
         return ChatColor.translateAlternateColorCodes('&', emphasis+configMessage+emphasis);
     }
 
-    public String getThirstBar(OfflinePlayer p)
+    public String getThirstBar(OfflinePlayer offlinePlayer)
     {
-        int percent = getPlayerThirst(p);
+        int percent = getPlayerThirst(offlinePlayer);
 
         String thirstBar = "::::::::::";
 
@@ -227,9 +227,9 @@ public class Thirst
         return thirstBar.substring(0, bars)+ChatColor.RED+thirstBar.substring(bars, thirstBar.length())+ChatColor.RESET;
     }
 
-    public String getThirstPercent(OfflinePlayer p, boolean colored)
+    public String getThirstPercent(OfflinePlayer offlinePlayer, boolean colored)
     {
-        int percent = getPlayerThirst(p);
+        int percent = getPlayerThirst(offlinePlayer);
 
         if (colored)
         {
@@ -309,13 +309,13 @@ public class Thirst
 
         if (Main.getInstance().getYAMLConfig().effectsEnabled)
         {
-            for (String s : Main.getInstance().getYAMLConfig().potions)
+            for (String potion : Main.getInstance().getYAMLConfig().potions)
             {
-                String[] parts = s.split("\\.");
+                String[] parts = potion.split("\\.");
 
                 if (parts.length != 4)
                 {
-                    Main.getInstance().printPluginError("Error occurred while reading the config", "String '"+s+"' is in an invalid format!");
+                    Main.getInstance().printPluginError("Error occurred while reading the config", "String '"+potion+"' is in an invalid format!");
                     return;
                 }
 
@@ -332,7 +332,7 @@ public class Thirst
 
                     if (type == null)
                     {
-                        Main.getInstance().printPluginError("Error occurred while reading the config", "String '"+s+"' is in an invalid format!");
+                        Main.getInstance().printPluginError("Error occurred while reading the config", "String '"+potion+"' is in an invalid format!");
                         return;
                     }
 
@@ -353,14 +353,11 @@ public class Thirst
         displayThirst(player);
     }
 
-    public void refreshScoreboard (Player p)
+    public void refreshScoreboard (Player player)
     {
-        if (getThirstString(p).length() > 40)
+        if (getThirstString(player).length() > 40)
         {
-            Logger log = Main.getInstance().getLogger();
-            PluginDescriptionFile pdf = Main.getInstance().getDescription();
-
-            Main.getInstance().printPluginError("Error occurred while displaying scoreboard.", "The string "+getThirstString(p)+" is longer than 40 characters." +
+            Main.getInstance().printPluginError("Error occurred while displaying scoreboard.", "The string "+getThirstString(player)+" is longer than 40 characters." +
                                                                                                       "\nYou must have a thirst message under 40 characters to use the SCOREBOARD displaytype." +
                                                                                                       "\n " +
                                                                                                       "\nNOTE: This message will be displayed every time Thirst tries to update someones thirst (A lot!)");
@@ -368,39 +365,39 @@ public class Thirst
         }
 
         Scoreboard board = manager.getNewScoreboard();
-        Objective obj = board.registerNewObjective(p.getName().toUpperCase(), "dummy");
+        Objective obj = board.registerNewObjective(player.getName().toUpperCase(), "dummy");
 
         obj.setDisplaySlot(DisplaySlot.SIDEBAR);
-        obj.setDisplayName(ChatColor.translateAlternateColorCodes('&', Main.getInstance().getYAMLConfig().scoreboardName.replace("%player%", p.getName())));
-        obj.getScore(getThirstString(p)).setScore(-1);
+        obj.setDisplayName(ChatColor.translateAlternateColorCodes('&', Main.getInstance().getYAMLConfig().scoreboardName.replace("%player%", player.getName())));
+        obj.getScore(getThirstString(player)).setScore(-1);
 
-        p.setScoreboard(board);
+        player.setScoreboard(board);
     }
 
-    public void blipScoreboard(final Player p)
+    public void blipScoreboard(final Player player)
     {
-        refreshScoreboard(p);
+        refreshScoreboard(player);
 
         new BukkitRunnable()
         {
             @Override
             public void run()
             {
-                p.setScoreboard(Bukkit.getServer().getScoreboardManager().getNewScoreboard());
+                player.setScoreboard(Bukkit.getServer().getScoreboardManager().getNewScoreboard());
             }
         }.runTaskLater(Main.getInstance(), 100L);
     }
 
-    public int getPlayerThirst(OfflinePlayer p) {
+    public int getPlayerThirst(OfflinePlayer player) {
         int percent = -1;
 
-        if (playerThirstData.containsKey(p.getUniqueId().toString()))
+        if (playerThirstData.containsKey(player.getUniqueId().toString()))
         {
-            percent = playerThirstData.get(p.getUniqueId().toString()).getThirstAmount();
+            percent = playerThirstData.get(player.getUniqueId().toString()).getThirstAmount();
         }
         else if (Main.getInstance().getYAMLConfig().enableSQL)
         {
-            ResultSet resultSet = UtilSQL.getInstance().runQuery("SELECT * FROM TABLENAME WHERE uuid = '"+p.getUniqueId().toString()+"'");
+            ResultSet resultSet = UtilSQL.getInstance().runQuery("SELECT * FROM TABLENAME WHERE uuid = '"+player.getUniqueId().toString()+"'");
             if (resultSet != null) {
                 try {
                     if (resultSet.isClosed()) {
@@ -411,8 +408,8 @@ public class Thirst
                     if (resultSet.first()) {
                         percent = resultSet.getInt("thirst");
 
-                        if (p.isOnline()) {
-                            Player onlinePlayer = Bukkit.getPlayer(p.getUniqueId());
+                        if (player.isOnline()) {
+                            Player onlinePlayer = Bukkit.getPlayer(player.getUniqueId());
                             long removalSpeed = calculateSpeed(onlinePlayer);
                             long removeTime = System.currentTimeMillis() + removalSpeed;
                             ThirstData playerData = new ThirstData(onlinePlayer, removeTime, removalSpeed, percent);
@@ -430,56 +427,56 @@ public class Thirst
                 }
             }
         }
-        else if (DataConfig.getConfig().fileContains(p.getUniqueId()))
+        else if (DataConfig.getConfig().fileContains(player.getUniqueId()))
         {
-            percent = DataConfig.getConfig().getThirstFromFile(p.getUniqueId());
+            percent = DataConfig.getConfig().getThirstFromFile(player.getUniqueId());
         }
 
         return percent;
     }
 
-    public ThirstData getThirstData(OfflinePlayer oP)
+    public ThirstData getThirstData(OfflinePlayer offlinePlayer)
     {
-        return playerThirstData.get(oP.getUniqueId().toString());
+        return playerThirstData.get(offlinePlayer.getUniqueId().toString());
     }
 
-    private void setThirstData(Player p, ThirstData data)
+    private void setThirstData(Player player, ThirstData data)
     {
-        playerThirstData.put(p.getUniqueId().toString(), data);
+        playerThirstData.put(player.getUniqueId().toString(), data);
     }
 
-    public void displayThirst(Player p)
+    public void displayThirst(Player player)
     {
-        if (validatePlayer(p))
+        if (validatePlayer(player))
         {
-            if (Main.getInstance().getYAMLConfig().displayType.equalsIgnoreCase("ACTION")) UtilActionBar.getInstance().sendActionBar(p, getThirstString(p));
-            else if (Main.getInstance().getYAMLConfig().displayType.equalsIgnoreCase("SCOREBOARD") && !Main.getInstance().getYAMLConfig().alwaysShowActionBar) blipScoreboard(p);
-            else if (Main.getInstance().getYAMLConfig().displayType.equalsIgnoreCase("SCOREBOARD")) refreshScoreboard(p);
-            else if (Main.getInstance().getYAMLConfig().displayType.equalsIgnoreCase("BOSSBAR") && !Main.getInstance().getYAMLConfig().alwaysShowActionBar) blipBossbar(p);
-            else if (Main.getInstance().getYAMLConfig().displayType.equalsIgnoreCase("BOSSBAR")) sendBossBar(p);
+            if (Main.getInstance().getYAMLConfig().displayType.equalsIgnoreCase("ACTION")) UtilActionBar.getInstance().sendActionBar(player, getThirstString(player));
+            else if (Main.getInstance().getYAMLConfig().displayType.equalsIgnoreCase("SCOREBOARD") && !Main.getInstance().getYAMLConfig().alwaysShowActionBar) blipScoreboard(player);
+            else if (Main.getInstance().getYAMLConfig().displayType.equalsIgnoreCase("SCOREBOARD")) refreshScoreboard(player);
+            else if (Main.getInstance().getYAMLConfig().displayType.equalsIgnoreCase("BOSSBAR") && !Main.getInstance().getYAMLConfig().alwaysShowActionBar) blipBossbar(player);
+            else if (Main.getInstance().getYAMLConfig().displayType.equalsIgnoreCase("BOSSBAR")) sendBossBar(player);
         }
     }
 
-    private void sendBossBar(Player p)
+    private void sendBossBar(Player player)
     {
         if (Bukkit.getBukkitVersion().contains("1.9") || Bukkit.getServer().getBukkitVersion().contains("1.10") || Bukkit.getBukkitVersion().contains("1.11"))
         {
             if (validateColor(Main.getInstance().getYAMLConfig().barColor) != null && validateStyle(Main.getInstance().getYAMLConfig().barStyle) != null) {
                 BossBar bar;
 
-                if (getThirstData(p).getBar() != null) {
-                    bar = getThirstData(p).getBar();
-                    bar.setTitle(ChatColor.translateAlternateColorCodes('&', getThirstString(p)));
+                if (getThirstData(player).getBar() != null) {
+                    bar = getThirstData(player).getBar();
+                    bar.setTitle(ChatColor.translateAlternateColorCodes('&', getThirstString(player)));
                     bar.setColor(BarColor.valueOf(Main.getInstance().getYAMLConfig().barColor.toUpperCase()));
                     bar.setStyle(BarStyle.valueOf(Main.getInstance().getYAMLConfig().barStyle.toUpperCase()));
                 } else {
-                    bar = Bukkit.createBossBar(ChatColor.translateAlternateColorCodes('&', getThirstString(p)), BarColor.valueOf(Main.getInstance().getYAMLConfig().barColor.toUpperCase()), BarStyle.valueOf(Main.getInstance().getYAMLConfig().barStyle.toUpperCase()), new BarFlag[0]);
-                    bar.addPlayer(p);
-                    getThirstData(p).setBar(bar);
+                    bar = Bukkit.createBossBar(ChatColor.translateAlternateColorCodes('&', getThirstString(player)), BarColor.valueOf(Main.getInstance().getYAMLConfig().barColor.toUpperCase()), BarStyle.valueOf(Main.getInstance().getYAMLConfig().barStyle.toUpperCase()), new BarFlag[0]);
+                    bar.addPlayer(player);
+                    getThirstData(player).setBar(bar);
                 }
 
                 if (Main.getInstance().getYAMLConfig().useBarProgress)
-                    bar.setProgress((double) getPlayerThirst(p) / 100);
+                    bar.setProgress((double) getPlayerThirst(player) / 100);
             }
         }
         else
@@ -489,7 +486,7 @@ public class Thirst
                 Main.getInstance().getLogger().log(Level.SEVERE, "[Thirst V"+Main.getInstance().getDescription().getVersion()+"] Your Spigot version is not compatible with the Bossbar display type, please use version 1.9 or higher.");
                 Main.getInstance().getLogger().log(Level.SEVERE, "[Thirst V"+Main.getInstance().getDescription().getVersion()+"] Changing to display type ACTION...");
 
-                UtilActionBar.getInstance().sendActionBar(p, Thirst.getThirst().getThirstString(p));
+                UtilActionBar.getInstance().sendActionBar(player, Thirst.getThirst().getThirstString(player));
 
                 Main.getInstance().getYAMLConfig().displayType = "ACTION";
                 Main.getInstance().getYAMLConfig().save();
@@ -501,20 +498,20 @@ public class Thirst
         }
     }
 
-    private void blipBossbar(final Player p)
+    private void blipBossbar(final Player player)
     {
-        sendBossBar(p);
+        sendBossBar(player);
 
         new BukkitRunnable()
         {
             @Override
             public void run()
             {
-                ThirstData data = Thirst.getThirst().getThirstData(p);
+                ThirstData data = Thirst.getThirst().getThirstData(player);
 
                 if (data.getBar() != null)
                 {
-                    data.getBar().removePlayer(p);
+                    data.getBar().removePlayer(player);
                 }
             }
         }.runTaskLater(Main.getInstance(), 100L);
@@ -525,15 +522,15 @@ public class Thirst
         return playerThirstData;
     }
 
-    public boolean validatePlayer(Player p)
+    public boolean validatePlayer(Player player)
     {
-        if (p == null) return false;
-        if (!p.isOnline()) return false;
-        if (p.getGameMode() == GameMode.CREATIVE && Main.getInstance().getYAMLConfig().ignoreCreative) return false;
-        if (p.isOp() && Main.getInstance().getYAMLConfig().ignoreOP)  return false;
-        if (p.hasPermission("thirst.ignore") || p.hasPermission("thirst.*"))  return false;
+        if (player == null) return false;
+        if (!player.isOnline()) return false;
+        if (player.getGameMode() == GameMode.CREATIVE && Main.getInstance().getYAMLConfig().ignoreCreative) return false;
+        if (player.isOp() && Main.getInstance().getYAMLConfig().ignoreOP)  return false;
+        if (player.hasPermission("thirst.ignore") || player.hasPermission("thirst.*"))  return false;
 
-        String world = p.getWorld().getName();
+        String world = player.getWorld().getName();
         List<String> worlds = Arrays.asList(Main.getInstance().getYAMLConfig().disabledWorlds);
         if ( worlds.size() > 0)
         {
@@ -542,7 +539,7 @@ public class Thirst
 
         if (Main.getInstance().isWorldGuardEnabled())
         {
-            for(ProtectedRegion region : WGBukkit.getRegionManager(p.getWorld()).getApplicableRegions(p.getLocation()))
+            for(ProtectedRegion region : WGBukkit.getRegionManager(player.getWorld()).getApplicableRegions(player.getLocation()))
             {
                 if (region == null) continue;
                 ArrayList<String> regions  = (ArrayList<String>) Arrays.asList(Main.getInstance().getYAMLConfig().disabledRegions);

@@ -19,37 +19,37 @@ public class PlayerGamemodeChangeListener
 	@EventHandler
 	public void onGamemodeChange(PlayerGameModeChangeEvent event)
 	{
-		Player p = event.getPlayer();
+		Player player = event.getPlayer();
 
 		if (event.getNewGameMode() != GameMode.CREATIVE || Main.getInstance().getYAMLConfig().ignoreCreative)
 		{
-			Thirst.getThirst().displayThirst(p);
+			Thirst.getThirst().displayThirst(player);
 			return;
 		}
 		else if (event.getNewGameMode() == GameMode.CREATIVE && !Main.getInstance().getYAMLConfig().ignoreCreative)
 		{
-			for (PotionEffect effect : p.getActivePotionEffects())
+			for (PotionEffect effect : player.getActivePotionEffects())
 			{
-				p.removePotionEffect(effect.getType());
+				player.removePotionEffect(effect.getType());
 			}
 		}
 
 		if (Main.getInstance().getYAMLConfig().displayType.equalsIgnoreCase("scoreboard"))
 		{
 			if (Main.getInstance().getYAMLConfig().displayType.equalsIgnoreCase("SCOREBOARD"))
-				p.setScoreboard(Bukkit.getServer().getScoreboardManager().getNewScoreboard());
+				player.setScoreboard(Bukkit.getServer().getScoreboardManager().getNewScoreboard());
 		}
 		else if (Main.getInstance().getYAMLConfig().displayType.equalsIgnoreCase("action"))
 		{
-			UtilActionBar.getInstance().sendActionBar(p, "");
+			UtilActionBar.getInstance().sendActionBar(player, "");
 		}
 		else if (Main.getInstance().getYAMLConfig().displayType.equalsIgnoreCase("bossbar"))
 		{
-			ThirstData data = Thirst.getThirst().getThirstData(p);
+			ThirstData data = Thirst.getThirst().getThirstData(player);
 
 			if (data.getBar() != null)
 			{
-				data.getBar().removePlayer(p);
+				data.getBar().removePlayer(player);
 			}
 		}
 	}

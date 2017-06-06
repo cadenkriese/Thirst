@@ -12,10 +12,10 @@ implements Listener
 	@EventHandler
 	public void onPlayerRespawn(PlayerRespawnEvent event)
 	{
-		final Player p = event.getPlayer();
+		final Player player = event.getPlayer();
 
-		if (!Thirst.getThirst().validatePlayer(p)) return;
+		if (!Thirst.getThirst().validatePlayer(player)) return;
 		
-		Thirst.getThirst().setThirst(p, 100);
+		Thirst.getThirst().setThirst(player, 100);
 	}
 }

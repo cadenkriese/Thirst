@@ -44,23 +44,23 @@ public class PlayerMoveListener
 	@EventHandler
 	public void onPlayerMove(PlayerMoveEvent event)
 	{
-		Player p = event.getPlayer();
+		Player player = event.getPlayer();
 
-		if (p.getEyeLocation().getBlock().getType() == Material.WATER || p.getEyeLocation().getBlock().getType() == Material.STATIONARY_WATER)
+		if (player.getEyeLocation().getBlock().getType() == Material.WATER || player.getEyeLocation().getBlock().getType() == Material.STATIONARY_WATER)
 		{
 			if (Main.getInstance().getYAMLConfig().drinkBlockWater)
 			{
-				if (!drinkingMap.containsKey(p.getUniqueId().toString()))
+				if (!drinkingMap.containsKey(player.getUniqueId().toString()))
 				{
-					drinkingMap.put(p.getUniqueId().toString(), p);
+					drinkingMap.put(player.getUniqueId().toString(), player);
 				}
 			}
 		}
 		else
 		{
-			if (drinkingMap.containsKey(p.getUniqueId().toString()))
+			if (drinkingMap.containsKey(player.getUniqueId().toString()))
 			{
-				drinkingMap.remove(p.getUniqueId().toString());
+				drinkingMap.remove(player.getUniqueId().toString());
 			}
 		}
 	}

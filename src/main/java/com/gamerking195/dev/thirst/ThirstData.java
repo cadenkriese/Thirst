@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 
 public class ThirstData 
 {
-	private Player p;
+	private Player player;
 	//the time in milliseconds when the players thirst will be removed (system.currentTimeMillis()+removalSpeed)
 	private long thirstTime;
 	//the interval at which a players thirst will be removed, fluctuates depends on config and players active multipliers.
@@ -20,18 +20,18 @@ public class ThirstData
 	
 	/**
 	 * @author GamerKing195
-	 * @param p the player whos data this is.
+	 * @param player the player whos data this is.
 	 * @param time the next time their thirst will be removed.
 	 * @param speed the interval at which the players thirst will be removed.
 	 * @param amount the amount of thirst a player has 0-100.
 	 */
-    ThirstData(Player p, long time, long speed, int amount)
+    ThirstData(Player player, long time, long speed, int amount)
 	{
-		this.p = p;
+		this.player = player;
 		thirstTime = time;
 		removalSpeed = speed;
 		thirstAmount = amount;
-		this.location = p.getLocation();
+		this.location = player.getLocation();
 	}
 
     /*
@@ -81,7 +81,7 @@ public class ThirstData
 
     public Player getPlayer()
     {
-        return p;
+        return player;
     }
 
     public long getTime()

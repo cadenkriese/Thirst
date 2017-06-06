@@ -16,21 +16,21 @@ implements Listener
 	@EventHandler
 	public void onPlayerDeath(PlayerDeathEvent event)
 	{
-		Player p = event.getEntity();
+		Player player = event.getEntity();
 		boolean damageEffects = false;
-		for (String s : Main.getInstance().getYAMLConfig().potions)
+		for (String potion : Main.getInstance().getYAMLConfig().potions)
 		{
-			if (s.contains("DAMAGE") && event.getDeathMessage().equalsIgnoreCase(p.getName()+" died"))
+			if (potion.contains("DAMAGE") && event.getDeathMessage().equalsIgnoreCase(player.getName()+" died"))
 			{
 				damageEffects = true;
 			}
 		}
 		
-		if (Thirst.getThirst().getPlayerThirst(p) <= Main.getInstance().getYAMLConfig().getDamagePercent() && damageEffects)
+		if (Thirst.getThirst().getPlayerThirst(player) <= Main.getInstance().getYAMLConfig().getDamagePercent() && damageEffects)
 		{
-			event.setDeathMessage(ChatColor.translateAlternateColorCodes('&', Main.getInstance().getYAMLConfig().thirstDeathMessage.replace("%player%", p.getName())));
+			event.setDeathMessage(ChatColor.translateAlternateColorCodes('&', Main.getInstance().getYAMLConfig().thirstDeathMessage.replace("%player%", player.getName())));
 
-			Thirst.getThirst().setThirst(p, 100);
+			Thirst.getThirst().setThirst(player, 100);
 		}
 	}
 }

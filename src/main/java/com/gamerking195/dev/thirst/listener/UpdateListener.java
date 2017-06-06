@@ -22,57 +22,57 @@ public class UpdateListener
     {
         if (event.getType() == UpdateType.SECOND)
         {
-            for (Player p : Bukkit.getOnlinePlayers())
+            for (Player player : Bukkit.getOnlinePlayers())
             {
-                if (!Thirst.getThirst().validatePlayer(p)) continue;
+                if (!Thirst.getThirst().validatePlayer(player)) continue;
                 if (!Main.getInstance().getYAMLConfig().alwaysShowActionBar) continue;
 
-                Thirst.getThirst().displayThirst(p);
+                Thirst.getThirst().displayThirst(player);
             }
         }
 
         else if (event.getType() == UpdateType.CENTI_SECOND)
         {
-            for (String s : Thirst.getThirst().getThirstDataMap().keySet())
+            for (String key : Thirst.getThirst().getThirstDataMap().keySet())
             {
-                Player p = Bukkit.getServer().getPlayer(UUID.fromString(s));
+                Player player = Bukkit.getServer().getPlayer(UUID.fromString(key));
 
-                if (p == null)
+                if (player == null)
                 {
-                    Thirst.getThirst().getThirstDataMap().remove(s);
+                    Thirst.getThirst().getThirstDataMap().remove(key);
                     continue;
                 }
 
-                if (!Thirst.getThirst().validatePlayer(p)) continue;
+                if (!Thirst.getThirst().validatePlayer(player)) continue;
 
                 //Don't put in validatePlayer because then thirst doesn't display properly.
-                if ((p.getEyeLocation().getBlock().getType() == Material.WATER || p.getEyeLocation().getBlock().getType() == Material.STATIONARY_WATER) && !Main.getInstance().getYAMLConfig().removeThirstSubmerged) continue;
+                if ((player.getEyeLocation().getBlock().getType() == Material.WATER || player.getEyeLocation().getBlock().getType() == Material.STATIONARY_WATER) && !Main.getInstance().getYAMLConfig().removeThirstSubmerged) continue;
 
 
-                if (System.currentTimeMillis() >= Thirst.getThirst().getThirstData(p).getTime())
+                if (System.currentTimeMillis() >= Thirst.getThirst().getThirstData(player).getTime())
                 {
                     if (!Main.getInstance().getYAMLConfig().removeAFK) {
-                        if (p.getLocation().getBlockX() != Thirst.getThirst().getThirstData(p).getLastLocation().getBlockX() || p.getLocation().getBlockY() != Thirst.getThirst().getThirstData(p).getLastLocation().getBlockY() || p.getLocation().getBlockZ() != Thirst.getThirst().getThirstData(p).getLastLocation().getBlockZ()) {
-                            Thirst.getThirst().removeThirst(p);
+                        if (player.getLocation().getBlockX() != Thirst.getThirst().getThirstData(player).getLastLocation().getBlockX() || player.getLocation().getBlockY() != Thirst.getThirst().getThirstData(player).getLastLocation().getBlockY() || player.getLocation().getBlockZ() != Thirst.getThirst().getThirstData(player).getLastLocation().getBlockZ()) {
+                            Thirst.getThirst().removeThirst(player);
 
-                            Thirst.getThirst().getThirstData(p).setLastLocation(p.getLocation());
+                            Thirst.getThirst().getThirstData(player).setLastLocation(player.getLocation());
                         }
                     }
                     else
-                        Thirst.getThirst().removeThirst(p);
+                        Thirst.getThirst().removeThirst(player);
                 }
             }
         }
 
         else if (event.getType() == UpdateType.DAMAGE)
         {
-            for (Player p : Bukkit.getOnlinePlayers())
+            for (Player player : Bukkit.getOnlinePlayers())
             {
-                if (!Thirst.getThirst().validatePlayer(p)) continue;
+                if (!Thirst.getThirst().validatePlayer(player)) continue;
 
-                if (Thirst.getThirst().getPlayerThirst(p) <= Main.getInstance().getYAMLConfig().getDamagePercent())
+                if (Thirst.getThirst().getPlayerThirst(player) <= Main.getInstance().getYAMLConfig().getDamagePercent())
                 {
-                    p.damage(Main.getInstance().getYAMLConfig().getDamageAmount());
+                    player.damage(Main.getInstance().getYAMLConfig().getDamageAmount());
                 }
             }
         }

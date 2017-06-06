@@ -115,8 +115,6 @@ public class Main
 		catch(InvalidConfigurationException ex)
 		{
 			printError(ex, "Error while initializing the config.yml file please check that you didn't use tabs and all formatting is correct.");
-			this.setEnabled(false);
-			return;
 		}
 
 		if (yamlConf.enableSQL)
@@ -191,9 +189,7 @@ public class Main
 			}
 			else
 			{
-				printPluginError("Error occurred while parsing config.", "You are trying to use worldgaurd in the config but the plugin could not be found!");
-
-				this.setEnabled(false);
+				printPluginError("Error occurred while parsing config.", "You are trying to use WorldGuard in the config but the plugin could not be found!");
 			}
 		}
 
@@ -217,7 +213,7 @@ public class Main
 		pm.registerEvents(new PlayerMoveListener(), instance);
 
 		//VALIDATION
-		if (!Bukkit.getBukkitVersion().contains("1.9") && !Bukkit.getBukkitVersion().contains("1.10") && !Bukkit.getBukkitVersion().contains("1.11"))
+		if (Main.getInstance().getYAMLConfig().displayType.equalsIgnoreCase("BOSSBAR") && !Bukkit.getBukkitVersion().contains("1.9") && !Bukkit.getBukkitVersion().contains("1.10") && !Bukkit.getBukkitVersion().contains("1.11"))
 		{
 			try
 			{
@@ -230,7 +226,6 @@ public class Main
 			catch (InvalidConfigurationException ex)
 			{
 				printError(ex, "Error while validating the config.yml file please check that you used all spaces and all formatting is correct.");
-				this.setEnabled(false);
 			}
 		}
 	}
@@ -243,11 +238,6 @@ public class Main
 	boolean isWorldGuardEnabled()
 	{
 		return worldGuardEnabled;
-	}
-
-	public void disable()
-	{
-		this.setEnabled(false);
 	}
 
 	public void printError(Exception ex, String extraInfo) {

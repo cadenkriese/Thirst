@@ -18,9 +18,9 @@ implements Listener
 	@EventHandler
 	public void onPlayerItemConsume(PlayerItemConsumeEvent event)
 	{		
-		for (String s : Main.getInstance().getYAMLConfig().thirstQuenchingItems)
+		for (String itemString : Main.getInstance().getYAMLConfig().thirstQuenchingItems)
 		{
-			ThirstItem item = Main.getInstance().getYAMLConfig().new ThirstItem(s);
+			ThirstItem item = Main.getInstance().getYAMLConfig().new ThirstItem(itemString);
 			
 			ItemStack is = new ItemStack(Material.valueOf(item.getItem()), 1);
 			
