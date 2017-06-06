@@ -129,7 +129,18 @@ public class YAMLConfig extends YamlConfig {
                      "Default: 1"
             })
     @Path("Block-Drink-Delay")
-    public int blockDrinkDelay = 1;
+    public float blockDrinkDelay = 1;
+
+    @Comments
+            ({
+                     "",
+                     "REMOVE_THIRST_SUBMERGED",
+                     "Desc: If true, the player will still be affected by thirst while they are underwater..",
+                     "Type: boolean",
+                     "Default: false"
+            })
+    @Path("Remove-Thirst-Submerged")
+    public boolean removeThirstSubmerged = false;
 
     @Comments
             ({

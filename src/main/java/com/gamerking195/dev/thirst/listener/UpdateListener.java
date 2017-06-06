@@ -3,6 +3,7 @@ package com.gamerking195.dev.thirst.listener;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -43,6 +44,10 @@ public class UpdateListener
                 }
 
                 if (!Thirst.getThirst().validatePlayer(p)) continue;
+
+                //Don't put in validatePlayer because then thirst doesn't display properly.
+                if ((p.getEyeLocation().getBlock().getType() == Material.WATER || p.getEyeLocation().getBlock().getType() == Material.STATIONARY_WATER) && !Main.getInstance().getYAMLConfig().removeThirstSubmerged) continue;
+
 
                 if (System.currentTimeMillis() >= Thirst.getThirst().getThirstData(p).getTime())
                 {

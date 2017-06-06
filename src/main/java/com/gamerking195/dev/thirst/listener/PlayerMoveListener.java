@@ -19,7 +19,7 @@ public class PlayerMoveListener
 {
 	public static void init()
 	{
-		runnable.runTaskTimer(Main.getInstance(), Main.getInstance().getYAMLConfig().blockDrinkDelay*20, Main.getInstance().getYAMLConfig().blockDrinkDelay*20);
+		runnable.runTaskTimer(Main.getInstance(), (long) Main.getInstance().getYAMLConfig().blockDrinkDelay*20, (long) Main.getInstance().getYAMLConfig().blockDrinkDelay*20);
 	}
 
 	private static HashMap<String, Player> drinkingMap = new HashMap<>();
@@ -32,11 +32,10 @@ public class PlayerMoveListener
 			for (String uuid : drinkingMap.keySet())
 			{
 				UUID pid = UUID.fromString(uuid);
-				Player p = Bukkit.getPlayer(pid);
+				Player player = Bukkit.getPlayer(pid);
 
-				if (p != null)
-				{
-					Thirst.getThirst().setThirst(p, Thirst.getThirst().getPlayerThirst(p)+1);
+				if (player != null) {
+					Thirst.getThirst().setThirst(player, Thirst.getThirst().getPlayerThirst(player)+1);
 				}
 			}
 		}

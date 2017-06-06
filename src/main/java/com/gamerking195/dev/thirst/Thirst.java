@@ -248,18 +248,18 @@ public class Thirst
         }
     }
 
-    public void playerJoin(Player p)
+    public void playerJoin(Player player)
     {
-        UUID pid = p.getUniqueId();
+        UUID pid = player.getUniqueId();
 
-        long removalSpeed = calculateSpeed(p);
+        long removalSpeed = calculateSpeed(player);
         long removeTime = System.currentTimeMillis()+removalSpeed;
         int startingThirst = 100;
 
-        if (!p.hasPlayedBefore() || getPlayerThirst(p) < 0)
+        if (!player.hasPlayedBefore() || getPlayerThirst(player) < 0)
         {
             if (Main.getInstance().getYAMLConfig().enableSQL) {
-                UtilSQL.getInstance().runStatement("INSERT INTO TABLENAME (uuid,thirst) VALUES ('"+p.getUniqueId().toString()+"','"+getPlayerThirst(p)+"') ON DUPLICATE KEY UPDATE thirst = "+getPlayerThirst(p));
+                UtilSQL.getInstance().runStatement("INSERT INTO TABLENAME (uuid,thirst) VALUES ('"+player.getUniqueId().toString()+"','"+getPlayerThirst(player)+"') ON DUPLICATE KEY UPDATE thirst = "+getPlayerThirst(player));
             }
             else {
                 DataConfig.getConfig().writeThirstToFile(pid, 100);
@@ -268,44 +268,44 @@ public class Thirst
         }
         else
         {
-            startingThirst = getPlayerThirst(p);
+            startingThirst = getPlayerThirst(player);
         }
 
-        ThirstData playerData = new ThirstData(p, removeTime, removalSpeed, startingThirst);
-        setThirstData(p, playerData);
+        ThirstData playerData = new ThirstData(player, removeTime, removalSpeed, startingThirst);
+        setThirstData(player, playerData);
 
-        displayThirst(p);
+        displayThirst(player);
     }
 
-    public void playerLeave(Player p)
+    public void playerLeave(Player player)
     {
-        if (p.isDead()) setThirst(p, 100);
+        if (player.isDead()) setThirst(player, 100);
 
-        p.setScoreboard(manager.getNewScoreboard());
+        player.setScoreboard(manager.getNewScoreboard());
 
         if (Main.getInstance().getYAMLConfig().enableSQL) {
-            UtilSQL.getInstance().runStatement("INSERT INTO TABLENAME (uuid,thirst) VALUES ('"+p.getUniqueId().toString()+"','"+getPlayerThirst(p)+"') ON DUPLICATE KEY UPDATE thirst = "+getPlayerThirst(p));
+            UtilSQL.getInstance().runStatement("INSERT INTO TABLENAME (uuid,thirst) VALUES ('"+player.getUniqueId().toString()+"','"+getPlayerThirst(player)+"') ON DUPLICATE KEY UPDATE thirst = "+getPlayerThirst(player));
         }
         else {
-            DataConfig.getConfig().writeThirstToFile(p.getUniqueId(), 100);
+            DataConfig.getConfig().writeThirstToFile(player.getUniqueId(), getPlayerThirst(player));
             DataConfig.getConfig().saveFile();
         }
 
-        playerThirstData.remove(p.getName());
+        playerThirstData.remove(player.getName());
 
-        playerThirstData.remove(p);
+        playerThirstData.remove(player);
     }
 
-    public void setThirst(Player p, int thirst)
+    public void setThirst(Player player, int thirst)
     {
-        int oldThirst = getPlayerThirst(p);
+        int oldThirst = getPlayerThirst(player);
 
-        if (p.isDead()) thirst = 100;
+        if (player.isDead()) thirst = 100;
 
         if (thirst < 0) thirst = 0;
         if (thirst > 100) thirst = 100;
 
-        playerThirstData.get(p.getUniqueId().toString()).setThirstAmount(thirst);
+        playerThirstData.get(player.getUniqueId().toString()).setThirstAmount(thirst);
 
         if (Main.getInstance().getYAMLConfig().effectsEnabled)
         {
@@ -315,7 +315,7 @@ public class Thirst
 
                 if (parts.length != 4)
                 {
-                    Main.getInstance().printPluginError("Error occured while reading the config", "String '"+s+"' is in an invalid format!");
+                    Main.getInstance().printPluginError("Error occurred while reading the config", "String '"+s+"' is in an invalid format!");
                     return;
                 }
 
@@ -332,25 +332,25 @@ public class Thirst
 
                     if (type == null)
                     {
-                        Main.getInstance().printPluginError("Error occured while reading the config", "String '"+s+"' is in an invalid format!");
+                        Main.getInstance().printPluginError("Error occurred while reading the config", "String '"+s+"' is in an invalid format!");
                         return;
                     }
 
                     PotionEffect effect = new PotionEffect(type, Integer.valueOf(parts[2])*20, Integer.valueOf(parts[3])-1);
 
-                    p.addPotionEffect(effect);
+                    player.addPotionEffect(effect);
                 }
                 else if (percent > thirst)
                 {
                     PotionEffectType type = PotionEffectType.getByName(parts[1].toUpperCase());
-                    p.removePotionEffect(type);
+                    player.removePotionEffect(type);
                 }
             }
         }
 
-        if (thirst <= Main.getInstance().getYAMLConfig().criticalThirstPercent && oldThirst != 0 & oldThirst != -1) p.sendMessage(ChatColor.translateAlternateColorCodes('&', Main.getInstance().getYAMLConfig().thirstLowMessage.replace("%player%", p.getName()).replace("%percent%", getThirstPercent(p, true))));
+        if (thirst <= Main.getInstance().getYAMLConfig().criticalThirstPercent && oldThirst != 0 & oldThirst != -1) player.sendMessage(ChatColor.translateAlternateColorCodes('&', Main.getInstance().getYAMLConfig().thirstLowMessage.replace("%player%", player.getName()).replace("%percent%", getThirstPercent(player, true))));
 
-        displayThirst(p);
+        displayThirst(player);
     }
 
     public void refreshScoreboard (Player p)
@@ -360,7 +360,7 @@ public class Thirst
             Logger log = Main.getInstance().getLogger();
             PluginDescriptionFile pdf = Main.getInstance().getDescription();
 
-            Main.getInstance().printPluginError("Error occured while displaying scoreboard.", "The string "+getThirstString(p)+" is longer than 40 characters." +
+            Main.getInstance().printPluginError("Error occurred while displaying scoreboard.", "The string "+getThirstString(p)+" is longer than 40 characters." +
                                                                                                       "\nYou must have a thirst message under 40 characters to use the SCOREBOARD displaytype." +
                                                                                                       "\n " +
                                                                                                       "\nNOTE: This message will be displayed every time Thirst tries to update someones thirst (A lot!)");
@@ -425,7 +425,7 @@ public class Thirst
                     try {
                         resultSet.close();
                     } catch (Exception exception) {
-                        Main.getInstance().printError(exception, "Error occured while closing result set.");
+                        Main.getInstance().printError(exception, "Error occurred while closing result set.");
                     }
                 }
             }
@@ -443,7 +443,7 @@ public class Thirst
         return playerThirstData.get(oP.getUniqueId().toString());
     }
 
-    public void setThirstData(Player p, ThirstData data)
+    private void setThirstData(Player p, ThirstData data)
     {
         playerThirstData.put(p.getUniqueId().toString(), data);
     }
