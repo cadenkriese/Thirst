@@ -213,7 +213,7 @@ public class Main
 		pm.registerEvents(new PlayerMoveListener(), instance);
 
 		//VALIDATION
-		if (Main.getInstance().getYAMLConfig().displayType.equalsIgnoreCase("BOSSBAR") && !Bukkit.getBukkitVersion().contains("1.9") && !Bukkit.getBukkitVersion().contains("1.10") && !Bukkit.getBukkitVersion().contains("1.11"))
+		if (Main.getInstance().getYAMLConfig().displayType.equalsIgnoreCase("BOSSBAR") && !Bukkit.getBukkitVersion().contains("1.9") && !Bukkit.getBukkitVersion().contains("1.10") && !Bukkit.getBukkitVersion().contains("1.11") && !Bukkit.getBukkitVersion().contains("1.12"))
 		{
 			try
 			{

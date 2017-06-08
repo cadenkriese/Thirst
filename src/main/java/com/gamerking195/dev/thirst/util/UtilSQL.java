@@ -90,7 +90,7 @@ public class UtilSQL {
         }
     }
 
-    //No real need to run queries async litterally just getting a 36 char string & a 2-3 digit number.
+    //No real need to run queries async literally just getting a 36 char string & a 2-3 digit number.
     public ResultSet runQuery(String query) {
         final String updatedQuery = query.replace("TABLENAME", Main.getInstance().getYAMLConfig().tablename);
 

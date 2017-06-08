@@ -8,13 +8,13 @@ import com.gamerking195.dev.thirst.ThirstData;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -63,27 +63,27 @@ public class UtilUpdater {
                                 String mcVersion = Bukkit.getServer().getClass().getPackage().getName();
                                 mcVersion = mcVersion.substring(mcVersion.lastIndexOf(".") + 1).substring(1, mcVersion.length()-3).replace("_", ".");
 
-                                player.sendMessage(net.md_5.bungee.api.ChatColor.translateAlternateColorCodes('&', "&f&m------------------------------"));
-                                player.sendMessage(net.md_5.bungee.api.ChatColor.translateAlternateColorCodes('&', "&1&lThirst &fV" + currentVersion + " &bby &f" + Main.getInstance().getDescription().getAuthors()));
+                                player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&f&m------------------------------"));
+                                player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&1&lThirst &fV" + currentVersion + " &bby &f" + Main.getInstance().getDescription().getAuthors()));
                                 player.sendMessage("");
-                                player.sendMessage(net.md_5.bungee.api.ChatColor.translateAlternateColorCodes('&', "&bThere is a Thirst update available!"));
-                                player.sendMessage(net.md_5.bungee.api.ChatColor.translateAlternateColorCodes('&', "&bVersion: &f" + latestVersion));
-                                player.sendMessage(net.md_5.bungee.api.ChatColor.translateAlternateColorCodes('&', "&bUpdates: \n" + UtilUpdater.getInstance().getUpdateInfo()));
-                                player.sendMessage(net.md_5.bungee.api.ChatColor.translateAlternateColorCodes('&', "&bSupported MC Versions: &f" + StringUtils.join(testedVersions, ", ")));
+                                player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&bThere is a Thirst update available!"));
+                                player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&bVersion: &f" + latestVersion));
+                                player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&bUpdates: \n" + UtilUpdater.getInstance().getUpdateInfo()));
+                                player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&bSupported MC Versions: &f" + StringUtils.join(testedVersions, ", ")));
                                 if (!testedVersions.contains(mcVersion))
-                                    player.sendMessage(net.md_5.bungee.api.ChatColor.RED+"Warning your current version, "+mcVersion+", is not supported by this update, there may be unexpected bugs!");
+                                    player.sendMessage(ChatColor.DARK_RED+"Warning your current version, "+mcVersion+", is not supported by this update, there may be unexpected bugs!");
                                 player.sendMessage("");
 
                                 TextComponent accept = new TextComponent("[CLICK TO UPDATE]");
-                                accept.setColor(net.md_5.bungee.api.ChatColor.DARK_AQUA);
+                                accept.setColor(ChatColor.DARK_AQUA);
                                 accept.setBold(true);
                                 accept.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/thirst update"));
-                                accept.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(net.md_5.bungee.api.ChatColor.translateAlternateColorCodes('&', "&1&lTHIRST &bV" + currentVersion + " &a&l» &bV" + latestVersion+"\n&b\n&b    CLICK TO UPDATE")).create()));
+                                accept.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&1&lTHIRST &bV" + currentVersion + " &a&l» &bV" + latestVersion+"\n&b\n&b    CLICK TO UPDATE")).create()));
 
                                 player.spigot().sendMessage(accept);
 
                                 player.sendMessage("");
-                                player.sendMessage(net.md_5.bungee.api.ChatColor.translateAlternateColorCodes('&', "&f&m------------------------------"));
+                                player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&f&m------------------------------"));
                             }
                         }
                     }
@@ -154,8 +154,8 @@ public class UtilUpdater {
                     httpConnection.setRequestProperty("User-Agent", "SpigetResourceUpdater");
                     long completeFileSize = httpConnection.getContentLength();
 
-                    BufferedInputStream in = new java.io.BufferedInputStream(httpConnection.getInputStream());
-                    FileOutputStream fos = new java.io.FileOutputStream(new File(Main.getInstance().getDataFolder().getPath().substring(0, Main.getInstance().getDataFolder().getPath().lastIndexOf("/")) + "/PluginUpdater.jar"));
+                    BufferedInputStream in = new BufferedInputStream(httpConnection.getInputStream());
+                    FileOutputStream fos = new FileOutputStream(new File(Main.getInstance().getDataFolder().getPath().substring(0, Main.getInstance().getDataFolder().getPath().lastIndexOf("/")) + "/PluginUpdater.jar"));
                     BufferedOutputStream bout = new BufferedOutputStream(fos, 1024);
 
                     byte[] data = new byte[1024];
@@ -237,7 +237,8 @@ public class UtilUpdater {
 
     private String readFrom(String url) throws IOException
     {
-        try (InputStream is = new URL(url).openStream()) {
+        try (InputStream is = new URL(url).openStream())
+        {
             BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
 
             StringBuilder sb = new StringBuilder();
@@ -245,6 +246,7 @@ public class UtilUpdater {
             while ((cp = rd.read()) != -1) {
                 sb.append((char) cp);
             }
+
             return sb.toString();
         }
     }
