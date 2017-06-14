@@ -46,7 +46,7 @@ implements Listener
                         player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&f&m------------------------------"));
                         player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&1&lThirst &fV" + currentVersion + " &bby &f" + Thirst.getInstance().getDescription().getAuthors()));
                         player.sendMessage("");
-                        player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&bThere is a ThirstManager update available!"));
+                        player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&bThere is a Thirst update available!"));
                         player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&bVersion: &f" + newVersion));
                         player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&bUpdates: \n" + UtilUpdater.getInstance().getUpdateInfo()));
                         player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&bSupported MC Versions: &f" + StringUtils.join(testedVersions, ", ")));

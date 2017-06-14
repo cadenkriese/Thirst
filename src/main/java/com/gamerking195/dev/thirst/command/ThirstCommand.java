@@ -52,7 +52,7 @@ public class ThirstCommand
                 sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&f&m-----------------------"));
                 sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&1&lThirst &fV"+ Thirst.getInstance().getDescription().getVersion()+" &bby &f"+ Thirst.getInstance().getDescription().getAuthors()));
                 sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&bSpigot: &fhttps://www.spigotmc.org/resources/thirst.24610/"));
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&bGitHub: &fhttps://github.com/GamerKing195/ThirstManager"));
+                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&bGitHub: &fhttps://github.com/GamerKing195/Thirst"));
                 sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&bHelp: &f/thirst help"));
                 sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&f&m-----------------------"));
                 return true;

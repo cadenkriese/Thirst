@@ -19,7 +19,7 @@ public class YAMLConfig extends YamlConfig {
                                 {
                                         "#################################",
                                         "                                #",
-                                        "ThirstManager V" + Thirst.getInstance().getDescription().getVersion() + ", by " + Thirst.getInstance().getDescription().getAuthors() + "#",
+                                        "Thirst V" + Thirst.getInstance().getDescription().getVersion() + ", by " + Thirst.getInstance().getDescription().getAuthors() + "#",
                                         "                                #",
                                         "#################################",
                                         "",
@@ -45,7 +45,8 @@ public class YAMLConfig extends YamlConfig {
                      "Type: int (100 or lower.)",
                      "Default: 1"
             })
-    @Path("Remove-ThirstManager")
+    @Path("Remove-Thirst" +
+                  "")
     public int removeThirst = 1;
 
     @Comments
@@ -56,7 +57,8 @@ public class YAMLConfig extends YamlConfig {
                      "Type: Integer",
                      "Default: 10"
             })
-    @Path("Critical-ThirstManager-Percent")
+    @Path("Critical-Thirst" +
+                  "-Percent")
     public int criticalThirstPercent = 10;
 
     @Comments
@@ -68,7 +70,8 @@ public class YAMLConfig extends YamlConfig {
                      "Default: 36 (will remove 100% over three days, just like in real life!)",
                      "Note: This does support values under one second without any changes in lag!"
             })
-    @Path("ThirstManager-Delay")
+    @Path("Thirst" +
+                  "-Delay")
     public float thirstDelay = 36;
 
     @Comments
@@ -82,14 +85,16 @@ public class YAMLConfig extends YamlConfig {
                      "- GOLDEN_APPLE:1=100",
                      "Requirements: Should be in format: ITEM:METADATA=PERCENT(metadata optional)"
             })
-    @Path("ThirstManager-Quenching-Items")
+    @Path("Thirst" +
+                  "-Quenching-Items")
     public String[] thirstQuenchingItems = {"POTION=20", "GOLDEN_APPLE:1=100"};
 
     @Comments
             ({
                      "",
                      "IGNORE_CREATIVE",
-                     "Desc: If true, anyone in creative will not be affected by ThirstManager.",
+                     "Desc: If true, anyone in creative will not be affected by Thirst" +
+                             ".",
                      "Type: Boolean",
                      "Default: true"
             })
@@ -100,7 +105,8 @@ public class YAMLConfig extends YamlConfig {
             ({
                      "",
                      "IGNORE_OP",
-                     "Desc: If true, anyone who is opped will not be affected by ThirstManager.",
+                     "Desc: If true, anyone who is opped will not be affected by Thirst" +
+                             ".",
                      "Type: Boolean",
                      "Default: false"
             })
@@ -122,7 +128,8 @@ public class YAMLConfig extends YamlConfig {
             ({
                      "",
                      "BLOCK_DRINK_DELAY",
-                     "Desc: Time in seconds between when players gain 1 ThirstManager from being under water.",
+                     "Desc: Time in seconds between when players gain 1 Thirst" +
+                             " from being under water.",
                      "Type: Float (Seconds)",
                      "Default: 1"
             })
@@ -137,7 +144,8 @@ public class YAMLConfig extends YamlConfig {
                      "Type: boolean",
                      "Default: false"
             })
-    @Path("Remove-ThirstManager-Submerged")
+    @Path("Remove-Thirst" +
+                  "-Submerged")
     public boolean removeThirstSubmerged = false;
 
     @Comments
@@ -162,6 +170,17 @@ public class YAMLConfig extends YamlConfig {
             })
     @Path("Remove-When-AFK")
     public boolean removeAFK = true;
+
+    @Comments
+            ({
+                     "",
+                     "ALLOW_ITEM_CONSUMPTION",
+                     "Desc: If false, thirst will not allow players to consume any THIRST_QUENCHING_ITEMS, if their thirst is at 100%.",
+                     "Type: Boolean",
+                     "Default: true"
+            })
+    @Path("Allow-Item-Consumption")
+    public boolean itemConsumption = true;
 
     @Comment("---------------Display---------------")
     @Comments
@@ -237,6 +256,7 @@ public class YAMLConfig extends YamlConfig {
             })
     @Path("Multipliers.Biomes")
     public String[] biomes = new String[]{"DESERT.5", "HELL.10"};
+
     @Comments
             ({
                      "",
@@ -249,6 +269,7 @@ public class YAMLConfig extends YamlConfig {
             })
     @Path("Multipliers.Armor")
     public String[] armor = new String[]{"LEATHER.5", "IRON_CHESTPLATE.10"};
+
     @Comments
             ({
                      "",
@@ -259,26 +280,51 @@ public class YAMLConfig extends YamlConfig {
             })
     @Path("Multipliers.Sprint")
     public int sprint = -1;
+
     @Comments
             ({
                      "",
                      "DAY",
-                     "Desc: How much quicker you want thirst to be removed when it is day, put 0 to make no thirst removed, put negative to make thirst take longer to be removed.",
+                     "Desc: How much quicker you want thirst to be removed when it is day, put 0 for no change, put negative to make thirst take longer to be removed.",
                      "Type: Integer",
                      "Default: 0"
             })
     @Path("Multipliers.Day")
     public int dayMultiplier = 0;
+
     @Comments
             ({
                      "",
                      "NIGHT",
-                     "Desc: How much quicker you want thirst to be removed when it is night, put 0 to make no thirst removed, put negative to make thirst take longer to be removed.",
+                     "Desc: How much quicker you want thirst to be removed when it is night, put 0 for no change, put negative to make thirst take longer to be removed.",
                      "Type: Integer",
                      "Default: 0"
             })
     @Path("Multipliers.Night")
     public int nightMultiplier = 0;
+
+    @Comments
+            ({
+                     "",
+                     "SUNNY",
+                     "Desc: How much quicker you want thirst to be removed when it is sunny, put 0 for no change, put negative to make thirst take longer to be removed.",
+                     "Type: Integer",
+                     "Default: 0"
+            })
+    @Path("Multipliers.Sunny")
+    public int sunnyMultiplier = 0;
+
+    @Comments
+            ({
+                     "",
+                     "RAIN",
+                     "Desc: How much quicker you want thirst to be removed when it is raining, put 0 for no change, put negative to make thirst take longer to be removed.",
+                     "Type: Integer",
+                     "Default: 0"
+            })
+    @Path("Multipliers.Rain")
+    public int rainMultiplier = 0;
+
 
     @Comment("---------------Potions---------------")
     @Comments
@@ -344,7 +390,8 @@ public class YAMLConfig extends YamlConfig {
                      "Variables: %player%",
                      "Default: &f%player% didn't drink his water bottle."
             })
-    @Path("Messages.ThirstManager-Death-Message")
+    @Path("Messages.Thirst" +
+                  "-Death-Message")
     public String thirstDeathMessage = "&f%player% didn't drink his water bottle.";
 
     @Comments
@@ -356,7 +403,8 @@ public class YAMLConfig extends YamlConfig {
                      "Variables: %player%, %thirstbar%, %percent%, %thirstmessage%, %removespeed%",
                      "Default: &f%player%'s &bthirst: %thirstmessage%"
             })
-    @Path("Messages.ThirstManager-View-Player")
+    @Path("Messages.Thirst" +
+                  "-View-Player")
     public String thirstViewPlayerMessage = "&8[&1Thirst&8] &f%player%'s &bthirst: %thirstmessage%";
 
     @Comments
@@ -370,8 +418,21 @@ public class YAMLConfig extends YamlConfig {
                      "Note: This message will be displayed before the %thirstmessage%",
                      "Note: There will not be a space between messages unless you add one."
             })
-    @Path("Messages.ThirstManager-View-Message")
+    @Path("Messages.Thirst" +
+                  "-View-Message")
     public String thirstViewMessage = "&8[&1Thirst&8] &bYour thirst: ";
+
+    @Comments
+            ({
+                     "",
+                     "ITEM_CONSUME_MESSAGE",
+                     "Desc: The message sent when a player tries to consume a THIRST_QUENCHING_ITEM on 100% thirst with ALLOW_ITEM_CONSUMPTION set to false.",
+                     "Type: String",
+                     "Variables: %player%",
+                     "Default: &8[&1Thirst&8] &bYou cannot consume that while your Thirst is full!"
+            })
+    @Path("Messages.Item-Consume-Message")
+    public String itemConsumeMessage = "&8[&1Thirst&8] &bYou cannot consume that while your Thirst is full!";
 
     @Comments
             ({
@@ -458,7 +519,7 @@ public class YAMLConfig extends YamlConfig {
             ({
                      "",
                      "USERNAME",
-                     "Desc: Username ThirstManager will use to connect to the database.",
+                     "Desc: Username Thirst  will use to connect to the database.",
                      "Type: boolean"
             })
     @Path("SQL.Username")
@@ -468,7 +529,7 @@ public class YAMLConfig extends YamlConfig {
             ({
                      "",
                      "PASSWORD",
-                     "Desc: Username ThirstManager will use to connect to the database.",
+                     "Desc: Password Thirst will use to connect to the database.",
                      "Type: boolean"
             })
     @Path("SQL.Password")
@@ -478,7 +539,7 @@ public class YAMLConfig extends YamlConfig {
             ({
                      "",
                      "DATABASE",
-                     "Desc: The database that ThirstManager will store its table in.",
+                     "Desc: The database that Thirst will store its table in.",
                      "Type: boolean"
             })
     @Path("SQL.Database")
@@ -488,7 +549,7 @@ public class YAMLConfig extends YamlConfig {
             ({
                      "",
                      "TABLENAME",
-                     "Desc: The name of the table ThirstManager will store data in.",
+                     "Desc: The name of the table Thirst will store data in.",
                      "Type: boolean"
             })
     @Path("SQL.Tablename")

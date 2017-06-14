@@ -2,6 +2,7 @@ package com.gamerking195.dev.thirst.listener;
 
 import com.gamerking195.dev.thirst.Thirst;
 import com.gamerking195.dev.thirst.ThirstManager;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -29,11 +30,14 @@ implements Listener
 
 			int quenchPercent = item.getQuenchPercent();
 			
-			if (is.getType() == event.getItem().getType() && event.getItem().getData().toString().equals(is.getData().toString()))
-			{
-				ThirstManager.getThirst().setThirst(event.getPlayer(), ThirstManager.getThirst().getPlayerThirst(event.getPlayer())+quenchPercent);
-				return;
-			}
+			if (is.getType() == event.getItem().getType() && event.getItem().getData().toString().equals(is.getData().toString())) {
+                if (Thirst.getInstance().getYAMLConfig().itemConsumption || ThirstManager.getThirst().getPlayerThirst(event.getPlayer()) != 100)
+                    ThirstManager.getThirst().setThirst(event.getPlayer(), ThirstManager.getThirst().getPlayerThirst(event.getPlayer()) + quenchPercent);
+                else {
+                    event.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', Thirst.getInstance().getYAMLConfig().itemConsumeMessage.replace("%player%", event.getPlayer().getName())));
+                    event.setCancelled(true);
+                }
+            }
 		}
 	}
 }
