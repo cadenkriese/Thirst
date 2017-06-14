@@ -2,8 +2,8 @@ package com.gamerking195.dev.thirst.util;
 
 import com.gamerking195.dev.pluginupdater.UpdateLocale;
 import com.gamerking195.dev.pluginupdater.Updater;
-import com.gamerking195.dev.thirst.Main;
 import com.gamerking195.dev.thirst.Thirst;
+import com.gamerking195.dev.thirst.ThirstManager;
 import com.gamerking195.dev.thirst.ThirstData;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -50,7 +50,7 @@ public class UtilUpdater {
      */
 
     public void init() {
-        if (Main.getInstance().getYAMLConfig().enableUpdater) {
+        if (Thirst.getInstance().getYAMLConfig().enableUpdater) {
             new BukkitRunnable() {
                 @Override
                 public void run() {
@@ -59,12 +59,12 @@ public class UtilUpdater {
                     if (updateAvailable) {
                         for (Player player : Bukkit.getOnlinePlayers()) {
                             if (player.isOp() || player.hasPermission("thirst.command.update") || player.hasPermission("thirst.*")) {
-                                String currentVersion = Main.getInstance().getDescription().getVersion();
+                                String currentVersion = Thirst.getInstance().getDescription().getVersion();
                                 String mcVersion = Bukkit.getServer().getClass().getPackage().getName();
                                 mcVersion = mcVersion.substring(mcVersion.lastIndexOf(".") + 1).substring(1, mcVersion.length()-3).replace("_", ".");
 
                                 player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&f&m------------------------------"));
-                                player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&1&lThirst &fV" + currentVersion + " &bby &f" + Main.getInstance().getDescription().getAuthors()));
+                                player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&1&lThirst &fV" + currentVersion + " &bby &f" + Thirst.getInstance().getDescription().getAuthors()));
                                 player.sendMessage("");
                                 player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&bThere is a Thirst update available!"));
                                 player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&bVersion: &f" + latestVersion));
@@ -88,7 +88,7 @@ public class UtilUpdater {
                         }
                     }
                 }
-            }.runTaskTimer(Main.getInstance(), 0, 24000L);
+            }.runTaskTimer(Thirst.getInstance(), 0, 24000L);
         }
     }
 
@@ -102,7 +102,7 @@ public class UtilUpdater {
             JsonObject object = gson.fromJson(latestVersionInfo, type);
 
             latestVersion = object.get("name").getAsString();
-            updateAvailable = !latestVersion.equals(Main.getInstance().getDescription().getVersion());
+            updateAvailable = !latestVersion.equals(Thirst.getInstance().getDescription().getVersion());
 
             if (updateAvailable) {
                 //Supported mc versions
@@ -132,16 +132,16 @@ public class UtilUpdater {
                 updateInfo = sb.toString();
             }
         } catch (Exception exception) {
-            Main.getInstance().printError(exception, "Error occurred whilst pinging spiget.");
+            Thirst.getInstance().printError(exception, "Error occurred whilst pinging spiget.");
             try {
-                Main.getInstance().printPluginError("Json received from spigot.", readFrom("https://api.spiget.org/v2/resources/24610/"));
+                Thirst.getInstance().printPluginError("Json received from spigot.", readFrom("https://api.spiget.org/v2/resources/24610/"));
             } catch (Exception ignored) {}
         }
     }
 
     public void update(Player initiator) {
-        if (Main.getInstance().getYAMLConfig().enableUpdater && updateAvailable && !updating) {
-            UtilActionBar.getInstance().sendActionBar(initiator, ChatColor.translateAlternateColorCodes('&', "&f&lUPDATING &1&lTHIRST &b&lV" + Main.getInstance().getDescription().getVersion() + " &a&l» &b&lV" + latestVersion + " &8[RETREIVING UPDATER]"));
+        if (Thirst.getInstance().getYAMLConfig().enableUpdater && updateAvailable && !updating) {
+            UtilActionBar.getInstance().sendActionBar(initiator, ChatColor.translateAlternateColorCodes('&', "&f&lUPDATING &1&lTHIRST &b&lV" + Thirst.getInstance().getDescription().getVersion() + " &a&l» &b&lV" + latestVersion + " &8[RETREIVING UPDATER]"));
 
             updating = true;
             boolean delete = true;
@@ -155,7 +155,7 @@ public class UtilUpdater {
                     long completeFileSize = httpConnection.getContentLength();
 
                     BufferedInputStream in = new BufferedInputStream(httpConnection.getInputStream());
-                    FileOutputStream fos = new FileOutputStream(new File(Main.getInstance().getDataFolder().getPath().substring(0, Main.getInstance().getDataFolder().getPath().lastIndexOf("/")) + "/PluginUpdater.jar"));
+                    FileOutputStream fos = new FileOutputStream(new File(Thirst.getInstance().getDataFolder().getPath().substring(0, Thirst.getInstance().getDataFolder().getPath().lastIndexOf("/")) + "/PluginUpdater.jar"));
                     BufferedOutputStream bout = new BufferedOutputStream(fos, 1024);
 
                     byte[] data = new byte[1024];
@@ -172,7 +172,7 @@ public class UtilUpdater {
 
                         bar = bar.substring(0, currentProgress + 2) + "&c" + bar.substring(currentProgress + 2);
 
-                        UtilActionBar.getInstance().sendActionBar(initiator, ChatColor.translateAlternateColorCodes('&', "&f&lUPDATING &1&lTHIRST &b&lV" + Main.getInstance().getDescription().getVersion() + " &a&l» &b&lV" + latestVersion + " &8&l| " + bar + " &8&l| &2" + currentPercent + "% &8[DOWNLAODING UPDATER]"));
+                        UtilActionBar.getInstance().sendActionBar(initiator, ChatColor.translateAlternateColorCodes('&', "&f&lUPDATING &1&lTHIRST &b&lV" + Thirst.getInstance().getDescription().getVersion() + " &a&l» &b&lV" + latestVersion + " &8&l| " + bar + " &8&l| &2" + currentPercent + "% &8[DOWNLAODING UPDATER]"));
 
                         bout.write(data, 0, x);
                     }
@@ -180,9 +180,9 @@ public class UtilUpdater {
                     bout.close();
                     in.close();
 
-                    UtilActionBar.getInstance().sendActionBar(initiator, ChatColor.translateAlternateColorCodes('&', "&f&lUPDATING &1&lTHIRST &b&lV" + Main.getInstance().getDescription().getVersion() + " &a&l» &b&lV" + latestVersion + " &8[RUNNING UPDATER]"));
+                    UtilActionBar.getInstance().sendActionBar(initiator, ChatColor.translateAlternateColorCodes('&', "&f&lUPDATING &1&lTHIRST &b&lV" + Thirst.getInstance().getDescription().getVersion() + " &a&l» &b&lV" + latestVersion + " &8[RUNNING UPDATER]"));
 
-                    Plugin target = Bukkit.getPluginManager().loadPlugin(new File(Main.getInstance().getDataFolder().getPath().substring(0, Main.getInstance().getDataFolder().getPath().lastIndexOf("/")) + "/PluginUpdater.jar"));
+                    Plugin target = Bukkit.getPluginManager().loadPlugin(new File(Thirst.getInstance().getDataFolder().getPath().substring(0, Thirst.getInstance().getDataFolder().getPath().lastIndexOf("/")) + "/PluginUpdater.jar"));
                     target.onLoad();
                     Bukkit.getPluginManager().enablePlugin(target);
                 }
@@ -191,22 +191,22 @@ public class UtilUpdater {
                 //Save player data
 
                 for (Player p : Bukkit.getOnlinePlayers()) {
-                    ThirstData thirstData = Thirst.getThirst().getThirstData(p);
+                    ThirstData thirstData = ThirstManager.getThirst().getThirstData(p);
 
                     if (thirstData.getBar() != null) {
                         thirstData.getBar().removePlayer(p);
                     }
                 }
 
-                Main.getInstance().getYAMLConfig().save();
+                Thirst.getInstance().getYAMLConfig().save();
 
                 UpdateLocale locale = new UpdateLocale();
                 locale.fileName = "Thirst-" + latestVersion;
 
-                new Updater(initiator, Main.getInstance(), 24610, locale, delete).update();
+                new Updater(initiator, Thirst.getInstance(), 24610, locale, delete).update();
             } catch (Exception ex) {
-                Main.getInstance().printError(ex, "Error occurred whilst downloading resource update.");
-                UtilActionBar.getInstance().sendActionBar(initiator, ChatColor.translateAlternateColorCodes('&', "&f&lUPDATING &1&lTHIRST &b&lV" + Main.getInstance().getDescription().getVersion() + " &b&l» &1&lV" + latestVersion + " &8[&c&lUPDATE FAILED &7&o(Check Console)&8]"));
+                Thirst.getInstance().printError(ex, "Error occurred whilst downloading resource update.");
+                UtilActionBar.getInstance().sendActionBar(initiator, ChatColor.translateAlternateColorCodes('&', "&f&lUPDATING &1&lTHIRST &b&lV" + Thirst.getInstance().getDescription().getVersion() + " &b&l» &1&lV" + latestVersion + " &8[&c&lUPDATE FAILED &7&o(Check Console)&8]"));
             }
         }
     }

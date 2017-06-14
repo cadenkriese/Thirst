@@ -1,6 +1,6 @@
 package me.gamerzking.core.updater;
 
-import com.gamerking195.dev.thirst.Main;
+import com.gamerking195.dev.thirst.Thirst;
 
 import me.gamerzking.core.utils.UtilTime;
 
@@ -17,7 +17,7 @@ public enum UpdateType
 	HALF_SECOND(500),
 	QUARTER_SECOND(250),
 	CENTI_SECOND(100),
-	DAMAGE((long) Main.getInstance().getYAMLConfig().getDamageInterval()*1000),
+	DAMAGE((long) Thirst.getInstance().getYAMLConfig().getDamageInterval()*1000),
 	TICK(50);
 
 	private long milliseconds;

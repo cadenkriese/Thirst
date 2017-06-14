@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.gamerking195.dev</groupId>
     <artifactId>Thirst</artifactId>
-    <version>1.8.11</version>
+    <version>1.8.12</version>
     <name>Thirst</name>
     <description>Adds a thirst mechanic into vanilla minecraft!</description>
     <url>https://www.spigotmc.org/resources/thirst.24610/</url>
@@ -21,12 +21,6 @@
         <repository>
             <id>sk89q-repo</id>
             <url>http://maven.sk89q.com/repo/</url>
-        </repository>
-        <!-- MVDW Repo -->
-        <repository>
-            <id>mvdw-software</id>
-            <name>MVdW Public Repositories</name>
-            <url>http://repo.mvdw-software.be/content/groups/public/</url>
         </repository>
         <!-- GK195 Repo (Public) -->
         <repository>
@@ -60,7 +54,7 @@
         <dependency>
             <groupId>be.maximvdw</groupId>
             <artifactId>MVdWPlaceholderAPI</artifactId>
-            <version>1.0.2-SNAPSHOT</version>
+            <version>1.0.2</version>
             <scope>provided</scope>
         </dependency>
         <!--WorldgaurdAPI-->
@@ -144,7 +138,7 @@
                         <configuration>
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>com.gamerking195.dev.thirst.Main</mainClass>
+                                    <mainClass>com.gamerking195.dev.thirst.Thirst</mainClass>
                                 </transformer>
                             </transformers>
                         </configuration>

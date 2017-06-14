@@ -4,24 +4,22 @@ import java.io.File;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.gamerking195.dev.thirst.Thirst;
 import net.cubespace.Yamler.Config.Path;
 import org.apache.commons.lang.math.NumberUtils;
-
-import com.gamerking195.dev.thirst.Main;
 
 import net.cubespace.Yamler.Config.Comment;
 import net.cubespace.Yamler.Config.Comments;
 import net.cubespace.Yamler.Config.YamlConfig;
-import org.bukkit.Bukkit;
 
 public class YAMLConfig extends YamlConfig {
 
-    public YAMLConfig(Main plugin) {
+    public YAMLConfig(Thirst plugin) {
         CONFIG_HEADER = new String[]
                                 {
                                         "#################################",
                                         "                                #",
-                                        "Thirst V" + Main.getInstance().getDescription().getVersion() + ", by " + Main.getInstance().getDescription().getAuthors() + "#",
+                                        "ThirstManager V" + Thirst.getInstance().getDescription().getVersion() + ", by " + Thirst.getInstance().getDescription().getAuthors() + "#",
                                         "                                #",
                                         "#################################",
                                         "",
@@ -47,7 +45,7 @@ public class YAMLConfig extends YamlConfig {
                      "Type: int (100 or lower.)",
                      "Default: 1"
             })
-    @Path("Remove-Thirst")
+    @Path("Remove-ThirstManager")
     public int removeThirst = 1;
 
     @Comments
@@ -58,7 +56,7 @@ public class YAMLConfig extends YamlConfig {
                      "Type: Integer",
                      "Default: 10"
             })
-    @Path("Critical-Thirst-Percent")
+    @Path("Critical-ThirstManager-Percent")
     public int criticalThirstPercent = 10;
 
     @Comments
@@ -70,7 +68,7 @@ public class YAMLConfig extends YamlConfig {
                      "Default: 36 (will remove 100% over three days, just like in real life!)",
                      "Note: This does support values under one second without any changes in lag!"
             })
-    @Path("Thirst-Delay")
+    @Path("ThirstManager-Delay")
     public float thirstDelay = 36;
 
     @Comments
@@ -84,14 +82,14 @@ public class YAMLConfig extends YamlConfig {
                      "- GOLDEN_APPLE:1=100",
                      "Requirements: Should be in format: ITEM:METADATA=PERCENT(metadata optional)"
             })
-    @Path("Thirst-Quenching-Items")
+    @Path("ThirstManager-Quenching-Items")
     public String[] thirstQuenchingItems = {"POTION=20", "GOLDEN_APPLE:1=100"};
 
     @Comments
             ({
                      "",
                      "IGNORE_CREATIVE",
-                     "Desc: If true, anyone in creative will not be affected by Thirst.",
+                     "Desc: If true, anyone in creative will not be affected by ThirstManager.",
                      "Type: Boolean",
                      "Default: true"
             })
@@ -102,7 +100,7 @@ public class YAMLConfig extends YamlConfig {
             ({
                      "",
                      "IGNORE_OP",
-                     "Desc: If true, anyone who is opped will not be affected by Thirst.",
+                     "Desc: If true, anyone who is opped will not be affected by ThirstManager.",
                      "Type: Boolean",
                      "Default: false"
             })
@@ -124,7 +122,7 @@ public class YAMLConfig extends YamlConfig {
             ({
                      "",
                      "BLOCK_DRINK_DELAY",
-                     "Desc: Time in seconds between when players gain 1 Thirst from being under water.",
+                     "Desc: Time in seconds between when players gain 1 ThirstManager from being under water.",
                      "Type: Float (Seconds)",
                      "Default: 1"
             })
@@ -139,7 +137,7 @@ public class YAMLConfig extends YamlConfig {
                      "Type: boolean",
                      "Default: false"
             })
-    @Path("Remove-Thirst-Submerged")
+    @Path("Remove-ThirstManager-Submerged")
     public boolean removeThirstSubmerged = false;
 
     @Comments
@@ -346,7 +344,7 @@ public class YAMLConfig extends YamlConfig {
                      "Variables: %player%",
                      "Default: &f%player% didn't drink his water bottle."
             })
-    @Path("Messages.Thirst-Death-Message")
+    @Path("Messages.ThirstManager-Death-Message")
     public String thirstDeathMessage = "&f%player% didn't drink his water bottle.";
 
     @Comments
@@ -358,7 +356,7 @@ public class YAMLConfig extends YamlConfig {
                      "Variables: %player%, %thirstbar%, %percent%, %thirstmessage%, %removespeed%",
                      "Default: &f%player%'s &bthirst: %thirstmessage%"
             })
-    @Path("Messages.Thirst-View-Player")
+    @Path("Messages.ThirstManager-View-Player")
     public String thirstViewPlayerMessage = "&8[&1Thirst&8] &f%player%'s &bthirst: %thirstmessage%";
 
     @Comments
@@ -372,7 +370,7 @@ public class YAMLConfig extends YamlConfig {
                      "Note: This message will be displayed before the %thirstmessage%",
                      "Note: There will not be a space between messages unless you add one."
             })
-    @Path("Messages.Thirst-View-Message")
+    @Path("Messages.ThirstManager-View-Message")
     public String thirstViewMessage = "&8[&1Thirst&8] &bYour thirst: ";
 
     @Comments
@@ -460,7 +458,7 @@ public class YAMLConfig extends YamlConfig {
             ({
                      "",
                      "USERNAME",
-                     "Desc: Username Thirst will use to connect to the database.",
+                     "Desc: Username ThirstManager will use to connect to the database.",
                      "Type: boolean"
             })
     @Path("SQL.Username")
@@ -470,7 +468,7 @@ public class YAMLConfig extends YamlConfig {
             ({
                      "",
                      "PASSWORD",
-                     "Desc: Username Thirst will use to connect to the database.",
+                     "Desc: Username ThirstManager will use to connect to the database.",
                      "Type: boolean"
             })
     @Path("SQL.Password")
@@ -480,7 +478,7 @@ public class YAMLConfig extends YamlConfig {
             ({
                      "",
                      "DATABASE",
-                     "Desc: The database that Thirst will store its table in.",
+                     "Desc: The database that ThirstManager will store its table in.",
                      "Type: boolean"
             })
     @Path("SQL.Database")
@@ -490,7 +488,7 @@ public class YAMLConfig extends YamlConfig {
             ({
                      "",
                      "TABLENAME",
-                     "Desc: The name of the table Thirst will store data in.",
+                     "Desc: The name of the table ThirstManager will store data in.",
                      "Type: boolean"
             })
     @Path("SQL.Tablename")
@@ -505,7 +503,7 @@ public class YAMLConfig extends YamlConfig {
 
         public ThirstItem(String s) {
             if (!s.contains("=")) {
-                Main.getInstance().printPluginError("Error while reading the config.", "String '" + s + "' is in an invalid format!");
+                Thirst.getInstance().printPluginError("Error while reading the config.", "String '" + s + "' is in an invalid format!");
 
                 item = "AIR";
                 quenchPercent = 0;
@@ -522,7 +520,7 @@ public class YAMLConfig extends YamlConfig {
                     quenchPercent = Integer.valueOf(match.group(3));
                 }
                 else {
-                    Main.getInstance().printPluginError("Error while reading the config.", "String '" + s + "' is in an invalid format!");
+                    Thirst.getInstance().printPluginError("Error while reading the config.", "String '" + s + "' is in an invalid format!");
 
                     item = "AIR";
                     quenchPercent = 0;
@@ -537,14 +535,14 @@ public class YAMLConfig extends YamlConfig {
                         item = match2.group(1);
                         quenchPercent = Integer.valueOf(match2.group(2));
                     } else {
-                        Main.getInstance().printPluginError("Error while reading the config.", "String '" + s + "' is in an invalid format!");
+                        Thirst.getInstance().printPluginError("Error while reading the config.", "String '" + s + "' is in an invalid format!");
 
                         item = "AIR";
                         quenchPercent = 0;
                     }
                 }
                 else {
-                    Main.getInstance().printPluginError("Error while reading the config.", "String '" + s + "' is in an invalid format!");
+                    Thirst.getInstance().printPluginError("Error while reading the config.", "String '" + s + "' is in an invalid format!");
 
                     item = "AIR";
                     quenchPercent = 0;
@@ -575,7 +573,7 @@ public class YAMLConfig extends YamlConfig {
         for (String s : potions) {
             String[] parts = s.split("\\.");
             if (parts.length != 4) {
-                Main.getInstance().printPluginError("Error while reading the config.", "String '" + s + "' is in an invalid format!");
+                Thirst.getInstance().printPluginError("Error while reading the config.", "String '" + s + "' is in an invalid format!");
 
                 return -1;
             }
@@ -591,7 +589,7 @@ public class YAMLConfig extends YamlConfig {
         for (String s : potions) {
             String[] parts = s.split("\\.");
             if (parts.length != 4) {
-                Main.getInstance().printPluginError("Error while reading the config.", "String '" + s + "' is in an invalid format!");
+                Thirst.getInstance().printPluginError("Error while reading the config.", "String '" + s + "' is in an invalid format!");
 
                 return -1;
             }
@@ -607,7 +605,7 @@ public class YAMLConfig extends YamlConfig {
         for (String s : potions) {
             String[] parts = s.split("\\.");
             if (parts.length != 4) {
-                Main.getInstance().printPluginError("Error while reading the config.", "String '" + s + "' is in an invalid format!");
+                Thirst.getInstance().printPluginError("Error while reading the config.", "String '" + s + "' is in an invalid format!");
                 return -1;
             }
 

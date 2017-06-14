@@ -1,6 +1,7 @@
 package com.gamerking195.dev.thirst.listener;
 
-import com.gamerking195.dev.thirst.Main;
+import com.gamerking195.dev.thirst.Thirst;
+import com.gamerking195.dev.thirst.ThirstManager;
 import com.gamerking195.dev.thirst.util.UtilUpdater;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -15,7 +16,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import com.gamerking195.dev.thirst.Thirst;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.List;
@@ -28,14 +28,14 @@ implements Listener
 	{
         Player player = event.getPlayer();
 
-		Thirst.getThirst().playerJoin(player);
+		ThirstManager.getThirst().playerJoin(player);
 
 		if (player.isOp() || player.hasPermission("thirst.command.update") || player.hasPermission("thirst.*")) {
-		    if (Main.getInstance().getYAMLConfig().enableUpdater && UtilUpdater.getInstance().isUpdateAvailable()) {
+		    if (Thirst.getInstance().getYAMLConfig().enableUpdater && UtilUpdater.getInstance().isUpdateAvailable()) {
 		        new BukkitRunnable() {
                     @Override
                     public void run() {
-                        String currentVersion = Main.getInstance().getDescription().getVersion();
+                        String currentVersion = Thirst.getInstance().getDescription().getVersion();
                         String newVersion = UtilUpdater.getInstance().getLatestVersion();
                         List<String> testedVersions = UtilUpdater.getInstance().getTestedVersions();
                         String mcVersion = Bukkit.getServer().getClass().getPackage().getName();
@@ -44,9 +44,9 @@ implements Listener
                         mcVersion = mcVersion.replace("_", ".");
 
                         player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&f&m------------------------------"));
-                        player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&1&lThirst &fV" + currentVersion + " &bby &f" + Main.getInstance().getDescription().getAuthors()));
+                        player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&1&lThirst &fV" + currentVersion + " &bby &f" + Thirst.getInstance().getDescription().getAuthors()));
                         player.sendMessage("");
-                        player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&bThere is a Thirst update available!"));
+                        player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&bThere is a ThirstManager update available!"));
                         player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&bVersion: &f" + newVersion));
                         player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&bUpdates: \n" + UtilUpdater.getInstance().getUpdateInfo()));
                         player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&bSupported MC Versions: &f" + StringUtils.join(testedVersions, ", ")));
@@ -65,7 +65,7 @@ implements Listener
                         player.sendMessage("");
                         player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&f&m------------------------------"));
                     }
-                }.runTaskLater(Main.getInstance(), 2L);
+                }.runTaskLater(Thirst.getInstance(), 2L);
             }
         }
 	}
@@ -73,6 +73,6 @@ implements Listener
 	@EventHandler
 	public void onPlayerLeave(PlayerQuitEvent event)
 	{
-		Thirst.getThirst().playerLeave(event.getPlayer());
+		ThirstManager.getThirst().playerLeave(event.getPlayer());
 	}
 }

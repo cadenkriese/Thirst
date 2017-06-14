@@ -4,14 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.UUID;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
+import com.gamerking195.dev.thirst.Thirst;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.PluginDescriptionFile;
-
-import com.gamerking195.dev.thirst.Main;
 
 public class DataConfig
 {
@@ -19,7 +15,7 @@ public class DataConfig
 	private static DataConfig instance = new DataConfig();
 	public static DataConfig getConfig() {	return instance;	 }
 
-	private File thirstFile = new File(Main.getInstance().getDataFolder(), "thirst_data.yml");
+	private File thirstFile = new File(Thirst.getInstance().getDataFolder(), "thirst_data.yml");
 	private FileConfiguration thirstConfig = YamlConfiguration.loadConfiguration(thirstFile); 
 
 	public void init()
@@ -35,7 +31,7 @@ public class DataConfig
 			}
 			catch (IOException ex)
 			{ 			
-				Main.getInstance().printError(ex, "Error occurred while creating thirst_data.yml");
+				Thirst.getInstance().printError(ex, "Error occurred while creating thirst_data.yml");
 			}
 		}
 	}
@@ -48,7 +44,7 @@ public class DataConfig
 		} 
 		catch (IOException ex) 
 		{
-			Main.getInstance().printError(ex, "Error occurred while creating thirst_data.yml");
+			Thirst.getInstance().printError(ex, "Error occurred while creating thirst_data.yml");
 		}
 	}
 

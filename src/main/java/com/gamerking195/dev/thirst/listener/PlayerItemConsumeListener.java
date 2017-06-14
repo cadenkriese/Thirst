@@ -1,5 +1,7 @@
 package com.gamerking195.dev.thirst.listener;
 
+import com.gamerking195.dev.thirst.Thirst;
+import com.gamerking195.dev.thirst.ThirstManager;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -7,8 +9,6 @@ import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 
-import com.gamerking195.dev.thirst.Main;
-import com.gamerking195.dev.thirst.Thirst;
 import com.gamerking195.dev.thirst.config.YAMLConfig.ThirstItem;
 
 public class PlayerItemConsumeListener 
@@ -18,9 +18,9 @@ implements Listener
 	@EventHandler
 	public void onPlayerItemConsume(PlayerItemConsumeEvent event)
 	{		
-		for (String itemString : Main.getInstance().getYAMLConfig().thirstQuenchingItems)
+		for (String itemString : Thirst.getInstance().getYAMLConfig().thirstQuenchingItems)
 		{
-			ThirstItem item = Main.getInstance().getYAMLConfig().new ThirstItem(itemString);
+			ThirstItem item = Thirst.getInstance().getYAMLConfig().new ThirstItem(itemString);
 			
 			ItemStack is = new ItemStack(Material.valueOf(item.getItem()), 1);
 			
@@ -31,7 +31,7 @@ implements Listener
 			
 			if (is.getType() == event.getItem().getType() && event.getItem().getData().toString().equals(is.getData().toString()))
 			{
-				Thirst.getThirst().setThirst(event.getPlayer(), Thirst.getThirst().getPlayerThirst(event.getPlayer())+quenchPercent);
+				ThirstManager.getThirst().setThirst(event.getPlayer(), ThirstManager.getThirst().getPlayerThirst(event.getPlayer())+quenchPercent);
 				return;
 			}
 		}

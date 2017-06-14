@@ -1,13 +1,13 @@
 name: Thirst
-version: 1.8.11
+version: 1.8.12
 description: Adds a thirst mechanic into vanilla minecraft!
-main: com.gamerking195.dev.thirst.Main
+main: com.gamerking195.dev.thirst.Thirst
 author: GamerKing195
 softdepend: [PlaceholderAPI, WorldGuard, MVdWPlaceholderAPI]
 website: https://www.spigotmc.org/resources/thirst.24610/
 commands:
   thirst:
-    description: The base Thirst command.
+    description: The base ThirstManager command.
 permissions:
   thirst.*:
     default: false

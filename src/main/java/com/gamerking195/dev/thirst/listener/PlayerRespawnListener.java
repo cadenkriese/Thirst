@@ -1,10 +1,10 @@
 package com.gamerking195.dev.thirst.listener;
 
+import com.gamerking195.dev.thirst.ThirstManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerRespawnEvent;
-import com.gamerking195.dev.thirst.Thirst;
 
 public class PlayerRespawnListener 
 implements Listener
@@ -14,8 +14,8 @@ implements Listener
 	{
 		final Player player = event.getPlayer();
 
-		if (!Thirst.getThirst().validatePlayer(player)) return;
+		if (!ThirstManager.getThirst().validatePlayer(player)) return;
 		
-		Thirst.getThirst().setThirst(player, 100);
+		ThirstManager.getThirst().setThirst(player, 100);
 	}
 }

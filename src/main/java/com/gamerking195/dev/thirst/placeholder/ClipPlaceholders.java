@@ -1,10 +1,9 @@
 package com.gamerking195.dev.thirst.placeholder;
 
-import com.gamerking195.dev.thirst.Main;
+import com.gamerking195.dev.thirst.Thirst;
+import com.gamerking195.dev.thirst.ThirstManager;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-
-import com.gamerking195.dev.thirst.Thirst;
 
 import me.clip.placeholderapi.external.EZPlaceholderHook;
 
@@ -21,15 +20,15 @@ extends EZPlaceholderHook
 	{
 		switch (identifier) {
 			case "thirstmessage":
-				return Thirst.getThirst().getThirstString(player);
+				return ThirstManager.getThirst().getThirstString(player);
 			case "thirstbar":
-				return Thirst.getThirst().getThirstBar(player);
+				return ThirstManager.getThirst().getThirstBar(player);
 			case "thirstpercent":
-				return Thirst.getThirst().getThirstPercent(player, true);
+				return ThirstManager.getThirst().getThirstPercent(player, true);
 			case "thirstremovalspeed":
-				return String.format(String.valueOf(Thirst.getThirst().getThirstData(player).getSpeed() / 1000), "%.3f");
+				return String.format(String.valueOf(ThirstManager.getThirst().getThirstData(player).getSpeed() / 1000), "%.3f");
 			case "thirstremovalamount":
-				return String.valueOf(Main.getInstance().getYAMLConfig().removeThirst);
+				return String.valueOf(Thirst.getInstance().getYAMLConfig().removeThirst);
 		}
 		return null;
 	}

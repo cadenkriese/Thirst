@@ -1,6 +1,6 @@
 package com.gamerking195.dev.thirst.util;
 
-import com.gamerking195.dev.thirst.Main;
+import com.gamerking195.dev.thirst.Thirst;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -21,20 +21,20 @@ public class UtilSQL {
     public void init() {
         if (dataSource == null) {
             HikariConfig config = new HikariConfig();
-            config.setJdbcUrl("jdbc:mysql://"+Main.getInstance().getYAMLConfig().hostName+"/"+Main.getInstance().getYAMLConfig().database);
-            config.setUsername(Main.getInstance().getYAMLConfig().username);
-            config.setPassword(Main.getInstance().getYAMLConfig().password);
+            config.setJdbcUrl("jdbc:mysql://"+ Thirst.getInstance().getYAMLConfig().hostName+"/"+ Thirst.getInstance().getYAMLConfig().database);
+            config.setUsername(Thirst.getInstance().getYAMLConfig().username);
+            config.setPassword(Thirst.getInstance().getYAMLConfig().password);
 
             config.setMaximumPoolSize(5);
 
             dataSource = new HikariDataSource(config);
         }
 
-        runStatementSync("CREATE TABLE IF NOT EXISTS "+Main.getInstance().getYAMLConfig().tablename+" (uuid varchar(36) NOT NULL, thirst INT, PRIMARY KEY(uuid))");
+        runStatementSync("CREATE TABLE IF NOT EXISTS "+ Thirst.getInstance().getYAMLConfig().tablename+" (uuid varchar(36) NOT NULL, thirst INT, PRIMARY KEY(uuid))");
     }
 
     public void runStatement(String statement) {
-        final String updatedStatement = statement.replace("TABLENAME", Main.getInstance().getYAMLConfig().tablename);
+        final String updatedStatement = statement.replace("TABLENAME", Thirst.getInstance().getYAMLConfig().tablename);
 
         Connection connection;
 
@@ -57,15 +57,15 @@ public class UtilSQL {
                         ex.printStackTrace();
                     }
                 }
-            }.runTaskAsynchronously(Main.getInstance());
+            }.runTaskAsynchronously(Thirst.getInstance());
         }
         catch(Exception ex) {
-            Main.getInstance().printError(ex, "Error occurred while running MySQL statement.");
+            Thirst.getInstance().printError(ex, "Error occurred while running MySQL statement.");
         }
     }
 
     public void runStatementSync(String statement) {
-        final String updatedStatement = statement.replace("TABLENAME", Main.getInstance().getYAMLConfig().tablename);
+        final String updatedStatement = statement.replace("TABLENAME", Thirst.getInstance().getYAMLConfig().tablename);
 
         if (dataSource == null)
             init();
@@ -86,13 +86,13 @@ public class UtilSQL {
             }
         }
         catch(Exception ex) {
-            Main.getInstance().printError(ex, "Error occurred while running MySQL statement.");
+            Thirst.getInstance().printError(ex, "Error occurred while running MySQL statement.");
         }
     }
 
     //No real need to run queries async literally just getting a 36 char string & a 2-3 digit number.
     public ResultSet runQuery(String query) {
-        final String updatedQuery = query.replace("TABLENAME", Main.getInstance().getYAMLConfig().tablename);
+        final String updatedQuery = query.replace("TABLENAME", Thirst.getInstance().getYAMLConfig().tablename);
 
         Connection connection;
 
@@ -108,15 +108,15 @@ public class UtilSQL {
                         connection.close();
                     }
                     catch(Exception ex) {
-                        Main.getInstance().printError(ex, "Error occurred while closing connection.");
+                        Thirst.getInstance().printError(ex, "Error occurred while closing connection.");
                     }
                 }
-            }.runTaskLater(Main.getInstance(), 20L);
+            }.runTaskLater(Thirst.getInstance(), 20L);
 
             return preparedStatement.executeQuery();
         }
         catch(Exception ex) {
-            Main.getInstance().printError(ex, "Error occurred while running query '"+updatedQuery+"'.");
+            Thirst.getInstance().printError(ex, "Error occurred while running query '"+updatedQuery+"'.");
         }
 
         return null;

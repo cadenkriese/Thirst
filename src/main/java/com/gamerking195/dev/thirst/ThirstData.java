@@ -38,9 +38,9 @@ public class ThirstData
      * SETTERS
      */
 
-    void setTime(long l)
+    void setTime(long time)
 	{
-		thirstTime = l;
+		thirstTime = time;
 	}
 	
     void setSpeed(long speed)
