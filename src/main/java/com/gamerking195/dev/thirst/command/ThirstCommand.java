@@ -151,6 +151,9 @@ public class ThirstCommand
                     sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&b/thirst view | &fDisplays your thirst."));
                     sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&b/thirst view [PLAYER] | &fDisplays the thirst of the specified player."));
                     sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&b/thirst list [BIOMES:FOOD:EFFECTS] | &fLists all possible config nodes for the specified category."));
+                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&b/thirst set [PLAYER] [INT] | &fSet a players thirst."));
+                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&b/thirst add [PLAYER] [INT] | &fAdd thirst to a player."));
+                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&b/thirst remove [PLAYER] [INT] | &fRemove thirst from a player."));
                     sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&b/thirst reload | &fReloads the configuration and data files."));
                     sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&b/thirst update | &fAutomatically updates the plugin to the latest version."));
                     sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&f&m-----------------------"));
@@ -363,12 +366,48 @@ public class ThirstCommand
                         sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&f&m-----------------------"));
                     }
                 }
-                else if (args[0].equalsIgnoreCase("set") && args.length > 1) {
+                else if (args[0].equalsIgnoreCase("set") && args.length > 2) {
                     if (Bukkit.getPlayer(args[1]) != null) {
                         if (NumberUtils.isNumber(args[2])) {
                             if (sender.hasPermission("thirst.*") || sender.hasPermission("thirst.command.set")) {
                                 ThirstManager.getThirst().setThirst(Bukkit.getPlayer(args[1]), Integer.valueOf(args[2]));
                                 sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&8[&1Thirst&8] &bSet &f"+Bukkit.getPlayer(args[1]).getName()+"'s&b thirst to &f"+Integer.valueOf(args[2])+"&b."));
+                            } else {
+                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', Thirst.getInstance().getYAMLConfig().noPermissionMessage));
+                            }
+                        } else {
+                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', Thirst.getInstance().getYAMLConfig().invalidCommandMessage));
+                        }
+                    } else {
+                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&8[&1Thirst&8] &bThat player is not online."));
+                    }
+                }
+                else if (args[0].equalsIgnoreCase("add") && args.length > 2) {
+                    if (Bukkit.getPlayer(args[1]) != null) {
+                        if (NumberUtils.isNumber(args[2])) {
+                            if (sender.hasPermission("thirst.*") || sender.hasPermission("thirst.command.set")) {
+                                Player player = Bukkit.getPlayer(args[1]);
+
+                                ThirstManager.getThirst().setThirst(player, ThirstManager.getThirst().getPlayerThirst(player)+Integer.valueOf(args[2]));
+                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&8[&1Thirst&8] &bAdded &f"+Integer.valueOf(args[2])+" thirst to &f"+player.getName()+"&b."));
+                            } else {
+                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', Thirst.getInstance().getYAMLConfig().noPermissionMessage));
+                            }
+                        } else {
+                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', Thirst.getInstance().getYAMLConfig().invalidCommandMessage));
+                        }
+                    } else {
+                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&8[&1Thirst&8] &bThat player is not online."));
+                    }
+                }
+                else if (args[0].equalsIgnoreCase("remove") && args.length > 2) {
+                    if (Bukkit.getPlayer(args[1]) != null) {
+                        if (NumberUtils.isNumber(args[2])) {
+                            if (sender.hasPermission("thirst.*") || sender.hasPermission("thirst.command.set")) {
+                                Player player = Bukkit.getPlayer(args[1]);
+
+                                ThirstManager.getThirst().setThirst(player, ThirstManager.getThirst().getPlayerThirst(player)-Integer.valueOf(args[2]));
+                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&8[&1Thirst&8] &bRemoved &f"+Integer.valueOf(args[2])+" thirst from &f"+player.getName()+"&b."));
                             } else {
                                 sender.sendMessage(ChatColor.translateAlternateColorCodes('&', Thirst.getInstance().getYAMLConfig().noPermissionMessage));
                             }
