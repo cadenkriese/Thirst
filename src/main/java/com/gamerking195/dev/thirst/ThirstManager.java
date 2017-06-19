@@ -18,7 +18,6 @@ import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Biome;
 import org.bukkit.boss.BarColor;
-import org.bukkit.boss.BarFlag;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
@@ -35,7 +34,6 @@ import com.sk89q.worldguard.bukkit.WGBukkit;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 
 import net.cubespace.Yamler.Config.InvalidConfigurationException;
-import sun.applet.Main;
 
 public class ThirstManager
 {
@@ -217,7 +215,13 @@ public class ThirstManager
 
         if (percent <= Thirst.getInstance().getYAMLConfig().criticalThirstPercent && !Thirst.getInstance().getYAMLConfig().displayType.equalsIgnoreCase("SCOREBOARD")) emphasis = " &4!&c!&4! ";
 
-        String configMessage = Thirst.getInstance().getYAMLConfig().thirstMessage.replace("%player%", offlinePlayer.getName()).replace("%percent%", getThirstPercent(offlinePlayer, true)).replace("%thirstbar%", "&1"+getThirstBar(offlinePlayer)).replace("%removespeed%", String.valueOf((double) getThirstData(offlinePlayer).getSpeed()/1000));
+        String configMessage;
+
+        if (offlinePlayer.isOnline()) {
+            configMessage = Thirst.getInstance().getYAMLConfig().thirstMessage.replace("%player%", offlinePlayer.getName()).replace("%percent%", getThirstPercent(offlinePlayer)).replace("%thirstbar%", "&1"+getThirstBar(offlinePlayer)).replace("%removespeed%", String.valueOf((double) getThirstData(offlinePlayer).getSpeed()/1000));
+        }
+        else
+            configMessage = Thirst.getInstance().getYAMLConfig().thirstMessage.replace("%player%", offlinePlayer.getName()).replace("%percent%", getThirstPercent(offlinePlayer)).replace("%thirstbar%", "&1"+getThirstBar(offlinePlayer)).replace("%removespeed%", "");
 
         return ChatColor.translateAlternateColorCodes('&', emphasis+configMessage+emphasis);
     }
@@ -233,25 +237,18 @@ public class ThirstManager
         return thirstBar.substring(0, bars)+ChatColor.RED+thirstBar.substring(bars, thirstBar.length())+ChatColor.RESET;
     }
 
-    public String getThirstPercent(OfflinePlayer offlinePlayer, boolean colored)
+    public String getThirstPercent(OfflinePlayer offlinePlayer)
     {
         int percent = getPlayerThirst(offlinePlayer);
 
-        if (colored)
-        {
-            String percentColor = "&a";
+        String percentColor = "&a";
 
-            if (percent <= 20) percentColor = "&4";
-            else if (percent <= 40) percentColor = "&c";
-            else if (percent <= 60) percentColor = "&6";
-            else if (percent <= 80) percentColor = "&e";
+        if (percent <= 20) percentColor = "&4";
+        else if (percent <= 40) percentColor = "&c";
+        else if (percent <= 60) percentColor = "&6";
+        else if (percent <= 80) percentColor = "&e";
 
-            return percentColor+percent+"%";
-        }
-        else
-        {
-            return percent+"%";
-        }
+        return percentColor+percent+"%";
     }
 
     public void playerJoin(Player player)
@@ -298,8 +295,6 @@ public class ThirstManager
         }
 
         playerThirstData.remove(player.getName());
-
-        playerThirstData.remove(player);
     }
 
     public void setThirst(Player player, int thirst)
@@ -354,7 +349,7 @@ public class ThirstManager
             }
         }
 
-        if (thirst <= Thirst.getInstance().getYAMLConfig().criticalThirstPercent && oldThirst != -1 && oldThirst > thirst) player.sendMessage(ChatColor.translateAlternateColorCodes('&', Thirst.getInstance().getYAMLConfig().thirstLowMessage.replace("%player%", player.getName()).replace("%percent%", getThirstPercent(player, true))));
+        if (thirst <= Thirst.getInstance().getYAMLConfig().criticalThirstPercent && oldThirst != -1 && oldThirst > thirst) player.sendMessage(ChatColor.translateAlternateColorCodes('&', Thirst.getInstance().getYAMLConfig().thirstLowMessage.replace("%player%", player.getName()).replace("%percent%", getThirstPercent(player))));
 
         displayThirst(player);
     }
@@ -364,9 +359,9 @@ public class ThirstManager
         if (getThirstString(player).length() > 40)
         {
             Thirst.getInstance().printPluginError("Error occurred while displaying scoreboard.", "The string "+getThirstString(player)+" is longer than 40 characters." +
-                                                                                                      "\nYou must have a thirst message under 40 characters to use the SCOREBOARD displaytype." +
-                                                                                                      "\n " +
-                                                                                                      "\nNOTE: This message will be displayed every time Thirst tries to update someones thirst (A lot!)");
+                                                                                                         "\nYou must have a thirst message under 40 characters to use the SCOREBOARD displaytype." +
+                                                                                                         "\n " +
+                                                                                                         "\nNOTE: This message will be displayed every time Thirst tries to update someones thirst (A lot!)");
             return;
         }
 
@@ -380,7 +375,7 @@ public class ThirstManager
         player.setScoreboard(board);
     }
 
-    public void blipScoreboard(final Player player)
+    private void blipScoreboard(final Player player)
     {
         refreshScoreboard(player);
 
@@ -476,7 +471,7 @@ public class ThirstManager
                     bar.setColor(BarColor.valueOf(Thirst.getInstance().getYAMLConfig().barColor.toUpperCase()));
                     bar.setStyle(BarStyle.valueOf(Thirst.getInstance().getYAMLConfig().barStyle.toUpperCase()));
                 } else {
-                    bar = Bukkit.createBossBar(ChatColor.translateAlternateColorCodes('&', getThirstString(player)), BarColor.valueOf(Thirst.getInstance().getYAMLConfig().barColor.toUpperCase()), BarStyle.valueOf(Thirst.getInstance().getYAMLConfig().barStyle.toUpperCase()), new BarFlag[0]);
+                    bar = Bukkit.createBossBar(ChatColor.translateAlternateColorCodes('&', getThirstString(player)), BarColor.valueOf(Thirst.getInstance().getYAMLConfig().barColor.toUpperCase()), BarStyle.valueOf(Thirst.getInstance().getYAMLConfig().barStyle.toUpperCase()));
                     bar.addPlayer(player);
                     getThirstData(player).setBar(bar);
                 }
@@ -548,9 +543,9 @@ public class ThirstManager
             for(ProtectedRegion region : WGBukkit.getRegionManager(player.getWorld()).getApplicableRegions(player.getLocation()))
             {
                 if (region == null) continue;
-                ArrayList<String> regions  = (ArrayList<String>) Arrays.asList(Thirst.getInstance().getYAMLConfig().disabledRegions);
+                ArrayList<String> regions = new ArrayList<>(Arrays.asList(Thirst.getInstance().getYAMLConfig().disabledRegions));
 
-                if (regions.contains(region)) return false;
+                if (regions.contains(region.getId())) return false;
             }
         }
         return true;

@@ -8,6 +8,7 @@ import com.gamerking195.dev.thirst.util.UtilUpdater;
 import net.cubespace.Yamler.Config.InvalidConfigurationException;
 import net.md_5.bungee.api.ChatColor;
 
+import org.apache.commons.lang.math.NumberUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -88,12 +89,23 @@ public class ThirstCommand
                                 return true;
                             }
 
-                            String thirstViewPlayerMessage = Thirst.getInstance().getYAMLConfig().thirstViewPlayerMessage
-                                                                     .replace("%player%", offlinePlayer.getName())
-                                                                     .replace("%bar%", ThirstManager.getThirst().getThirstBar(offlinePlayer)
-                                                                                               .replace("%percent%", ThirstManager.getThirst().getThirstPercent(offlinePlayer, true)
-                                                                                                                             .replace("%thirstmessage%", ThirstManager.getThirst().getThirstString(offlinePlayer)
-                                                                                                                                                                 .replace("%removespeed%", String.valueOf(ThirstManager.getThirst().getThirstData(offlinePlayer).getSpeed()/1000)))));
+                            String thirstViewPlayerMessage;
+
+                            if (offlinePlayer.isOnline()) {
+                                thirstViewPlayerMessage = Thirst.getInstance().getYAMLConfig().thirstViewPlayerMessage
+                                                                  .replace("%player%", offlinePlayer.getName())
+                                                                  .replace("%bar%", ThirstManager.getThirst().getThirstBar(offlinePlayer)
+                                                                                            .replace("%percent%", ThirstManager.getThirst().getThirstPercent(offlinePlayer)
+                                                                                                                          .replace("%thirstmessage%", ThirstManager.getThirst().getThirstString(offlinePlayer)
+                                                                                                                                                              .replace("%removespeed%", String.valueOf(ThirstManager.getThirst().getThirstData(offlinePlayer).getSpeed()/1000)))));
+                            } else {
+                                thirstViewPlayerMessage = Thirst.getInstance().getYAMLConfig().thirstViewPlayerMessage
+                                                                  .replace("%player%", offlinePlayer.getName())
+                                                                  .replace("%bar%", ThirstManager.getThirst().getThirstBar(offlinePlayer)
+                                                                                            .replace("%percent%", ThirstManager.getThirst().getThirstPercent(offlinePlayer)
+                                                                                                                          .replace("%thirstmessage%", ThirstManager.getThirst().getThirstString(offlinePlayer)
+                                                                                                                                                              .replace("%removespeed%", ""))));
+                            }
 
                             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', thirstViewPlayerMessage.replace("%thirstmessage%", ThirstManager.getThirst().getThirstString(offlinePlayer))));
                             return true;
@@ -349,6 +361,22 @@ public class ThirstCommand
                             }
                         }
                         sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&f&m-----------------------"));
+                    }
+                }
+                else if (args[0].equalsIgnoreCase("set") && args.length > 1) {
+                    if (Bukkit.getPlayer(args[1]) != null) {
+                        if (NumberUtils.isNumber(args[2])) {
+                            if (sender.hasPermission("thirst.*") || sender.hasPermission("thirst.command.set")) {
+                                ThirstManager.getThirst().setThirst(Bukkit.getPlayer(args[1]), Integer.valueOf(args[2]));
+                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&8[&1Thirst&8] &bSet &f"+Bukkit.getPlayer(args[1]).getName()+"'s&b thirst to &f"+Integer.valueOf(args[2])+"&b."));
+                            } else {
+                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', Thirst.getInstance().getYAMLConfig().noPermissionMessage));
+                            }
+                        } else {
+                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', Thirst.getInstance().getYAMLConfig().invalidCommandMessage));
+                        }
+                    } else {
+                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&8[&1Thirst&8] &bThat player is not online."));
                     }
                 }
                 else

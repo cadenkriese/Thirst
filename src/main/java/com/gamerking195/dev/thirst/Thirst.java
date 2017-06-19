@@ -144,7 +144,7 @@ public class Thirst
 			PlaceholderAPI.registerPlaceholder(this, "gkthirst_thirstpercent", event -> {
 				if (event.isOnline()) {
 					if (event.getPlayer() != null) {
-						return ThirstManager.getThirst().getThirstPercent(event.getPlayer(), true);
+						return ThirstManager.getThirst().getThirstPercent(event.getPlayer());
 					}
 				}
 				return null;

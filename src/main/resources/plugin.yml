@@ -1,5 +1,5 @@
 name: Thirst
-version: 1.8.12
+version: 1.8.13
 description: Adds a thirst mechanic into vanilla minecraft!
 main: com.gamerking195.dev.thirst.Thirst
 author: GamerKing195
@@ -23,7 +23,7 @@ permissions:
     description: Allows a player to view THEIR thirst via /thirst view.
   thirst.command.view.other:
     default: op
-    description: Allows a player to view OTHER players thirst via /thirst view %player%.
+    description: Allows a player to view OTHER players thirst via /thirst view [player].
   thirst.command.reload:
     default: op
     description: Gives access to the command /thirst reload.
@@ -36,3 +36,6 @@ permissions:
   thirst.command.update:
     default: op
     description: Gives access to the command /thirst update.
+  thirst.command.set:
+    default: op
+    description: Gives access to the command /thirst set [player] [int].

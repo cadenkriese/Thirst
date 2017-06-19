@@ -24,7 +24,7 @@ extends EZPlaceholderHook
 			case "thirstbar":
 				return ThirstManager.getThirst().getThirstBar(player);
 			case "thirstpercent":
-				return ThirstManager.getThirst().getThirstPercent(player, true);
+				return ThirstManager.getThirst().getThirstPercent(player);
 			case "thirstremovalspeed":
 				return String.format(String.valueOf(ThirstManager.getThirst().getThirstData(player).getSpeed() / 1000), "%.3f");
 			case "thirstremovalamount":

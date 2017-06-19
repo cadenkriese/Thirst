@@ -364,7 +364,8 @@ public class YAMLConfig extends YamlConfig {
                      "Desc: Changes the message displayed in the display_type.",
                      "Type: String",
                      "Variables: %thirstbar%, %percent%, %player%, %removespeed%",
-                     "Default: &bTHIRST &f- &8[%thirstbar%&8] %percent%"
+                     "Default: &bTHIRST &f- &8[%thirstbar%&8] %percent%",
+                     "Notes: %removespeed% will not work if you are viewing an offline players thirst. It will be replaced with nothing."
             })
     @Path("Messages.ThirstMessage")
     public String thirstMessage = "&b&lTHIRST &f- &8[%thirstbar%&8] %percent%";
@@ -401,7 +402,8 @@ public class YAMLConfig extends YamlConfig {
                      "Desc: The message that will be sent when someone does /thirst view %player%",
                      "Type: String",
                      "Variables: %player%, %thirstbar%, %percent%, %thirstmessage%, %removespeed%",
-                     "Default: &f%player%'s &bthirst: %thirstmessage%"
+                     "Default: &f%player%'s &bthirst: %thirstmessage%",
+                     "Notes: %removespeed% will not work if you are viewing an offline players thirst. It will be replaced with nothing."
             })
     @Path("Messages.Thirst" +
                   "-View-Player")
