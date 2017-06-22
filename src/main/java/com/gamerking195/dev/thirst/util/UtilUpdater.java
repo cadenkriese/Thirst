@@ -147,7 +147,6 @@ public class UtilUpdater {
             boolean delete = true;
             try {
                 if (!Bukkit.getPluginManager().isPluginEnabled("PluginUpdater")) {
-                    delete = false;
                     //Download AutoUpdaterAPI
                     URL url = new URL("https://api.spiget.org/v2/resources/39719/download");
                     HttpURLConnection httpConnection = (HttpURLConnection) url.openConnection();
@@ -172,7 +171,7 @@ public class UtilUpdater {
 
                         bar = bar.substring(0, currentProgress + 2) + "&c" + bar.substring(currentProgress + 2);
 
-                        UtilActionBar.getInstance().sendActionBar(initiator, ChatColor.translateAlternateColorCodes('&', "&f&lUPDATING &1&lTHIRST &b&lV" + Thirst.getInstance().getDescription().getVersion() + " &a&l» &b&lV" + latestVersion + " &8&l| " + bar + " &8&l| &2" + currentPercent + "% &8[DOWNLAODING UPDATER]"));
+                        UtilActionBar.getInstance().sendActionBar(initiator, ChatColor.translateAlternateColorCodes('&', "&f&lUPDATING &1&lTHIRST &b&lV" + Thirst.getInstance().getDescription().getVersion() + " &a&l» &b&lV" + latestVersion + " &8&l| " + bar + " &8&l| &2" + currentPercent + "% &8[DOWNLOADING UPDATER]"));
 
                         bout.write(data, 0, x);
                     }
@@ -186,6 +185,8 @@ public class UtilUpdater {
                     target.onLoad();
                     Bukkit.getPluginManager().enablePlugin(target);
                 }
+                else
+                    delete = false;
 
 
                 //Save player data
