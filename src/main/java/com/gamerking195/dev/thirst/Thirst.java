@@ -79,7 +79,8 @@ public class Thirst
 				if (Thirst.getInstance().getYAMLConfig().displayType.equalsIgnoreCase("SCOREBOARD"))
 					player.setScoreboard(Bukkit.getServer().getScoreboardManager().getNewScoreboard());
 
-				UtilSQL.getInstance().runStatement("UPDATE TABLENAME SET thirst = "+ ThirstManager.getThirst().getPlayerThirst(player)+" WHERE uuid = '"+player.getUniqueId().toString()+"'");
+				//Gotta run sync bc Bukkit gets mad if you try schedule new tasks when it's disabling ;-;
+				UtilSQL.getInstance().runStatementSync("UPDATE TABLENAME SET thirst = "+ ThirstManager.getThirst().getPlayerThirst(player)+" WHERE uuid = '"+player.getUniqueId().toString()+"'");
 			}
 		}
 		else {
