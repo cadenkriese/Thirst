@@ -85,8 +85,7 @@ public class YAMLConfig extends YamlConfig {
                      "- GOLDEN_APPLE:1=100",
                      "Requirements: Should be in format: ITEM:METADATA=PERCENT(metadata optional)"
             })
-    @Path("Thirst" +
-                  "-Quenching-Items")
+    @Path("Thirst-Quenching-Items")
     public String[] thirstQuenchingItems = {"POTION=20", "GOLDEN_APPLE:1=100"};
 
     @Comments

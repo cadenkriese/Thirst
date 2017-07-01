@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.gamerking195.dev</groupId>
     <artifactId>Thirst</artifactId>
-    <version>1.8.16</version>
+    <version>1.9.1</version>
     <name>Thirst</name>
     <description>Adds a thirst mechanic into vanilla minecraft!</description>
     <url>https://www.spigotmc.org/resources/thirst.24610/</url>
@@ -33,6 +33,11 @@
             <id>GK195-res</id>
             <name>GamerKing195-Resources</name>
             <url>http://api.gamerking195.com/archiva/repository/GK195-res/</url>
+        </repository>
+        <!-- bstats -->
+        <repository>
+            <id>bstats-repo</id>
+            <url>http://repo.bstats.org/content/repositories/releases/</url>
         </repository>
     </repositories>
     <dependencies>
@@ -88,8 +93,8 @@
         <!-- PluginUpdater -->
         <dependency>
             <groupId>com.gamerking195.dev</groupId>
-            <artifactId>PluginUpdater</artifactId>
-            <version>1.1.1</version>
+            <artifactId>AutoUpdaterAPI</artifactId>
+            <version>2.0.1</version>
             <scope>provided</scope>
         </dependency>
         <!-- Apache Commons Lang -->
@@ -110,6 +115,12 @@
             <groupId>net.cubespace.Yamler</groupId>
             <artifactId>Yamler</artifactId>
             <version>2.4.0</version>
+        </dependency>
+        <!-- bstats -->
+        <dependency>
+            <groupId>org.bstats</groupId>
+            <artifactId>bstats-bukkit</artifactId>
+            <version>1.1</version>
         </dependency>
     </dependencies>
     <build>
@@ -140,6 +151,12 @@
                                     <mainClass>com.gamerking195.dev.thirst.Thirst</mainClass>
                                 </transformer>
                             </transformers>
+                            <relocations>
+                                <relocation>
+                                    <pattern>org.bstats</pattern>
+                                    <shadedPattern>com.gamerking195.dev</shadedPattern>
+                                </relocation>
+                            </relocations>
                         </configuration>
                     </execution>
                 </executions>

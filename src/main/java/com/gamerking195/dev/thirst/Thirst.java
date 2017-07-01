@@ -1,5 +1,6 @@
 package com.gamerking195.dev.thirst;
 
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -9,6 +10,7 @@ import com.gamerking195.dev.thirst.util.UtilUpdater;
 import me.gamerzking.core.updater.Updater;
 import net.cubespace.Yamler.Config.InvalidConfigurationException;
 
+import org.bstats.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -49,6 +51,8 @@ public class Thirst
 	private Logger log;
 	private YAMLConfig yamlConf;
 
+	private Metrics metrics;
+
 	private boolean worldGuardEnabled = false;
 
 	@Override
@@ -64,7 +68,7 @@ public class Thirst
 			{
 				loadFiles();
 			}
-		}.runTaskLater(this, 2L);
+		}.runTaskLater(instance, 2L);
 
 		log.log(Level.INFO, "V"+pdf.getVersion()+" enabled!");
 		log.log(Level.INFO, pdf.getName()+" developed by "+pdf.getAuthors());
@@ -229,6 +233,23 @@ public class Thirst
 				printError(ex, "Error while validating the config.yml file please check that you used all spaces and all formatting is correct.");
 			}
 		}
+
+		//SETUP METRICS
+        metrics = new Metrics(instance);
+
+        metrics.addCustomChart(new Metrics.SimplePie("popular_display_types") {
+            @Override
+            public String getValue() {
+                return yamlConf.displayType;
+            }
+        });
+
+        metrics.addCustomChart(new Metrics.SimplePie("sql_enabled") {
+            @Override
+            public String getValue() {
+                return yamlConf.enableSQL ? "ENABLED" : "DISABLED";
+            }
+        });
 	}
 
 	public YAMLConfig getYAMLConfig()

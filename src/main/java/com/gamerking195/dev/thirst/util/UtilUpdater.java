@@ -1,7 +1,7 @@
 package com.gamerking195.dev.thirst.util;
 
-import com.gamerking195.dev.pluginupdater.UpdateLocale;
-import com.gamerking195.dev.pluginupdater.Updater;
+import com.gamerking195.dev.autoupdaterapi.UpdateLocale;
+import com.gamerking195.dev.autoupdaterapi.Updater;
 import com.gamerking195.dev.thirst.Thirst;
 import com.gamerking195.dev.thirst.ThirstManager;
 import com.gamerking195.dev.thirst.ThirstData;
@@ -202,9 +202,10 @@ public class UtilUpdater {
                 Thirst.getInstance().getYAMLConfig().save();
 
                 UpdateLocale locale = new UpdateLocale();
-                locale.fileName = "Thirst-" + latestVersion;
+                locale.setFileName("Thirst-" + latestVersion);
+                locale.setPluginName("Thirst");
 
-                new Updater(initiator, Thirst.getInstance(), 24610, locale, delete).update();
+                new Updater(initiator, Thirst.getInstance(), 24610, locale, delete, true).update();
             } catch (Exception ex) {
                 Thirst.getInstance().printError(ex, "Error occurred whilst downloading resource update.");
                 UtilActionBar.getInstance().sendActionBar(initiator, ChatColor.translateAlternateColorCodes('&', "&f&lUPDATING &1&lTHIRST &b&lV" + Thirst.getInstance().getDescription().getVersion() + " &b&l» &1&lV" + latestVersion + " &8[&c&lUPDATE FAILED &7&o(Check Console)&8]"));
