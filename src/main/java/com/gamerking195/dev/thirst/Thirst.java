@@ -77,34 +77,32 @@ public class Thirst
 	@Override
 	public void onDisable()
 	{
-		if (yamlConf.enableSQL) {
+		if (yamlConf != null) {
+			if (yamlConf.enableSQL) {
 
-			for (Player player : Bukkit.getServer().getOnlinePlayers()) {
-				if (Thirst.getInstance().getYAMLConfig().displayType.equalsIgnoreCase("SCOREBOARD"))
-					player.setScoreboard(Bukkit.getServer().getScoreboardManager().getNewScoreboard());
+				for (Player player : Bukkit.getServer().getOnlinePlayers()) {
+					if (Thirst.getInstance().getYAMLConfig().displayType.equalsIgnoreCase("SCOREBOARD"))
+						player.setScoreboard(Bukkit.getServer().getScoreboardManager().getNewScoreboard());
 
-				//Gotta run sync bc Bukkit gets mad if you try schedule new tasks when it's disabling ;-;
-				UtilSQL.getInstance().runStatementSync("UPDATE TABLENAME SET thirst = "+ ThirstManager.getThirst().getPlayerThirst(player)+" WHERE uuid = '"+player.getUniqueId().toString()+"'");
+					//Gotta run sync bc Bukkit gets mad if you try schedule new tasks when it's disabling ;-;
+					UtilSQL.getInstance().runStatementSync("UPDATE TABLENAME SET thirst = " + ThirstManager.getThirst().getPlayerThirst(player) + " WHERE uuid = '" + player.getUniqueId().toString() + "'");
+				}
+			} else {
+				for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+					if (Thirst.getInstance().getYAMLConfig().displayType.equalsIgnoreCase("SCOREBOARD"))
+						p.setScoreboard(Bukkit.getServer().getScoreboardManager().getNewScoreboard());
+
+					DataConfig.getConfig().writeThirstToFile(p.getUniqueId(), ThirstManager.getThirst().getPlayerThirst(p));
+				}
+
+				DataConfig.getConfig().saveFile();
 			}
-		}
-		else {
-			for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-				if (Thirst.getInstance().getYAMLConfig().displayType.equalsIgnoreCase("SCOREBOARD"))
-					p.setScoreboard(Bukkit.getServer().getScoreboardManager().getNewScoreboard());
-
-				DataConfig.getConfig().writeThirstToFile(p.getUniqueId(), ThirstManager.getThirst().getPlayerThirst(p));
+			try {
+				yamlConf.reload();
+				yamlConf.save();
+			} catch (InvalidConfigurationException ex) {
+				printError(ex, "Error while saving the config.yml file please check that you didn't use tabs and all formatting is correct.");
 			}
-
-			DataConfig.getConfig().saveFile();
-		}
-		try
-		{
-			yamlConf.reload();
-			yamlConf.save();
-		}
-		catch(InvalidConfigurationException ex)
-		{
-			printError(ex, "Error while saving the config.yml file please check that you didn't use tabs and all formatting is correct.");
 		}
 	}
 
@@ -235,21 +233,21 @@ public class Thirst
 		}
 
 		//SETUP METRICS
-        metrics = new Metrics(instance);
+		metrics = new Metrics(instance);
 
-        metrics.addCustomChart(new Metrics.SimplePie("popular_display_types") {
-            @Override
-            public String getValue() {
-                return yamlConf.displayType;
-            }
-        });
+		metrics.addCustomChart(new Metrics.SimplePie("popular_display_types") {
+			@Override
+			public String getValue() {
+				return yamlConf.displayType;
+			}
+		});
 
-        metrics.addCustomChart(new Metrics.SimplePie("sql_enabled") {
-            @Override
-            public String getValue() {
-                return yamlConf.enableSQL ? "ENABLED" : "DISABLED";
-            }
-        });
+		metrics.addCustomChart(new Metrics.SimplePie("sql_enabled") {
+			@Override
+			public String getValue() {
+				return yamlConf.enableSQL ? "ENABLED" : "DISABLED";
+			}
+		});
 	}
 
 	public YAMLConfig getYAMLConfig()
