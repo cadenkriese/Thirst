@@ -26,7 +26,7 @@ implements Listener
 			}
 		}
 		
-		if (ThirstManager.getThirst().getPlayerThirst(player) <= Thirst.getInstance().getYAMLConfig().getDamagePercent() && damageEffects)
+		if (Thirst.getInstance().getYAMLConfig().isInDamageRange(ThirstManager.getThirst().getPlayerThirst(player)) && damageEffects)
 		{
 			event.setDeathMessage(ChatColor.translateAlternateColorCodes('&', Thirst.getInstance().getYAMLConfig().thirstDeathMessage.replace("%player%", player.getName())));
 

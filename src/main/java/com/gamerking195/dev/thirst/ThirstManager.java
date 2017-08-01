@@ -314,22 +314,23 @@ public class ThirstManager
             {
                 String[] parts = potion.split("\\.");
 
-                if (parts.length != 4)
+                if (parts.length != 5)
                 {
                     Thirst.getInstance().printPluginError("Error occurred while reading the config", "String '"+potion+"' is in an invalid format!");
                     return;
                 }
 
-                int percent = Integer.valueOf(parts[0]);
+                int maxPercent = Integer.valueOf(parts[3]);
+                int minPercent = Integer.valueOf(parts[4]);
 
-                if (percent >= thirst)
+                if (maxPercent >= thirst && minPercent <= thirst)
                 {
-                    if (parts[1].equalsIgnoreCase("DAMAGE"))
+                    if (parts[0].equalsIgnoreCase("DAMAGE"))
                     {
                         return;
                     }
 
-                    PotionEffectType type = PotionEffectType.getByName(parts[1].toUpperCase());
+                    PotionEffectType type = PotionEffectType.getByName(parts[0].toUpperCase());
 
                     if (type == null)
                     {
@@ -337,14 +338,15 @@ public class ThirstManager
                         return;
                     }
 
-                    PotionEffect effect = new PotionEffect(type, Integer.valueOf(parts[2])*20, Integer.valueOf(parts[3])-1);
+                    PotionEffect effect = new PotionEffect(type, Integer.valueOf(parts[1])*20, Integer.valueOf(parts[2])-1);
 
                     player.addPotionEffect(effect);
                 }
-                else if (percent > thirst)
+                else if (thirst > maxPercent || thirst < minPercent)
                 {
-                    PotionEffectType type = PotionEffectType.getByName(parts[1].toUpperCase());
-                    player.removePotionEffect(type);
+                    PotionEffectType type = PotionEffectType.getByName(parts[0].toUpperCase());
+                    if (type != null)
+                        player.removePotionEffect(type);
                 }
             }
         }

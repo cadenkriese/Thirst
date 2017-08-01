@@ -69,7 +69,7 @@ public class UpdateListener
             {
                 if (!ThirstManager.getThirst().validatePlayer(player)) continue;
 
-                if (ThirstManager.getThirst().getPlayerThirst(player) <= Thirst.getInstance().getYAMLConfig().getDamagePercent())
+                if (Thirst.getInstance().getYAMLConfig().isInDamageRange(ThirstManager.getThirst().getPlayerThirst(player)))
                 {
                     player.damage(Thirst.getInstance().getYAMLConfig().getDamageAmount());
                 }

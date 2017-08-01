@@ -85,7 +85,12 @@ public class ThirstCommand
                             //if they run /thirst view %player%
 
                             if (offlinePlayer.getPlayer() != null && sender instanceof Player && offlinePlayer.getPlayer() == sender) {
-                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', Thirst.getInstance().getYAMLConfig().thirstViewMessage.replace("%player%", offlinePlayer.getName())+ ThirstManager.getThirst().getThirstString(offlinePlayer)));
+                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', Thirst.getInstance().getYAMLConfig().thirstViewMessage
+                                                                                                       .replace("%player%", offlinePlayer.getName())
+                                                                                                       .replace("%bar%", ThirstManager.getThirst().getThirstBar(offlinePlayer))
+                                                                                                                                 .replace("%percent%", ThirstManager.getThirst().getThirstPercent(offlinePlayer))
+                                                                                                                                                               .replace("%thirstmessage%", ThirstManager.getThirst().getThirstString(offlinePlayer))
+                                                                                                                                                                                                   .replace("%removespeed%", String.valueOf(ThirstManager.getThirst().getThirstData(offlinePlayer).getSpeed()/1000))));
                                 return true;
                             }
 
@@ -94,17 +99,17 @@ public class ThirstCommand
                             if (offlinePlayer.isOnline()) {
                                 thirstViewPlayerMessage = Thirst.getInstance().getYAMLConfig().thirstViewPlayerMessage
                                                                   .replace("%player%", offlinePlayer.getName())
-                                                                  .replace("%bar%", ThirstManager.getThirst().getThirstBar(offlinePlayer)
-                                                                                            .replace("%percent%", ThirstManager.getThirst().getThirstPercent(offlinePlayer)
-                                                                                                                          .replace("%thirstmessage%", ThirstManager.getThirst().getThirstString(offlinePlayer)
-                                                                                                                                                              .replace("%removespeed%", String.valueOf(ThirstManager.getThirst().getThirstData(offlinePlayer).getSpeed()/1000)))));
+                                                                  .replace("%bar%", ThirstManager.getThirst().getThirstBar(offlinePlayer))
+                                                                                            .replace("%percent%", ThirstManager.getThirst().getThirstPercent(offlinePlayer))
+                                                                                                                          .replace("%thirstmessage%", ThirstManager.getThirst().getThirstString(offlinePlayer))
+                                                                                                                                                              .replace("%removespeed%", String.valueOf(ThirstManager.getThirst().getThirstData(offlinePlayer).getSpeed()/1000));
                             } else {
                                 thirstViewPlayerMessage = Thirst.getInstance().getYAMLConfig().thirstViewPlayerMessage
                                                                   .replace("%player%", offlinePlayer.getName())
-                                                                  .replace("%bar%", ThirstManager.getThirst().getThirstBar(offlinePlayer)
-                                                                                            .replace("%percent%", ThirstManager.getThirst().getThirstPercent(offlinePlayer)
-                                                                                                                          .replace("%thirstmessage%", ThirstManager.getThirst().getThirstString(offlinePlayer)
-                                                                                                                                                              .replace("%removespeed%", ""))));
+                                                                  .replace("%bar%", ThirstManager.getThirst().getThirstBar(offlinePlayer))
+                                                                                            .replace("%percent%", ThirstManager.getThirst().getThirstPercent(offlinePlayer))
+                                                                                                                          .replace("%thirstmessage%", ThirstManager.getThirst().getThirstString(offlinePlayer))
+                                                                                                                                                              .replace("%removespeed%", "");
                             }
 
                             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', thirstViewPlayerMessage.replace("%thirstmessage%", ThirstManager.getThirst().getThirstString(offlinePlayer))));
@@ -122,7 +127,13 @@ public class ThirstCommand
                                 return true;
                             }
 
-                            player.sendMessage(ChatColor.translateAlternateColorCodes('&', Thirst.getInstance().getYAMLConfig().thirstViewMessage.replace("%player%", player.getName())+ ThirstManager.getThirst().getThirstString(player)));
+                            player.sendMessage(ChatColor.translateAlternateColorCodes('&', Thirst.getInstance().getYAMLConfig().thirstViewMessage
+                                                                                                   .replace("%player%", player.getName())
+                                                                                                   .replace("%bar%", ThirstManager.getThirst().getThirstBar(player))
+                                                                                                                             .replace("%percent%", ThirstManager.getThirst().getThirstPercent(player))
+                                                                                                                                                           .replace("%thirstmessage%", ThirstManager.getThirst().getThirstString(player))
+                                                                                                                                                                                               .replace("%removespeed%", String.valueOf(ThirstManager.getThirst().getThirstData(player).getSpeed()/1000))));
+
                             return true;
                         }
                         else

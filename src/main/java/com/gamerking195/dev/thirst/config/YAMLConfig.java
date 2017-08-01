@@ -344,14 +344,16 @@ public class YAMLConfig extends YamlConfig {
                      "Desc: The effects that will be applied on low thirst.",
                      "Type: Formatted string array",
                      "Default:",
-                     "- 10.SLOW_DIGGING.30.1",
-                     "- 0.DAMAGE.2.3",
-                     "Requirements: Should be in format 'PERCENT.POTIONEFFECT_DURATION-IN-SECONDS_AMPLIFIER'",
-                     "Note: To damage a player use the effect damage the duration will be the time between each damage",
-                     "and the amplifier is how much damage done (out of 20)."
+                     "- CONFUSION.30.1.10.0",
+                     "- DAMAGE.2.3.0.0",
+                     "Requirements: Should be in format 'POTIONEFFECT.DURATION-IN-SECONDS.AMPLIFIER.MAX-PERCENT.MIN-PERCENT'",
+                     "Note: To damage a player use this format DAMAGE.DELAY-IN-SECONDS.AMOUNT.MAX-PERCENT.MIN-PERCENT.",
+                     "(Amount is how much damage will be done out of 20)",
+                     "Note: The max percent and min percent are to specify a range for the effect, this can be used to give",
+                     "speed when the player has over 90 thirst or to increase the strength of an effect as thirst decreases."
             })
     @Path("Effects.Potions")
-    public String[] potions = {"10.CONFUSION.30.1", "0.DAMAGE.2.3"};
+    public String[] potions = {"CONFUSION.30.1.10.0", "DAMAGE.2.3.0.0"};
 
 
     @Comment("---------------Messages---------------")
@@ -402,7 +404,8 @@ public class YAMLConfig extends YamlConfig {
                      "Type: String",
                      "Variables: %player%, %thirstbar%, %percent%, %thirstmessage%, %removespeed%",
                      "Default: &f%player%'s &bthirst: %thirstmessage%",
-                     "Notes: %removespeed% will not work if you are viewing an offline players thirst. It will be replaced with nothing."
+                     "Notes: %removespeed% will not work if you are viewing an offline players thirst. It will be replaced with nothing.",
+                     "NOTICE: This is not the message displayed when a player runs /thirst view, the message run then is Thirst-View-Message."
             })
     @Path("Messages.Thirst" +
                   "-View-Player")
@@ -414,14 +417,12 @@ public class YAMLConfig extends YamlConfig {
                      "THIRST_VIEW_MESSAGE",
                      "Desc: The message sent when a player does /thirst view",
                      "Type: String",
-                     "Variables: %player%",
-                     "Default: &8[&1Thirst&8] &bYour thist: ",
-                     "Note: This message will be displayed before the %thirstmessage%",
-                     "Note: There will not be a space between messages unless you add one."
+                     "Variables: %player%, %bar%, %percent%, %thirstmessage%, %removespeed%",
+                     "Default: &8[&1Thirst&8] &bYour thist: %thirstmessage%"
             })
     @Path("Messages.Thirst" +
                   "-View-Message")
-    public String thirstViewMessage = "&8[&1Thirst&8] &bYour thirst: ";
+    public String thirstViewMessage = "&8[&1Thirst&8] &bYour thirst: %thirstmessage%";
 
     @Comments
             ({
@@ -475,7 +476,7 @@ public class YAMLConfig extends YamlConfig {
             ({
                      "",
                      "DISABLED_WORLDS",
-                     "Desc: List all of the worlds that will be unnaffected by thirst.",
+                     "Desc: List all of the worlds that will be unaffected by thirst.",
                      "Type: String Array",
                      "Default: []"
             })
@@ -486,7 +487,7 @@ public class YAMLConfig extends YamlConfig {
             ({
                      "",
                      "DISABLED_REGIONS",
-                     "Desc: List all of the worldgaurd regions that will be unnaffected by thirst..",
+                     "Desc: List all of the world guard regions that will be unaffected by thirst.",
                      "Type: String Array",
                      "Default: []"
             })
@@ -631,11 +632,29 @@ public class YAMLConfig extends YamlConfig {
 
     //METHODS
 
+    //EXAMPLE STRING "DAMAGE.2.3.0.0"
+
     public int getDamageInterval() {
-        for (String s : potions) {
-            String[] parts = s.split("\\.");
-            if (parts.length != 4) {
-                Thirst.getInstance().printPluginError("Error while reading the config.", "String '" + s + "' is in an invalid format!");
+        for (String string : potions) {
+            String[] parts = string.split("\\.");
+            if (parts.length != 5) {
+                Thirst.getInstance().printPluginError("Error while reading the config.", "String '" + string + "' is in an invalid format!");
+
+                return -1;
+            }
+
+            if (parts[0].equalsIgnoreCase("DAMAGE")) {
+                return Integer.valueOf(parts[1]);
+            }
+        }
+        return -1;
+    }
+
+    public int getDamageAmount() {
+        for (String string : potions) {
+            String[] parts = string.split("\\.");
+            if (parts.length != 5) {
+                Thirst.getInstance().printPluginError("Error while reading the config.", "String '" + string + "' is in an invalid format!");
 
                 return -1;
             }
@@ -647,36 +666,21 @@ public class YAMLConfig extends YamlConfig {
         return -1;
     }
 
-    public int getDamageAmount() {
-        for (String s : potions) {
-            String[] parts = s.split("\\.");
-            if (parts.length != 4) {
-                Thirst.getInstance().printPluginError("Error while reading the config.", "String '" + s + "' is in an invalid format!");
-
-                return -1;
+    public boolean isInDamageRange(int currentPercent) {
+        for (String string : potions) {
+            String[] parts = string.split("\\.");
+            if (parts.length != 5) {
+                Thirst.getInstance().printPluginError("Error while reading the config.", "String '" + string + "' is in an invalid format!");
+                return false;
             }
 
-            if (parts[1].equalsIgnoreCase("DAMAGE")) {
-                return Integer.valueOf(parts[3]);
-            }
-        }
-        return -1;
-    }
-
-    public int getDamagePercent() {
-        for (String s : potions) {
-            String[] parts = s.split("\\.");
-            if (parts.length != 4) {
-                Thirst.getInstance().printPluginError("Error while reading the config.", "String '" + s + "' is in an invalid format!");
-                return -1;
-            }
-
-            int percent = Integer.valueOf(parts[0]);
+            int maxPercent = Integer.valueOf(parts[3]);
+            int minPercent = Integer.valueOf(parts[4]);
 
             if (parts[1].startsWith("DAMAGE")) {
-                return percent;
+                return currentPercent >= minPercent && currentPercent <= maxPercent;
             }
         }
-        return -1;
+        return false;
     }
 }
