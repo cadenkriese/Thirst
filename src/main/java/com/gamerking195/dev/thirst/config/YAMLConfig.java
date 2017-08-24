@@ -19,7 +19,7 @@ public class YAMLConfig extends YamlConfig {
                                 {
                                         "#################################",
                                         "                                #",
-                                        "Thirst V" + Thirst.getInstance().getDescription().getVersion() + ", by " + Thirst.getInstance().getDescription().getAuthors() + "#",
+                                        "Thirst V" + Thirst.getInstance().getDescription().getVersion() + ", by " + Thirst.getInstance().getDescription().getAuthors().toString().replace("[", "").replace("]", "") + "#",
                                         "                                #",
                                         "#################################",
                                         "",
@@ -28,7 +28,8 @@ public class YAMLConfig extends YamlConfig {
                                         "STRING, Any text you want.",
                                         "INT, A number without a decimal.",
                                         "FLOAT, A number with a decimal.",
-                                        "BOOLEAN, A string that either equals true or false"
+                                        "BOOLEAN, A string that either equals true or false.",
+                                        "ARRAY, A list of values like those stated above."
                                 };
         CONFIG_FILE = new File(plugin.getDataFolder(), "config.yml");
     }
@@ -45,8 +46,7 @@ public class YAMLConfig extends YamlConfig {
                      "Type: int (100 or lower.)",
                      "Default: 1"
             })
-    @Path("Remove-Thirst" +
-                  "")
+    @Path("Remove-Thirst")
     public int removeThirst = 1;
 
     @Comments
