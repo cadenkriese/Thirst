@@ -216,7 +216,7 @@ public class Thirst
 		pm.registerEvents(new PlayerMoveListener(), instance);
 
 		//VALIDATION
-		if (Thirst.getInstance().getYAMLConfig().displayType.equalsIgnoreCase("BOSSBAR") && !Bukkit.getBukkitVersion().contains("1.9") && !Bukkit.getBukkitVersion().contains("1.10") && !Bukkit.getBukkitVersion().contains("1.11") && !Bukkit.getBukkitVersion().contains("1.12"))
+		if (Thirst.getInstance().getYAMLConfig().displayType.equalsIgnoreCase("BOSSBAR") && !Bukkit.getBukkitVersion().contains("1.9") && !Bukkit.getBukkitVersion().contains("1.10") && !Bukkit.getBukkitVersion().contains("1.11") && !Bukkit.getBukkitVersion().contains("1.12") && !Bukkit.getBukkitVersion().contains("1.12.1") && !Bukkit.getBukkitVersion().contains("1.12.2"))
 		{
 			try
 			{
