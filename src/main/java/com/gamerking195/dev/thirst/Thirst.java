@@ -1,6 +1,5 @@
 package com.gamerking195.dev.thirst;
 
-import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -215,11 +214,12 @@ public class Thirst
 		pm.registerEvents(new PlayerRespawnListener(), instance);
 		pm.registerEvents(new PlayerMoveListener(), instance);
 
-		//VALIDATION
-		if (Thirst.getInstance().getYAMLConfig().displayType.equalsIgnoreCase("BOSSBAR") && !Bukkit.getBukkitVersion().contains("1.9") && !Bukkit.getBukkitVersion().contains("1.10") && !Bukkit.getBukkitVersion().contains("1.11") && !Bukkit.getBukkitVersion().contains("1.12") && !Bukkit.getBukkitVersion().contains("1.12.1") && !Bukkit.getBukkitVersion().contains("1.12.2"))
+		//VALIDATION - Also checks whenever it sends a bossbar in ThirstManager.
+        if (Thirst.getInstance().getYAMLConfig().displayType.equalsIgnoreCase("BOSSBAR") && !Bukkit.getBukkitVersion().contains("1.9") && !Bukkit.getBukkitVersion().contains("1.10") && !Bukkit.getBukkitVersion().contains("1.11") && !Bukkit.getBukkitVersion().contains("1.12") && !Bukkit.getBukkitVersion().contains("1.13") && !Bukkit.getBukkitVersion().contains("1.14"))
 		{
 			try
 			{
+			    Bukkit.broadcastMessage("1");
 				Thirst.getInstance().getLogger().log(Level.SEVERE, "[Thirst V"+ Thirst.getInstance().getDescription().getVersion()+"] Your Spigot version is not compatible with the Bossbar display type, please use version 1.9 or higher.");
 				Thirst.getInstance().getLogger().log(Level.SEVERE, "[Thirst V"+ Thirst.getInstance().getDescription().getVersion()+"] Changing to display type ACTION...");
 

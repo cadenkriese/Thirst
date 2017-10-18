@@ -462,7 +462,7 @@ public class ThirstManager
 
     private void sendBossBar(Player player)
     {
-        if (Bukkit.getBukkitVersion().contains("1.9") || Bukkit.getServer().getBukkitVersion().contains("1.10") || Bukkit.getBukkitVersion().contains("1.11"))
+        if (Bukkit.getBukkitVersion().contains("1.9") || Bukkit.getServer().getBukkitVersion().contains("1.10") || Bukkit.getBukkitVersion().contains("1.11") || Bukkit.getBukkitVersion().contains("1.11") || Bukkit.getBukkitVersion().contains("1.12") || Bukkit.getBukkitVersion().contains("1.13") || Bukkit.getBukkitVersion().contains("1.14"))
         {
             if (validateColor(Thirst.getInstance().getYAMLConfig().barColor) != null && validateStyle(Thirst.getInstance().getYAMLConfig().barStyle) != null) {
                 BossBar bar;
@@ -486,6 +486,7 @@ public class ThirstManager
         {
             try
             {
+                Bukkit.broadcastMessage("2");
                 Thirst.getInstance().getLogger().log(Level.SEVERE, "[Thirst V"+ Thirst.getInstance().getDescription().getVersion()+"] Your Spigot version is not compatible with the Bossbar display type, please use version 1.9 or higher.");
                 Thirst.getInstance().getLogger().log(Level.SEVERE, "[Thirst V"+ Thirst.getInstance().getDescription().getVersion()+"] Changing to display type ACTION...");
 
