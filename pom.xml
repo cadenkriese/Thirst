@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.gamerking195.dev</groupId>
     <artifactId>Thirst</artifactId>
-    <version>1.9.8</version>
+    <version>1.9.9</version>
     <name>Thirst</name>
     <description>Adds a thirst mechanic into vanilla minecraft!</description>
     <url>https://www.spigotmc.org/resources/thirst.24610/</url>
@@ -11,6 +11,10 @@
         <repository>
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+        </repository>
+        <repository>
+            <id>spigot</id>
+            <url>https://repo.mineswine-dev.com/repository/spigot/</url>
         </repository>
         <!--PlaceholderAPI-->
         <repository>
@@ -34,10 +38,16 @@
             <name>GamerKing195-Resources</name>
             <url>http://api.gamerking195.com/archiva/repository/GK195-res/</url>
         </repository>
+        <!-- MVdW Repo -->
+        <repository>
+            <id>mvdw-software</id>
+            <name>MVdW Public Repositories</name>
+            <url>http://repo.mvdw-software.be/content/groups/public/</url>
+        </repository>
         <!-- bstats -->
         <repository>
             <id>bstats-repo</id>
-            <url>http://repo.bstats.org/content/repositories/releases/</url>
+            <url>https://repo.bstats.org/content/repositories/releases/</url>
         </repository>
     </repositories>
     <dependencies>
@@ -59,7 +69,7 @@
         <dependency>
             <groupId>be.maximvdw</groupId>
             <artifactId>MVdWPlaceholderAPI</artifactId>
-            <version>1.0.2</version>
+            <version>2.0.8-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <!--WorldgaurdAPI-->
@@ -74,13 +84,6 @@
             <groupId>com.googlecode.json-simple</groupId>
             <artifactId>json-simple</artifactId>
             <version>1.1</version>
-            <scope>provided</scope>
-        </dependency>
-        <!-- SnakeYaml-->
-        <dependency>
-            <groupId>org.yaml</groupId>
-            <artifactId>snakeyaml</artifactId>
-            <version>1.17</version>
             <scope>provided</scope>
         </dependency>
         <!-- IO Commons -->
@@ -113,8 +116,8 @@
         <!-- Yamler -->
         <dependency>
             <groupId>net.cubespace.Yamler</groupId>
-            <artifactId>Yamler</artifactId>
-            <version>2.4.0</version>
+            <artifactId>Yamler-Bukkit</artifactId>
+            <version>2.4.0-SNAPSHOT</version>
         </dependency>
         <!-- bstats -->
         <dependency>

@@ -472,6 +472,8 @@ public class ThirstManager
                     bar.setTitle(ChatColor.translateAlternateColorCodes('&', getThirstString(player)));
                     bar.setColor(BarColor.valueOf(Thirst.getInstance().getYAMLConfig().barColor.toUpperCase()));
                     bar.setStyle(BarStyle.valueOf(Thirst.getInstance().getYAMLConfig().barStyle.toUpperCase()));
+                    if (!bar.getPlayers().contains(player))
+                        bar.addPlayer(player);
                 } else {
                     bar = Bukkit.createBossBar(ChatColor.translateAlternateColorCodes('&', getThirstString(player)), BarColor.valueOf(Thirst.getInstance().getYAMLConfig().barColor.toUpperCase()), BarStyle.valueOf(Thirst.getInstance().getYAMLConfig().barStyle.toUpperCase()));
                     bar.addPlayer(player);
@@ -486,7 +488,6 @@ public class ThirstManager
         {
             try
             {
-                Bukkit.broadcastMessage("2");
                 Thirst.getInstance().getLogger().log(Level.SEVERE, "[Thirst V"+ Thirst.getInstance().getDescription().getVersion()+"] Your Spigot version is not compatible with the Bossbar display type, please use version 1.9 or higher.");
                 Thirst.getInstance().getLogger().log(Level.SEVERE, "[Thirst V"+ Thirst.getInstance().getDescription().getVersion()+"] Changing to display type ACTION...");
 
