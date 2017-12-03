@@ -218,10 +218,10 @@ public class ThirstManager
         String configMessage;
 
         if (offlinePlayer.isOnline()) {
-            configMessage = Thirst.getInstance().getYAMLConfig().thirstMessage.replace("%player%", offlinePlayer.getName()).replace("%percent%", getThirstPercent(offlinePlayer)).replace("%thirstbar%", "&1"+getThirstBar(offlinePlayer)).replace("%removespeed%", String.valueOf((double) getThirstData(offlinePlayer).getSpeed()/1000));
+            configMessage = Thirst.getInstance().getYAMLConfig().thirstMessage.replace("%player%", offlinePlayer.getName()).replace("%percent%", getThirstPercent(offlinePlayer, true)).replace("%thirstbar%", getThirstBar(offlinePlayer)).replace("%removespeed%", String.valueOf((double) getThirstData(offlinePlayer).getSpeed()/1000));
         }
         else
-            configMessage = Thirst.getInstance().getYAMLConfig().thirstMessage.replace("%player%", offlinePlayer.getName()).replace("%percent%", getThirstPercent(offlinePlayer)).replace("%thirstbar%", "&1"+getThirstBar(offlinePlayer)).replace("%removespeed%", "");
+            configMessage = Thirst.getInstance().getYAMLConfig().thirstMessage.replace("%player%", offlinePlayer.getName()).replace("%percent%", getThirstPercent(offlinePlayer, true)).replace("%thirstbar%", getThirstBar(offlinePlayer)).replace("%removespeed%", "");
 
         return ChatColor.translateAlternateColorCodes('&', emphasis+configMessage+emphasis);
     }
@@ -234,10 +234,10 @@ public class ThirstManager
 
         int bars = (int) Math.round(percent/10.0);
 
-        return thirstBar.substring(0, bars)+ChatColor.RED+thirstBar.substring(bars, thirstBar.length())+ChatColor.RESET;
+        return ChatColor.translateAlternateColorCodes('&', Thirst.getInstance().getYAMLConfig().thirstbarValidColor)+thirstBar.substring(0, bars)+ChatColor.translateAlternateColorCodes('&', Thirst.getInstance().getYAMLConfig().thirstbarInvalidColor)+thirstBar.substring(bars, thirstBar.length())+ChatColor.RESET;
     }
 
-    public String getThirstPercent(OfflinePlayer offlinePlayer)
+    public String getThirstPercent(OfflinePlayer offlinePlayer, boolean formatting)
     {
         int percent = getPlayerThirst(offlinePlayer);
 
@@ -248,7 +248,10 @@ public class ThirstManager
         else if (percent <= 60) percentColor = "&6";
         else if (percent <= 80) percentColor = "&e";
 
-        return percentColor+percent+"%";
+        if (formatting)
+            return percentColor+percent+"%";
+        else
+            return String.valueOf(percent);
     }
 
     public void playerJoin(Player player)
@@ -351,7 +354,7 @@ public class ThirstManager
             }
         }
 
-        if (thirst <= Thirst.getInstance().getYAMLConfig().criticalThirstPercent && oldThirst != -1 && oldThirst > thirst) player.sendMessage(ChatColor.translateAlternateColorCodes('&', Thirst.getInstance().getYAMLConfig().thirstLowMessage.replace("%player%", player.getName()).replace("%percent%", getThirstPercent(player))));
+        if (thirst <= Thirst.getInstance().getYAMLConfig().criticalThirstPercent && oldThirst != -1 && oldThirst > thirst) player.sendMessage(ChatColor.translateAlternateColorCodes('&', Thirst.getInstance().getYAMLConfig().thirstLowMessage.replace("%player%", player.getName()).replace("%percent%", getThirstPercent(player, true))));
 
         displayThirst(player);
     }

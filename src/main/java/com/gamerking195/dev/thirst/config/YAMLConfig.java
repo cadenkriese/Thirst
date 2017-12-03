@@ -470,6 +470,28 @@ public class YAMLConfig extends YamlConfig {
     @Path("Messages.Scoreboard-Title")
     public String scoreboardName = "&f&lTHIRST";
 
+    @Comments
+            ({
+                    "",
+                    "VALID",
+                    "Desc: Color that should be used for the valid part of the thirstbar.",
+                    "Type: String (ChatColor)",
+                    "Default: &1"
+            })
+    @Path("Messages.ThirstBar.ValidColor")
+    public String thirstbarValidColor = "&1";
+
+    @Comments
+            ({
+                    "",
+                    "VALID",
+                    "Desc: Color that should be used for the invalid part of the thirstbar.",
+                    "Type: String (ChatColor)",
+                    "Default: &c"
+            })
+    @Path("Messages.ThirstBar.InvalidColor")
+    public String thirstbarInvalidColor = "&c";
+
     @Comment("---------------Disabled Areas---------------")
 
     @Comments
@@ -560,8 +582,8 @@ public class YAMLConfig extends YamlConfig {
     //CLASSES
 
     public class ThirstItem extends YamlConfig {
-        private String item = "POTION";
-        private int quenchPercent = 20;
+        private String item;
+        private int quenchPercent;
         private int metaData = 0;
 
         public ThirstItem(String s) {
@@ -659,7 +681,7 @@ public class YAMLConfig extends YamlConfig {
                 return -1;
             }
 
-            if (parts[1].equalsIgnoreCase("DAMAGE")) {
+            if (parts[0].equalsIgnoreCase("DAMAGE")) {
                 return Integer.valueOf(parts[2]);
             }
         }
@@ -677,7 +699,7 @@ public class YAMLConfig extends YamlConfig {
             int maxPercent = Integer.valueOf(parts[3]);
             int minPercent = Integer.valueOf(parts[4]);
 
-            if (parts[1].startsWith("DAMAGE")) {
+            if (parts[0].startsWith("DAMAGE")) {
                 return currentPercent >= minPercent && currentPercent <= maxPercent;
             }
         }

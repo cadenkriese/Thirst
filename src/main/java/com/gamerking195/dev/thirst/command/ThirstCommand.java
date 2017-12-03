@@ -88,7 +88,7 @@ public class ThirstCommand
                                 sender.sendMessage(ChatColor.translateAlternateColorCodes('&', Thirst.getInstance().getYAMLConfig().thirstViewMessage
                                                                                                        .replace("%player%", offlinePlayer.getName())
                                                                                                        .replace("%bar%", ThirstManager.getThirst().getThirstBar(offlinePlayer))
-                                                                                                                                 .replace("%percent%", ThirstManager.getThirst().getThirstPercent(offlinePlayer))
+                                                                                                                                 .replace("%percent%", ThirstManager.getThirst().getThirstPercent(offlinePlayer, true))
                                                                                                                                                                .replace("%thirstmessage%", ThirstManager.getThirst().getThirstString(offlinePlayer))
                                                                                                                                                                                                    .replace("%removespeed%", String.valueOf(ThirstManager.getThirst().getThirstData(offlinePlayer).getSpeed()/1000))));
                                 return true;
@@ -100,14 +100,14 @@ public class ThirstCommand
                                 thirstViewPlayerMessage = Thirst.getInstance().getYAMLConfig().thirstViewPlayerMessage
                                                                   .replace("%player%", offlinePlayer.getName())
                                                                   .replace("%bar%", ThirstManager.getThirst().getThirstBar(offlinePlayer))
-                                                                                            .replace("%percent%", ThirstManager.getThirst().getThirstPercent(offlinePlayer))
+                                                                                            .replace("%percent%", ThirstManager.getThirst().getThirstPercent(offlinePlayer, true))
                                                                                                                           .replace("%thirstmessage%", ThirstManager.getThirst().getThirstString(offlinePlayer))
                                                                                                                                                               .replace("%removespeed%", String.valueOf(ThirstManager.getThirst().getThirstData(offlinePlayer).getSpeed()/1000));
                             } else {
                                 thirstViewPlayerMessage = Thirst.getInstance().getYAMLConfig().thirstViewPlayerMessage
                                                                   .replace("%player%", offlinePlayer.getName())
                                                                   .replace("%bar%", ThirstManager.getThirst().getThirstBar(offlinePlayer))
-                                                                                            .replace("%percent%", ThirstManager.getThirst().getThirstPercent(offlinePlayer))
+                                                                                            .replace("%percent%", ThirstManager.getThirst().getThirstPercent(offlinePlayer, true))
                                                                                                                           .replace("%thirstmessage%", ThirstManager.getThirst().getThirstString(offlinePlayer))
                                                                                                                                                               .replace("%removespeed%", "");
                             }
@@ -130,7 +130,7 @@ public class ThirstCommand
                             player.sendMessage(ChatColor.translateAlternateColorCodes('&', Thirst.getInstance().getYAMLConfig().thirstViewMessage
                                                                                                    .replace("%player%", player.getName())
                                                                                                    .replace("%bar%", ThirstManager.getThirst().getThirstBar(player))
-                                                                                                                             .replace("%percent%", ThirstManager.getThirst().getThirstPercent(player))
+                                                                                                                             .replace("%percent%", ThirstManager.getThirst().getThirstPercent(player, true))
                                                                                                                                                            .replace("%thirstmessage%", ThirstManager.getThirst().getThirstString(player))
                                                                                                                                                                                                .replace("%removespeed%", String.valueOf(ThirstManager.getThirst().getThirstData(player).getSpeed()/1000))));
 
