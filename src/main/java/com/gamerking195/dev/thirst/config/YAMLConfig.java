@@ -460,15 +460,51 @@ public class YAMLConfig extends YamlConfig {
 
     @Comments
             ({
-                     "",
-                     "SCOREBOARD_NAME",
-                     "Desc: Only applies if display_type is set to SCOREBOARD.",
-                     "Type: String",
-                     "Variables: %player%",
-                     "Default: &f&lTHIRST"
+                    "",
+                    "SCOREBOARD_NAME",
+                    "Desc: Only applies if display_type is set to SCOREBOARD.",
+                    "Type: String",
+                    "Variables: %player%",
+                    "Default: &f&lTHIRST"
             })
     @Path("Messages.Scoreboard-Title")
     public String scoreboardName = "&f&lTHIRST";
+
+    @Comments
+            ({
+                    "",
+                    "THIRST_SET",
+                    "Desc: Message sent after running /thirst set.",
+                    "Type: String",
+                    "Variables: %player%, %thirst%",
+                    "Default: &bSet &f%player%'s&b thirst to &F%thirst%&b."
+            })
+    @Path("Messages.Thirst-Set")
+    public String thirstSet = "&8[&1Thirst&8] &bSet &f%player%'s&b thirst to &F%thirst%&b.";
+
+    @Comments
+            ({
+                    "",
+                    "THIRST_ADD",
+                    "Desc: Message sent after running /thirst add.",
+                    "Type: String",
+                    "Variables: %player%, %thirst%",
+                    "Default: &bAdded &F%thirst%&b thirst to &f%player%&b."
+            })
+    @Path("Messages.Thirst-Add")
+    public String thirstAdd = "&8[&1Thirst&8] &bAdded &F%thirst%&b thirst to &f%player%&b.";
+
+    @Comments
+            ({
+                    "",
+                    "THIRST_REMOVE",
+                    "Desc: Message sent after running /thirst remove.",
+                    "Type: String",
+                    "Variables: %player%, %thirst%",
+                    "Default: &bAdded &F%thirst%&b thirst to &f%player%&b."
+            })
+    @Path("Messages.Thirst-Remove")
+    public String thirstRemove = "&8[&1Thirst&8] &bTook &F%thirst%&b thirst from &f%player%&b.";
 
     @Comments
             ({

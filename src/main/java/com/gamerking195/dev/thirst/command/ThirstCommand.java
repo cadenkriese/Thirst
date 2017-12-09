@@ -382,7 +382,7 @@ public class ThirstCommand
                         if (NumberUtils.isNumber(args[2])) {
                             if (sender.hasPermission("thirst.*") || sender.hasPermission("thirst.command.set")) {
                                 ThirstManager.getThirst().setThirst(Bukkit.getPlayer(args[1]), Integer.valueOf(args[2]));
-                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&8[&1Thirst&8] &bSet &f"+Bukkit.getPlayer(args[1]).getName()+"'s&b thirst to &f"+Integer.valueOf(args[2])+"&b."));
+                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', Thirst.getInstance().getYAMLConfig().thirstRemove.replace("%thirst%", args[2]).replace("%player%", args[1])));
                             } else {
                                 sender.sendMessage(ChatColor.translateAlternateColorCodes('&', Thirst.getInstance().getYAMLConfig().noPermissionMessage));
                             }
@@ -400,7 +400,7 @@ public class ThirstCommand
                                 Player player = Bukkit.getPlayer(args[1]);
 
                                 ThirstManager.getThirst().setThirst(player, ThirstManager.getThirst().getPlayerThirst(player)+Integer.valueOf(args[2]));
-                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&8[&1Thirst&8] &bAdded &f"+Integer.valueOf(args[2])+" thirst to &f"+player.getName()+"&b."));
+                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', Thirst.getInstance().getYAMLConfig().thirstAdd.replace("%thirst%", args[2]).replace("%player%", player.getName())));
                             } else {
                                 sender.sendMessage(ChatColor.translateAlternateColorCodes('&', Thirst.getInstance().getYAMLConfig().noPermissionMessage));
                             }
@@ -418,7 +418,7 @@ public class ThirstCommand
                                 Player player = Bukkit.getPlayer(args[1]);
 
                                 ThirstManager.getThirst().setThirst(player, ThirstManager.getThirst().getPlayerThirst(player)-Integer.valueOf(args[2]));
-                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&8[&1Thirst&8] &bRemoved &f"+Integer.valueOf(args[2])+" thirst from &f"+player.getName()+"&b."));
+                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', Thirst.getInstance().getYAMLConfig().thirstRemove.replace("%thirst%", args[2]).replace("%player%", player.getName())));
                             } else {
                                 sender.sendMessage(ChatColor.translateAlternateColorCodes('&', Thirst.getInstance().getYAMLConfig().noPermissionMessage));
                             }

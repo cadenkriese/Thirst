@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.gamerking195.dev</groupId>
     <artifactId>Thirst</artifactId>
-    <version>1.9.10</version>
+    <version>1.9.11</version>
     <name>Thirst</name>
     <description>Adds a thirst mechanic into vanilla minecraft!</description>
     <url>https://www.spigotmc.org/resources/thirst.24610/</url>
